@@ -81,13 +81,19 @@ export const Planet = ({ data, onClick }: { data: PlanetData; onClick: () => voi
         )}
       </group>
 
-      {/* Planet label */}
+      {/* Planet label with gravity */}
       <Html position={[0, data.radius + 0.6, 0]} center distanceFactor={25}>
         <div
-          className="px-2 py-0.5 rounded bg-card/80 text-foreground text-xs font-medium whitespace-nowrap cursor-pointer backdrop-blur-sm border border-border/50"
+          className="px-2.5 py-1.5 rounded-lg bg-card/85 text-foreground text-xs font-medium whitespace-nowrap cursor-pointer backdrop-blur-sm border border-border/50 text-center"
           onClick={onClick}
         >
-          {data.name}
+          <div className="font-semibold">{data.name}</div>
+          <div className="text-[10px] text-muted-foreground mt-0.5">
+            ⚖ {data.info.gravity}
+          </div>
+          <div className="text-[10px] mt-0.5" style={{ color: data.color }}>
+            {(70 * parseFloat(data.info.gravity) / 9.81).toFixed(1)} kg on surface
+          </div>
         </div>
       </Html>
     </group>
