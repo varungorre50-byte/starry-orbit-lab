@@ -57,11 +57,13 @@ export const Planet = ({ data, onClick }: { data: PlanetData; onClick: () => voi
           {texture ? (
             <meshStandardMaterial
               map={texture}
-              roughness={0.8}
+              roughness={0.5}
               metalness={0.1}
+              emissive={data.color}
+              emissiveIntensity={0.15}
             />
           ) : (
-            <meshStandardMaterial color={data.color} roughness={0.7} metalness={0.2} />
+            <meshStandardMaterial color={data.color} roughness={0.4} metalness={0.15} emissive={data.color} emissiveIntensity={0.3} />
           )}
         </mesh>
 
