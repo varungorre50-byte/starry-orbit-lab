@@ -8,6 +8,7 @@ import type { PlanetData } from "@/data/planetData";
 export const Planet = ({ data, speedRef, onClick }: { data: PlanetData; speedRef: React.MutableRefObject<number>; onClick: () => void }) => {
   const groupRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
+  const accumulatedTime = useRef(0);
   const atmosphereRef = useRef<THREE.Mesh>(null);
 
   let texture: THREE.Texture | null = null;
@@ -19,14 +20,14 @@ export const Planet = ({ data, speedRef, onClick }: { data: PlanetData; speedRef
 
   const tiltRad = useMemo(() => (data.tilt * Math.PI) / 180, [data.tilt]);
 
-  useFrame((state) => {
-    const time = state.clock.getElapsedTime();
+  useFrame((_, delta) => {
+    accumulatedTime.current += delta * speedRef.current;
+    const time = accumulatedTime.current;
 
     if (groupRef.current) {
       const angle = time * data.orbitSpeed;
       groupRef.current.position.x = Math.cos(angle) * data.orbitRadius;
       groupRef.current.position.z = Math.sin(angle) * data.orbitRadius;
-      // slight y variation for 3D depth
       groupRef.current.position.y = Math.sin(angle * 0.5) * 0.5;
     }
 
