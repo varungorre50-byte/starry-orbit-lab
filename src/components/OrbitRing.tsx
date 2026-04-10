@@ -1,24 +1,22 @@
 import * as THREE from "three";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
+import { useFrame } from "@react-three/fiber";
 
 export const OrbitRing = ({ radius }: { radius: number }) => {
-  const points = useMemo(() => {
+  const ref = useRef<THREE.Line>(null);
+  
+  const geometry = useMemo(() => {
     const pts: THREE.Vector3[] = [];
     for (let i = 0; i <= 128; i++) {
       const angle = (i / 128) * Math.PI * 2;
       pts.push(new THREE.Vector3(Math.cos(angle) * radius, 0, Math.sin(angle) * radius));
     }
-    return pts;
+    return new THREE.BufferGeometry().setFromPoints(pts);
   }, [radius]);
 
-  const geometry = useMemo(() => {
-    return new THREE.BufferGeometry().setFromPoints(points);
-  }, [points]);
+  const material = useMemo(() => {
+    return new THREE.LineBasicMaterial({ color: "#ffffff", transparent: true, opacity: 0.08 });
+  }, []);
 
-  return (
-    <line>
-      <bufferGeometry attach="geometry" {...geometry} />
-      <lineBasicMaterial attach="material" color="#ffffff" transparent opacity={0.08} />
-    </line>
-  );
+  return <primitive object={new THREE.Line(geometry, material)} />;
 };
