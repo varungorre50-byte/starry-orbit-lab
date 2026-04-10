@@ -15,13 +15,44 @@ export const PlanetInfoPanel = ({ planet, onClose }: { planet: PlanetData; onClo
         <InfoRow label="Type" value={planet.info.type} />
         <InfoRow label="Diameter" value={planet.info.diameter} />
         <InfoRow label="Distance from Sun" value={planet.info.distanceFromSun} />
-        <InfoRow label="Gravity" value={planet.info.gravity} />
         <InfoRow label="Day Length" value={planet.info.dayLength} />
         <InfoRow label="Year Length" value={planet.info.yearLength} />
         <InfoRow label="Temperature" value={planet.info.temperature} />
         <InfoRow label="Moons" value={String(planet.info.moons)} />
 
-        <div className="pt-2">
+        {/* Gravity Section */}
+        <div className="pt-2 border-t border-border">
+          <h3 className="text-sm font-semibold text-primary mb-2">⚖ Gravity</h3>
+          <InfoRow label="Surface Gravity" value={planet.info.gravity} />
+          <InfoRow
+            label="Your weight (if 70 kg on Earth)"
+            value={`${(70 * parseFloat(planet.info.gravity) / 9.81).toFixed(1)} kg`}
+          />
+          <InfoRow
+            label="Gravity vs Earth"
+            value={`${(parseFloat(planet.info.gravity) / 9.81 * 100).toFixed(0)}%`}
+          />
+          <div className="mt-2">
+            <div className="text-[10px] text-muted-foreground mb-1">Gravity strength vs Earth</div>
+            <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full bg-primary"
+                style={{ width: `${Math.min(parseFloat(planet.info.gravity) / 9.81 * 100, 100)}%` }}
+              />
+            </div>
+          </div>
+          <div className="mt-2 text-xs text-muted-foreground">
+            {parseFloat(planet.info.gravity) < 5
+              ? "🪶 Very weak gravity — you could jump extremely high!"
+              : parseFloat(planet.info.gravity) < 9
+              ? "🏃 Lower than Earth — you'd feel lighter and bounce higher."
+              : parseFloat(planet.info.gravity) < 12
+              ? "🌍 Similar to Earth — feels familiar."
+              : "🏋️ Very strong gravity — you'd feel much heavier and struggle to move."}
+          </div>
+        </div>
+
+        <div className="pt-2 border-t border-border">
           <h3 className="text-sm font-semibold text-primary mb-1.5">Atmosphere</h3>
           <div className="flex flex-wrap gap-1.5">
             {planet.info.atmosphere.map((gas) => (
