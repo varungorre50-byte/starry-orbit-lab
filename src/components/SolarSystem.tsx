@@ -20,8 +20,9 @@ const SolarSystem = () => {
         dpr={[1, 2]}
       >
         <color attach="background" args={["#050510"]} />
-        <ambientLight intensity={0.08} />
-        <pointLight position={[0, 0, 0]} intensity={3} color="#FDB813" distance={100} decay={0.5} />
+        <ambientLight intensity={0.6} />
+        <pointLight position={[0, 0, 0]} intensity={4} color="#FDB813" distance={150} decay={0.3} />
+        <directionalLight position={[10, 20, 10]} intensity={0.4} />
 
         <Stars radius={200} depth={80} count={6000} factor={5} fade speed={1} />
 
