@@ -8,26 +8,45 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
+    --background: 230 25% 5%;
+    --foreground: 210 20% 92%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
 
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 38 90% 55%;
+    --primary-foreground: 230 25% 5%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 220 20% 15%;
+    --secondary-foreground: 210 20% 85%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 220 15% 12%;
+    --muted-foreground: 215 15% 55%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 200 80% 55%;
+    --accent-foreground: 230 25% 5%;
+
+    --card: 225 20% 8%;
+    --card-foreground: 210 20% 92%;
+
+    --popover: 225 20% 8%;
+    --popover-foreground: 210 20% 92%;
+
+    --border: 220 15% 18%;
+    --input: 220 15% 18%;
+    --ring: 38 90% 55%;
+
+    --planet-sun: 38 95% 55%;
+    --planet-mercury: 30 15% 55%;
+    --planet-venus: 35 50% 65%;
+    --planet-earth: 210 70% 55%;
+    --planet-mars: 10 70% 50%;
+    --planet-jupiter: 25 50% 55%;
+    --planet-saturn: 42 55% 60%;
+    --planet-uranus: 185 50% 60%;
+    --planet-neptune: 225 60% 55%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
