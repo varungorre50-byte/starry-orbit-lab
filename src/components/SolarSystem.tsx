@@ -1,16 +1,24 @@
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Stars, Html } from "@react-three/drei";
-import { Suspense, useState } from "react";
+import { OrbitControls, Stars } from "@react-three/drei";
+import { Suspense, useState, useRef } from "react";
 import { Sun } from "./Sun";
 import { Planet } from "./Planet";
 import { OrbitRing } from "./OrbitRing";
 import { PlanetInfoPanel } from "./PlanetInfoPanel";
 import { SunInfoPanel } from "./SunInfoPanel";
-import { PLANETS, SUN_DATA, type PlanetData } from "@/data/planetData";
+import { SpeedController } from "./SpeedController";
+import { PLANETS, type PlanetData } from "@/data/planetData";
 
 const SolarSystem = () => {
   const [selectedPlanet, setSelectedPlanet] = useState<PlanetData | null>(null);
   const [showSunInfo, setShowSunInfo] = useState(false);
+  const speedRef = useRef(1);
+  const [speed, setSpeed] = useState(1);
+
+  const handleSpeedChange = (val: number) => {
+    speedRef.current = val;
+    setSpeed(val);
+  };
 
   return (
     <div className="relative w-full h-screen bg-background overflow-hidden">
@@ -34,6 +42,7 @@ const SolarSystem = () => {
               <OrbitRing radius={planet.orbitRadius} />
               <Planet
                 data={planet}
+                speedRef={speedRef}
                 onClick={() => { setSelectedPlanet(planet); setShowSunInfo(false); }}
               />
             </group>
@@ -60,6 +69,9 @@ const SolarSystem = () => {
         </h1>
         <p className="text-muted-foreground text-sm mt-1">Click on any planet or the Sun for details • Drag to orbit • Scroll to zoom</p>
       </div>
+
+      {/* Speed Controller */}
+      <SpeedController speed={speed} onSpeedChange={handleSpeedChange} />
 
       {/* Info Panel */}
       {selectedPlanet && (
