@@ -5,7 +5,7 @@ import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import type { PlanetData } from "@/data/planetData";
 
-export const Planet = ({ data, onClick }: { data: PlanetData; onClick: () => void }) => {
+export const Planet = ({ data, speedRef, onClick }: { data: PlanetData; speedRef: React.MutableRefObject<number>; onClick: () => void }) => {
   const groupRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
   const atmosphereRef = useRef<THREE.Mesh>(null);
