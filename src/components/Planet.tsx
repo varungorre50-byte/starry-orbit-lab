@@ -1,6 +1,5 @@
 import { useRef, useMemo } from "react";
-import { useFrame, useLoader } from "@react-three/fiber";
-import { TextureLoader } from "three";
+import { useFrame } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import type { PlanetData } from "@/data/planetData";
@@ -11,12 +10,6 @@ export const Planet = ({ data, speedRef, onClick }: { data: PlanetData; speedRef
   const accumulatedTime = useRef(0);
   const atmosphereRef = useRef<THREE.Mesh>(null);
 
-  let texture: THREE.Texture | null = null;
-  try {
-    texture = useLoader(TextureLoader, data.textureUrl);
-  } catch {
-    texture = null;
-  }
 
   const tiltRad = useMemo(() => (data.tilt * Math.PI) / 180, [data.tilt]);
 
