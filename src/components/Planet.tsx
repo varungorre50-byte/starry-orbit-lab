@@ -1,6 +1,7 @@
 import { useRef, useMemo } from "react";
 import { useFrame, useLoader } from "@react-three/fiber";
 import { TextureLoader } from "three";
+import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import type { PlanetData } from "@/data/planetData";
 
@@ -76,6 +77,15 @@ export const Planet = ({ data, speedRef, onClick }: { data: PlanetData; speedRef
           </mesh>
         )}
       </group>
+
+      <Html position={[0, data.radius + 0.6, 0]} center distanceFactor={25}>
+        <div
+          className="px-2 py-1 rounded-lg bg-card/85 text-foreground text-xs font-semibold whitespace-nowrap cursor-pointer backdrop-blur-sm border border-border/50"
+          onClick={onClick}
+        >
+          {data.name}
+        </div>
+      </Html>
     </group>
   );
 };
