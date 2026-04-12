@@ -48,7 +48,7 @@ export const PLANETS: PlanetData[] = [
     orbitRadius: 6,
     orbitSpeed: 0.8,
     rotationSpeed: 0.5,
-    color: "#8C7E6D",
+    color: "#A09080",
     textureUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Mercury_in_true_color.jpg/1280px-Mercury_in_true_color.jpg",
     tilt: 0.03,
     info: {
@@ -71,7 +71,7 @@ export const PLANETS: PlanetData[] = [
     orbitRadius: 9,
     orbitSpeed: 0.6,
     rotationSpeed: -0.2,
-    color: "#E8A952",
+    color: "#F5C842",
     textureUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e5/Venus-real_color.jpg",
     tilt: 177.4,
     info: {
@@ -94,7 +94,7 @@ export const PLANETS: PlanetData[] = [
     orbitRadius: 12,
     orbitSpeed: 0.5,
     rotationSpeed: 1.5,
-    color: "#2E86DE",
+    color: "#4A90D9",
     textureUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/The_Blue_Marble_%28remastered%29.jpg/1280px-The_Blue_Marble_%28remastered%29.jpg",
     tilt: 23.44,
     info: {
@@ -117,7 +117,7 @@ export const PLANETS: PlanetData[] = [
     orbitRadius: 16,
     orbitSpeed: 0.4,
     rotationSpeed: 1.4,
-    color: "#E74C3C",
+    color: "#E05A3A",
     textureUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/OSIRIS_Mars_true_color.jpg/1280px-OSIRIS_Mars_true_color.jpg",
     tilt: 25.19,
     info: {
@@ -140,7 +140,7 @@ export const PLANETS: PlanetData[] = [
     orbitRadius: 22,
     orbitSpeed: 0.25,
     rotationSpeed: 3,
-    color: "#E8985A",
+    color: "#E8A060",
     textureUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Jupiter_New_Horizons.jpg/1280px-Jupiter_New_Horizons.jpg",
     tilt: 3.13,
     info: {
@@ -163,7 +163,7 @@ export const PLANETS: PlanetData[] = [
     orbitRadius: 28,
     orbitSpeed: 0.18,
     rotationSpeed: 2.8,
-    color: "#F0D78C",
+    color: "#F0D890",
     textureUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Saturn_during_Equinox.jpg/1280px-Saturn_during_Equinox.jpg",
     tilt: 26.73,
     hasRings: true,
@@ -188,7 +188,7 @@ export const PLANETS: PlanetData[] = [
     orbitRadius: 34,
     orbitSpeed: 0.12,
     rotationSpeed: -1.5,
-    color: "#5DCED1",
+    color: "#7EEAED",
     textureUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Uranus2.jpg/1280px-Uranus2.jpg",
     tilt: 97.77,
     hasRings: true,
@@ -213,7 +213,7 @@ export const PLANETS: PlanetData[] = [
     orbitRadius: 40,
     orbitSpeed: 0.08,
     rotationSpeed: 1.6,
-    color: "#3742FA",
+    color: "#5B6BFF",
     textureUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Neptune_-_Voyager_2_%2829347980845%29_flatten_crop.jpg/1280px-Neptune_-_Voyager_2_%2829347980845%29_flatten_crop.jpg",
     tilt: 28.32,
     info: {
