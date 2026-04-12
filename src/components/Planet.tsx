@@ -1,7 +1,6 @@
 import { useRef, useMemo } from "react";
 import { useFrame, useLoader } from "@react-three/fiber";
 import { TextureLoader } from "three";
-import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import type { PlanetData } from "@/data/planetData";
 
@@ -42,9 +41,7 @@ export const Planet = ({ data, speedRef, onClick }: { data: PlanetData; speedRef
 
   return (
     <group ref={groupRef}>
-      {/* Axial tilt */}
       <group rotation={[tiltRad, 0, 0]}>
-        {/* Atmosphere glow */}
         {data.name === "Earth" && (
           <mesh ref={atmosphereRef}>
             <sphereGeometry args={[data.radius * 1.08, 32, 32]} />
@@ -52,7 +49,6 @@ export const Planet = ({ data, speedRef, onClick }: { data: PlanetData; speedRef
           </mesh>
         )}
 
-        {/* Planet body */}
         <mesh ref={meshRef} onClick={onClick}>
           <sphereGeometry args={[data.radius, 64, 64]} />
           {texture ? (
@@ -68,7 +64,6 @@ export const Planet = ({ data, speedRef, onClick }: { data: PlanetData; speedRef
           )}
         </mesh>
 
-        {/* Rings for Saturn and Uranus */}
         {data.hasRings && (
           <mesh rotation={[Math.PI / 2.2, 0, 0]}>
             <ringGeometry args={[data.radius * 1.4, data.radius * 2.2, 64]} />
@@ -81,16 +76,6 @@ export const Planet = ({ data, speedRef, onClick }: { data: PlanetData; speedRef
           </mesh>
         )}
       </group>
-
-      {/* Planet label with gravity */}
-      <Html position={[0, data.radius + 0.6, 0]} center distanceFactor={25}>
-        <div
-          className="px-2 py-1 rounded-lg bg-card/85 text-foreground text-xs font-semibold whitespace-nowrap cursor-pointer backdrop-blur-sm border border-border/50"
-          onClick={onClick}
-        >
-          {data.name}
-        </div>
-      </Html>
     </group>
   );
 };
