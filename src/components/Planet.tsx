@@ -1,6 +1,5 @@
 import { useRef, useMemo } from "react";
-import { useFrame, useLoader } from "@react-three/fiber";
-import { TextureLoader } from "three";
+import { useFrame } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import type { PlanetData } from "@/data/planetData";
@@ -11,12 +10,6 @@ export const Planet = ({ data, speedRef, onClick }: { data: PlanetData; speedRef
   const accumulatedTime = useRef(0);
   const atmosphereRef = useRef<THREE.Mesh>(null);
 
-  let texture: THREE.Texture | null = null;
-  try {
-    texture = useLoader(TextureLoader, data.textureUrl);
-  } catch {
-    texture = null;
-  }
 
   const tiltRad = useMemo(() => (data.tilt * Math.PI) / 180, [data.tilt]);
 
@@ -52,17 +45,13 @@ export const Planet = ({ data, speedRef, onClick }: { data: PlanetData; speedRef
 
         <mesh ref={meshRef} onClick={onClick}>
           <sphereGeometry args={[data.radius, 64, 64]} />
-          {texture ? (
-            <meshStandardMaterial
-              map={texture}
-              roughness={0.5}
-              metalness={0.1}
-              emissive={data.color}
-              emissiveIntensity={0.15}
-            />
-          ) : (
-            <meshStandardMaterial color={data.color} roughness={0.4} metalness={0.15} emissive={data.color} emissiveIntensity={0.3} />
-          )}
+          <meshStandardMaterial
+            color={data.color}
+            roughness={0.4}
+            metalness={0.15}
+            emissive={data.color}
+            emissiveIntensity={0.35}
+          />
         </mesh>
 
         {data.hasRings && (
@@ -78,7 +67,7 @@ export const Planet = ({ data, speedRef, onClick }: { data: PlanetData; speedRef
         )}
       </group>
 
-      <Html position={[0, data.radius + 0.6, 0]} center distanceFactor={25}>
+      <Html position={[0, data.radius + 0.8, 0]} center distanceFactor={18}>
         <div
           className="px-3 py-1.5 rounded-lg bg-card/85 text-foreground text-base font-bold whitespace-nowrap cursor-pointer backdrop-blur-sm border border-border/50"
           onClick={onClick}
