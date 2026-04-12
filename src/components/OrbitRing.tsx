@@ -15,7 +15,7 @@ export const OrbitRing = ({ radius }: { radius: number }) => {
   }, [radius]);
 
   const material = useMemo(() => {
-    return new THREE.LineBasicMaterial({ color: "#ffffff", transparent: true, opacity: 0.08 });
+    return new THREE.LineBasicMaterial({ color: "#ffffff", transparent: true, opacity: 0.25 });
   }, []);
 
   return <primitive object={new THREE.Line(geometry, material)} />;
