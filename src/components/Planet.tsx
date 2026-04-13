@@ -1,7 +1,8 @@
 import { useRef, useMemo } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useLoader } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import * as THREE from "three";
+import { TextureLoader } from "three";
 import type { PlanetData } from "@/data/planetData";
 
 export const Planet = ({ data, speedRef, onClick }: { data: PlanetData; speedRef: React.MutableRefObject<number>; onClick: () => void }) => {
@@ -10,8 +11,14 @@ export const Planet = ({ data, speedRef, onClick }: { data: PlanetData; speedRef
   const accumulatedTime = useRef(0);
   const atmosphereRef = useRef<THREE.Mesh>(null);
 
-
   const tiltRad = useMemo(() => (data.tilt * Math.PI) / 180, [data.tilt]);
+
+  let texture: THREE.Texture | null = null;
+  try {
+    texture = useLoader(TextureLoader, data.textureUrl);
+  } catch {
+    texture = null;
+  }
 
   useFrame((_, delta) => {
     accumulatedTime.current += delta * speedRef.current;
@@ -45,13 +52,23 @@ export const Planet = ({ data, speedRef, onClick }: { data: PlanetData; speedRef
 
         <mesh ref={meshRef} onClick={onClick}>
           <sphereGeometry args={[data.radius, 64, 64]} />
-          <meshStandardMaterial
-            color={data.color}
-            roughness={0.4}
-            metalness={0.15}
-            emissive={data.color}
-            emissiveIntensity={0.35}
-          />
+          {texture ? (
+            <meshStandardMaterial
+              map={texture}
+              roughness={0.6}
+              metalness={0.1}
+              emissive={data.color}
+              emissiveIntensity={0.15}
+            />
+          ) : (
+            <meshStandardMaterial
+              color={data.color}
+              roughness={0.4}
+              metalness={0.15}
+              emissive={data.color}
+              emissiveIntensity={0.35}
+            />
+          )}
         </mesh>
 
         {data.hasRings && (
