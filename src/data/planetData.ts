@@ -28,7 +28,7 @@ export const SUN_DATA = {
   name: "Sun",
   radius: 3,
   color: "#FDB813",
-  textureUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/The_Sun_by_the_Atmospheric_Imaging_Assembly_of_NASA%27s_Solar_Dynamics_Observatory_-_20100819.jpg/1280px-The_Sun_by_the_Atmospheric_Imaging_Assembly_of_NASA%27s_Solar_Dynamics_Observatory_-_20100819.jpg",
+  textureUrl: "/textures/sun.jpg",
   info: {
     type: "G-type main-sequence star (Yellow Dwarf)",
     diameter: "1,391,000 km",
@@ -49,7 +49,7 @@ export const PLANETS: PlanetData[] = [
     orbitSpeed: 0.8,
     rotationSpeed: 0.5,
     color: "#A09080",
-    textureUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Mercury_in_true_color.jpg/1280px-Mercury_in_true_color.jpg",
+    textureUrl: "/textures/mercury.jpg",
     tilt: 0.03,
     info: {
       distanceFromSun: "57.9 million km (0.39 AU)",
@@ -72,7 +72,7 @@ export const PLANETS: PlanetData[] = [
     orbitSpeed: 0.6,
     rotationSpeed: -0.2,
     color: "#F5C842",
-    textureUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e5/Venus-real_color.jpg",
+    textureUrl: "/textures/venus.jpg",
     tilt: 177.4,
     info: {
       distanceFromSun: "108.2 million km (0.72 AU)",
@@ -95,7 +95,7 @@ export const PLANETS: PlanetData[] = [
     orbitSpeed: 0.5,
     rotationSpeed: 1.5,
     color: "#4A90D9",
-    textureUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/The_Blue_Marble_%28remastered%29.jpg/1280px-The_Blue_Marble_%28remastered%29.jpg",
+    textureUrl: "/textures/earth.jpg",
     tilt: 23.44,
     info: {
       distanceFromSun: "149.6 million km (1 AU)",
@@ -118,7 +118,7 @@ export const PLANETS: PlanetData[] = [
     orbitSpeed: 0.4,
     rotationSpeed: 1.4,
     color: "#E05A3A",
-    textureUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/OSIRIS_Mars_true_color.jpg/1280px-OSIRIS_Mars_true_color.jpg",
+    textureUrl: "/textures/mars.jpg",
     tilt: 25.19,
     info: {
       distanceFromSun: "227.9 million km (1.52 AU)",
@@ -141,7 +141,7 @@ export const PLANETS: PlanetData[] = [
     orbitSpeed: 0.25,
     rotationSpeed: 3,
     color: "#E8A060",
-    textureUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Jupiter_New_Horizons.jpg/1280px-Jupiter_New_Horizons.jpg",
+    textureUrl: "/textures/jupiter.jpg",
     tilt: 3.13,
     info: {
       distanceFromSun: "778.3 million km (5.2 AU)",
@@ -164,7 +164,7 @@ export const PLANETS: PlanetData[] = [
     orbitSpeed: 0.18,
     rotationSpeed: 2.8,
     color: "#F0D890",
-    textureUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Saturn_during_Equinox.jpg/1280px-Saturn_during_Equinox.jpg",
+    textureUrl: "/textures/saturn.jpg",
     tilt: 26.73,
     hasRings: true,
     ringColor: "#D4C494",
@@ -189,7 +189,7 @@ export const PLANETS: PlanetData[] = [
     orbitSpeed: 0.12,
     rotationSpeed: -1.5,
     color: "#7EEAED",
-    textureUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Uranus2.jpg/1280px-Uranus2.jpg",
+    textureUrl: "/textures/uranus.jpg",
     tilt: 97.77,
     hasRings: true,
     ringColor: "#5A8A9A",
@@ -214,7 +214,7 @@ export const PLANETS: PlanetData[] = [
     orbitSpeed: 0.08,
     rotationSpeed: 1.6,
     color: "#5B6BFF",
-    textureUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Neptune_-_Voyager_2_%2829347980845%29_flatten_crop.jpg/1280px-Neptune_-_Voyager_2_%2829347980845%29_flatten_crop.jpg",
+    textureUrl: "/textures/neptune.jpg",
     tilt: 28.32,
     info: {
       distanceFromSun: "4.498 billion km (30.06 AU)",
