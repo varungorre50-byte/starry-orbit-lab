@@ -1,4 +1,5 @@
 import { Canvas } from "@react-three/fiber";
+import * as THREE from "three";
 import { OrbitControls, Stars } from "@react-three/drei";
 import { Suspense, useState, useRef } from "react";
 import { Sun } from "./Sun";
@@ -24,8 +25,9 @@ const SolarSystem = () => {
     <div className="relative w-full h-screen bg-background overflow-hidden">
       <Canvas
         camera={{ position: [0, 30, 50], fov: 55 }}
-        gl={{ antialias: true }}
+        gl={{ antialias: true, toneMapping: THREE.NoToneMapping }}
         dpr={[1, 2]}
+        onPointerMissed={() => {}}
       >
         <color attach="background" args={["#050510"]} />
         <ambientLight intensity={0.4} />
