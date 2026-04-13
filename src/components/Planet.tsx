@@ -50,7 +50,7 @@ export const Planet = ({ data, speedRef, onClick }: { data: PlanetData; speedRef
           </mesh>
         )}
 
-        <mesh ref={meshRef} onClick={onClick}>
+        <mesh ref={meshRef} onClick={(e) => { e.stopPropagation(); onClick(); }}>
           <sphereGeometry args={[data.radius, 64, 64]} />
           {texture ? (
             <meshStandardMaterial
@@ -59,6 +59,7 @@ export const Planet = ({ data, speedRef, onClick }: { data: PlanetData; speedRef
               metalness={0.1}
               emissive={data.color}
               emissiveIntensity={0.15}
+              toneMapped={true}
             />
           ) : (
             <meshStandardMaterial
@@ -67,6 +68,7 @@ export const Planet = ({ data, speedRef, onClick }: { data: PlanetData; speedRef
               metalness={0.15}
               emissive={data.color}
               emissiveIntensity={0.35}
+              toneMapped={true}
             />
           )}
         </mesh>
