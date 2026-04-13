@@ -173,6 +173,24 @@ export const PlanetInfoPanel = ({ planet, onClose }: { planet: PlanetData; onClo
         </div>
 
         <div className="pt-2 border-t border-border">
+          <h3 className="text-sm font-semibold text-primary mb-2">🌀 Orbital Info</h3>
+          <InfoRow label="Self Rotation (1 Day)" value={planet.info.dayLength} />
+          <InfoRow label="Orbit Around Sun (1 Year)" value={planet.info.yearLength} />
+          <InfoRow label="Orbital Distance" value={planet.info.distanceFromSun} />
+          <div className="mt-2 text-xs text-muted-foreground">
+            {parseFloat(planet.info.yearLength) > 50
+              ? "🐢 Extremely slow orbit — takes decades to go around the Sun!"
+              : parseFloat(planet.info.yearLength) > 10
+              ? "🕰️ Very long orbit — years upon years to complete one trip."
+              : parseFloat(planet.info.yearLength) > 1
+              ? "📅 Takes more than an Earth year to orbit the Sun."
+              : planet.info.dayLength.includes("hour")
+              ? "⚡ Rapid rotation — days are much shorter than Earth's!"
+              : "🔄 Slow rotation — one day lasts longer than you'd expect."}
+          </div>
+        </div>
+
+        <div className="pt-2 border-t border-border">
           <h3 className="text-sm font-semibold text-accent mb-1.5">Distance to Neighbors</h3>
           <InfoRow label="Previous" value={planet.info.distanceFromPrevious} />
           <InfoRow label="Next" value={planet.info.distanceFromNext} />
