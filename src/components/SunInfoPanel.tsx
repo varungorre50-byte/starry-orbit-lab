@@ -1,6 +1,19 @@
 import { useEffect, useRef } from "react";
 import { SUN_DATA, PLANETS } from "@/data/planetData";
 import { X } from "lucide-react";
+import { VoiceAssistantButton } from "./VoiceAssistantButton";
+
+const buildSunSpeech = (): string => {
+  const i = SUN_DATA.info;
+  return (
+    `The Sun. ${i.type}. Diameter ${i.diameter}. ` +
+    `Temperature ${i.temperature}. Gravity ${i.gravity}. ` +
+    `Age ${i.age}. Mass ${i.mass}. Luminosity ${i.luminosity}. ` +
+    `Composition: ${i.composition.join(", ")}. ` +
+    `The Sun has no moons. Instead, ${PLANETS.length} planets orbit around it: ${PLANETS.map((p) => p.name).join(", ")}. ` +
+    `It contains 99.86 percent of all mass in the solar system and produces energy through nuclear fusion.`
+  );
+};
 
 const SpinningSun = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
