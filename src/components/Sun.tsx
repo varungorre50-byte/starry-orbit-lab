@@ -57,7 +57,7 @@ export const Sun = ({ onClick }: { onClick: () => void }) => {
           className="px-3 py-1.5 rounded-lg bg-card/85 text-foreground text-base font-bold whitespace-nowrap cursor-pointer backdrop-blur-sm border border-border/50"
           onClick={onClick}
         >
-          ☀ Sun
+          Sun
         </div>
       </Html>
     </group>
