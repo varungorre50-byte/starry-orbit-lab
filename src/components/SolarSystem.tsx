@@ -80,6 +80,9 @@ const SolarSystem = () => {
       {/* Speed Controller */}
       <SpeedController speed={speed} onSpeedChange={handleSpeedChange} />
 
+      {/* Camera Presets */}
+      <CameraPresets active={cameraPreset} onChange={setCameraPreset} />
+
       {/* Info Panel */}
       {selectedPlanet && (
         <PlanetInfoPanel planet={selectedPlanet} onClose={() => setSelectedPlanet(null)} />
