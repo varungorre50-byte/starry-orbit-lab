@@ -16,6 +16,11 @@ export interface PlanetData {
     dayLength: string;
     yearLength: string;
     moons: number;
+    moonDetails?: {
+      notable: string[];
+      largest?: string;
+      description: string;
+    };
     atmosphere: string[];
     temperature: string;
     type: string;
@@ -58,6 +63,10 @@ export const PLANETS: PlanetData[] = [
       dayLength: "58.6 Earth days",
       yearLength: "88 Earth days",
       moons: 0,
+      moonDetails: {
+        notable: [],
+        description: "Mercury has no moons. Its proximity to the Sun and weak gravity make it impossible to retain a satellite.",
+      },
       atmosphere: ["Almost none", "Traces of oxygen, sodium, hydrogen"],
       temperature: "-180°C to 430°C",
       type: "Terrestrial (Rocky)",
@@ -81,6 +90,10 @@ export const PLANETS: PlanetData[] = [
       dayLength: "243 Earth days (retrograde)",
       yearLength: "225 Earth days",
       moons: 0,
+      moonDetails: {
+        notable: [],
+        description: "Venus has no natural satellites. Its slow retrograde rotation and proximity to the Sun likely prevented any moon from forming or being captured.",
+      },
       atmosphere: ["Carbon dioxide (96.5%)", "Nitrogen (3.5%)", "Sulfuric acid clouds"],
       temperature: "462°C (hottest planet)",
       type: "Terrestrial (Rocky)",
@@ -104,6 +117,11 @@ export const PLANETS: PlanetData[] = [
       dayLength: "24 hours",
       yearLength: "365.25 days",
       moons: 1,
+      moonDetails: {
+        notable: ["The Moon (Luna)"],
+        largest: "The Moon — 3,474 km diameter, 384,400 km away",
+        description: "Earth has one natural satellite, the Moon, formed ~4.5 billion years ago likely from a Mars-sized impact. It stabilizes Earth's tilt, drives ocean tides, and orbits Earth every 27.3 days.",
+      },
       atmosphere: ["Nitrogen (78%)", "Oxygen (21%)", "Argon (0.93%)", "CO₂ (0.04%)"],
       temperature: "-89°C to 57°C (avg 15°C)",
       type: "Terrestrial (Rocky)",
@@ -127,6 +145,11 @@ export const PLANETS: PlanetData[] = [
       dayLength: "24.6 hours",
       yearLength: "687 Earth days",
       moons: 2,
+      moonDetails: {
+        notable: ["Phobos", "Deimos"],
+        largest: "Phobos — 22.4 km, orbits just 6,000 km above Mars",
+        description: "Mars has two small, irregularly-shaped moons likely captured asteroids. Phobos orbits so close it will crash into Mars in ~50 million years; Deimos is tiny and drifting away.",
+      },
       atmosphere: ["Carbon dioxide (95.3%)", "Nitrogen (2.7%)", "Argon (1.6%)"],
       temperature: "-140°C to 20°C",
       type: "Terrestrial (Rocky)",
@@ -150,6 +173,11 @@ export const PLANETS: PlanetData[] = [
       dayLength: "9.93 hours (fastest rotation)",
       yearLength: "11.86 Earth years",
       moons: 95,
+      moonDetails: {
+        notable: ["Io", "Europa", "Ganymede", "Callisto"],
+        largest: "Ganymede — 5,268 km (largest moon in the solar system, bigger than Mercury)",
+        description: "Jupiter has 95 confirmed moons. The four Galilean moons (discovered by Galileo in 1610) include volcanic Io, icy Europa with a subsurface ocean, giant Ganymede, and cratered Callisto.",
+      },
       atmosphere: ["Hydrogen (89.8%)", "Helium (10.2%)", "Methane, ammonia traces"],
       temperature: "-110°C (cloud tops)",
       type: "Gas Giant",
@@ -175,6 +203,11 @@ export const PLANETS: PlanetData[] = [
       dayLength: "10.7 hours",
       yearLength: "29.46 Earth years",
       moons: 146,
+      moonDetails: {
+        notable: ["Titan", "Enceladus", "Mimas", "Iapetus", "Rhea"],
+        largest: "Titan — 5,150 km, has a thick nitrogen atmosphere and methane lakes",
+        description: "Saturn has 146 known moons — the most in the solar system. Titan is the only moon with a dense atmosphere, while Enceladus shoots water plumes from a hidden ocean, making both top targets in the search for life.",
+      },
       atmosphere: ["Hydrogen (96.3%)", "Helium (3.25%)", "Methane, ammonia traces"],
       temperature: "-140°C (cloud tops)",
       type: "Gas Giant",
@@ -200,6 +233,11 @@ export const PLANETS: PlanetData[] = [
       dayLength: "17.2 hours (retrograde)",
       yearLength: "84 Earth years",
       moons: 28,
+      moonDetails: {
+        notable: ["Titania", "Oberon", "Umbriel", "Ariel", "Miranda"],
+        largest: "Titania — 1,578 km diameter",
+        description: "Uranus has 28 known moons, all named after characters from Shakespeare and Alexander Pope. Miranda is famous for its bizarre patchwork surface with massive cliffs up to 20 km tall.",
+      },
       atmosphere: ["Hydrogen (82.5%)", "Helium (15.2%)", "Methane (2.3%)"],
       temperature: "-224°C",
       type: "Ice Giant",
@@ -223,6 +261,11 @@ export const PLANETS: PlanetData[] = [
       dayLength: "16.1 hours",
       yearLength: "164.8 Earth years",
       moons: 16,
+      moonDetails: {
+        notable: ["Triton", "Nereid", "Naiad", "Proteus"],
+        largest: "Triton — 2,707 km, orbits backwards (retrograde) and has active geysers",
+        description: "Neptune has 16 moons. Triton is the largest and unique — it orbits in the opposite direction to Neptune's rotation, suggesting it was captured from the Kuiper Belt. It's slowly spiraling inward and will eventually break apart into rings.",
+      },
       atmosphere: ["Hydrogen (80%)", "Helium (19%)", "Methane (1%)"],
       temperature: "-214°C",
       type: "Ice Giant",
