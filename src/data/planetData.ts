@@ -16,6 +16,11 @@ export interface PlanetData {
     dayLength: string;
     yearLength: string;
     moons: number;
+    moonDetails?: {
+      notable: string[];
+      largest?: string;
+      description: string;
+    };
     atmosphere: string[];
     temperature: string;
     type: string;
