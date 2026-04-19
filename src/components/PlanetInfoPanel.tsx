@@ -131,11 +131,17 @@ export const PlanetInfoPanel = ({ planet, onClose }: { planet: PlanetData; onClo
       </div>
 
       {/* Animated planet preview */}
-      <div className="flex justify-center mb-4">
+      <div className="flex justify-center mb-3">
         <div className="animate-pulse-slow">
           <SpinningPlanet planet={planet} />
         </div>
       </div>
+
+      {/* Voice assistant */}
+      <div className="flex justify-center mb-4">
+        <VoiceAssistantButton getText={() => buildPlanetSpeech(planet)} label={`Hear about ${planet.name}`} />
+      </div>
+
 
       <div className="space-y-3">
         <InfoRow label="Type" value={planet.info.type} />
