@@ -8,6 +8,8 @@ import { OrbitRing } from "./OrbitRing";
 import { PlanetInfoPanel } from "./PlanetInfoPanel";
 import { SunInfoPanel } from "./SunInfoPanel";
 import { SpeedController } from "./SpeedController";
+import { CameraRig, type CameraPreset } from "./CameraRig";
+import { CameraPresets } from "./CameraPresets";
 import { PLANETS, type PlanetData } from "@/data/planetData";
 
 const SolarSystem = () => {
@@ -15,6 +17,8 @@ const SolarSystem = () => {
   const [showSunInfo, setShowSunInfo] = useState(false);
   const speedRef = useRef(1);
   const [speed, setSpeed] = useState(1);
+  const [cameraPreset, setCameraPreset] = useState<CameraPreset>("default");
+  const controlsRef = useRef<any>(null);
 
   const handleSpeedChange = (val: number) => {
     speedRef.current = val;
@@ -51,16 +55,17 @@ const SolarSystem = () => {
           ))}
         </Suspense>
 
+        <CameraRig preset={cameraPreset} controlsRef={controlsRef} />
+
         <OrbitControls
+          ref={controlsRef}
           enablePan
           enableZoom
           enableRotate
-          minDistance={8}
-          maxDistance={120}
-          autoRotate
-          autoRotateSpeed={0.15}
-          maxPolarAngle={Math.PI * 0.85}
-          minPolarAngle={Math.PI * 0.1}
+          minDistance={5}
+          maxDistance={150}
+          maxPolarAngle={Math.PI}
+          minPolarAngle={0}
         />
       </Canvas>
 
@@ -74,6 +79,9 @@ const SolarSystem = () => {
 
       {/* Speed Controller */}
       <SpeedController speed={speed} onSpeedChange={handleSpeedChange} />
+
+      {/* Camera Presets */}
+      <CameraPresets active={cameraPreset} onChange={setCameraPreset} />
 
       {/* Info Panel */}
       {selectedPlanet && (
