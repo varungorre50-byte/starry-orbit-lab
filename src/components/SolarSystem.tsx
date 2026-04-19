@@ -8,6 +8,8 @@ import { OrbitRing } from "./OrbitRing";
 import { PlanetInfoPanel } from "./PlanetInfoPanel";
 import { SunInfoPanel } from "./SunInfoPanel";
 import { SpeedController } from "./SpeedController";
+import { CameraRig, type CameraPreset } from "./CameraRig";
+import { CameraPresets } from "./CameraPresets";
 import { PLANETS, type PlanetData } from "@/data/planetData";
 
 const SolarSystem = () => {
@@ -15,6 +17,8 @@ const SolarSystem = () => {
   const [showSunInfo, setShowSunInfo] = useState(false);
   const speedRef = useRef(1);
   const [speed, setSpeed] = useState(1);
+  const [cameraPreset, setCameraPreset] = useState<CameraPreset>("default");
+  const controlsRef = useRef<any>(null);
 
   const handleSpeedChange = (val: number) => {
     speedRef.current = val;
