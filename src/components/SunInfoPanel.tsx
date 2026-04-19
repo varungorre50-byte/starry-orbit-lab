@@ -130,8 +130,13 @@ export const SunInfoPanel = ({ onClose }: { onClose: () => void }) => {
       </div>
 
       {/* Animated Sun preview */}
-      <div className="flex justify-center mb-4">
+      <div className="flex justify-center mb-3">
         <SpinningSun />
+      </div>
+
+      {/* Voice assistant */}
+      <div className="flex justify-center mb-4">
+        <VoiceAssistantButton getText={buildSunSpeech} label="Hear about the Sun" />
       </div>
 
       <div className="space-y-3">
