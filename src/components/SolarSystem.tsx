@@ -55,16 +55,17 @@ const SolarSystem = () => {
           ))}
         </Suspense>
 
+        <CameraRig preset={cameraPreset} controlsRef={controlsRef} />
+
         <OrbitControls
+          ref={controlsRef}
           enablePan
           enableZoom
           enableRotate
-          minDistance={8}
-          maxDistance={120}
-          autoRotate
-          autoRotateSpeed={0.15}
-          maxPolarAngle={Math.PI * 0.85}
-          minPolarAngle={Math.PI * 0.1}
+          minDistance={5}
+          maxDistance={150}
+          maxPolarAngle={Math.PI}
+          minPolarAngle={0}
         />
       </Canvas>
 
