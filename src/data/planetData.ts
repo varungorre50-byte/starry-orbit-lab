@@ -63,6 +63,10 @@ export const PLANETS: PlanetData[] = [
       dayLength: "58.6 Earth days",
       yearLength: "88 Earth days",
       moons: 0,
+      moonDetails: {
+        notable: [],
+        description: "Mercury has no moons. Its proximity to the Sun and weak gravity make it impossible to retain a satellite.",
+      },
       atmosphere: ["Almost none", "Traces of oxygen, sodium, hydrogen"],
       temperature: "-180°C to 430°C",
       type: "Terrestrial (Rocky)",
