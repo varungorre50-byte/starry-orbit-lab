@@ -128,7 +128,34 @@ export const PlanetInfoPanel = ({ planet, onClose }: { planet: PlanetData; onClo
         <InfoRow label="Day Length" value={planet.info.dayLength} />
         <InfoRow label="Year Length" value={planet.info.yearLength} />
         <InfoRow label="Temperature" value={planet.info.temperature} />
-        <InfoRow label="Moons" value={String(planet.info.moons)} />
+        <InfoRow label="Number of Moons" value={String(planet.info.moons)} />
+
+        {planet.info.moonDetails && (
+          <div className="pt-2 border-t border-border">
+            <h3 className="text-sm font-semibold text-primary mb-2">🌙 Moons</h3>
+            {planet.info.moonDetails.largest && (
+              <div className="mb-2">
+                <div className="text-[10px] text-muted-foreground mb-0.5">Largest moon</div>
+                <div className="text-sm text-foreground">{planet.info.moonDetails.largest}</div>
+              </div>
+            )}
+            {planet.info.moonDetails.notable.length > 0 && (
+              <div className="mb-2">
+                <div className="text-[10px] text-muted-foreground mb-1">Notable moons</div>
+                <div className="flex flex-wrap gap-1.5">
+                  {planet.info.moonDetails.notable.map((m) => (
+                    <span key={m} className="text-xs px-2 py-1 bg-muted rounded-md text-foreground">
+                      {m}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {planet.info.moonDetails.description}
+            </p>
+          </div>
+        )}
 
         <div className="pt-2 border-t border-border">
           <h3 className="text-sm font-semibold text-primary mb-2">⚖ Gravity</h3>
