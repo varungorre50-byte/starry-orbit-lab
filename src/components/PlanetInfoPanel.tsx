@@ -1,6 +1,22 @@
 import { useEffect, useRef } from "react";
 import type { PlanetData } from "@/data/planetData";
 import { X } from "lucide-react";
+import { VoiceAssistantButton } from "./VoiceAssistantButton";
+
+const buildPlanetSpeech = (planet: PlanetData): string => {
+  const i = planet.info;
+  const moonsLine = i.moonDetails
+    ? ` ${planet.name} has ${i.moons} ${i.moons === 1 ? "moon" : "moons"}. ${i.moonDetails.description}`
+    : ` It has ${i.moons} ${i.moons === 1 ? "moon" : "moons"}.`;
+  return (
+    `${planet.name}. ${i.type}. ` +
+    `Diameter ${i.diameter}. Distance from the Sun ${i.distanceFromSun}. ` +
+    `One day on ${planet.name} lasts ${i.dayLength}, and one year takes ${i.yearLength}. ` +
+    `Surface gravity is ${i.gravity}. Temperature ranges ${i.temperature}. ` +
+    `Atmosphere consists of ${i.atmosphere.join(", ")}.` +
+    moonsLine
+  );
+};
 
 const SpinningPlanet = ({ planet }: { planet: PlanetData }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -115,11 +131,17 @@ export const PlanetInfoPanel = ({ planet, onClose }: { planet: PlanetData; onClo
       </div>
 
       {/* Animated planet preview */}
-      <div className="flex justify-center mb-4">
+      <div className="flex justify-center mb-3">
         <div className="animate-pulse-slow">
           <SpinningPlanet planet={planet} />
         </div>
       </div>
+
+      {/* Voice assistant */}
+      <div className="flex justify-center mb-4">
+        <VoiceAssistantButton getText={() => buildPlanetSpeech(planet)} label={`Hear about ${planet.name}`} />
+      </div>
+
 
       <div className="space-y-3">
         <InfoRow label="Type" value={planet.info.type} />

@@ -1,6 +1,19 @@
 import { useEffect, useRef } from "react";
 import { SUN_DATA, PLANETS } from "@/data/planetData";
 import { X } from "lucide-react";
+import { VoiceAssistantButton } from "./VoiceAssistantButton";
+
+const buildSunSpeech = (): string => {
+  const i = SUN_DATA.info;
+  return (
+    `The Sun. ${i.type}. Diameter ${i.diameter}. ` +
+    `Temperature ${i.temperature}. Gravity ${i.gravity}. ` +
+    `Age ${i.age}. Mass ${i.mass}. Luminosity ${i.luminosity}. ` +
+    `Composition: ${i.composition.join(", ")}. ` +
+    `The Sun has no moons. Instead, ${PLANETS.length} planets orbit around it: ${PLANETS.map((p) => p.name).join(", ")}. ` +
+    `It contains 99.86 percent of all mass in the solar system and produces energy through nuclear fusion.`
+  );
+};
 
 const SpinningSun = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -117,8 +130,13 @@ export const SunInfoPanel = ({ onClose }: { onClose: () => void }) => {
       </div>
 
       {/* Animated Sun preview */}
-      <div className="flex justify-center mb-4">
+      <div className="flex justify-center mb-3">
         <SpinningSun />
+      </div>
+
+      {/* Voice assistant */}
+      <div className="flex justify-center mb-4">
+        <VoiceAssistantButton getText={buildSunSpeech} label="Hear about the Sun" />
       </div>
 
       <div className="space-y-3">
