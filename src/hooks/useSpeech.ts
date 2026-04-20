@@ -3,10 +3,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 /**
  * useSpeech — wrapper around the browser's Web Speech API (speechSynthesis).
  * Provides play / stop / toggle controls plus a `speaking` state flag.
+ * Supports adjustable speech rate (speed).
  */
 export const useSpeech = () => {
   const [speaking, setSpeaking] = useState(false);
   const [supported, setSupported] = useState(true);
+  const [rate, setRate] = useState(1);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   useEffect(() => {
@@ -32,7 +34,7 @@ export const useSpeech = () => {
       window.speechSynthesis.cancel();
 
       const utter = new SpeechSynthesisUtterance(text);
-      utter.rate = 1;
+      utter.rate = rate;
       utter.pitch = 1;
       utter.volume = 1;
       utter.lang = "en-US";
@@ -52,7 +54,7 @@ export const useSpeech = () => {
       utteranceRef.current = utter;
       window.speechSynthesis.speak(utter);
     },
-    [supported]
+    [supported, rate]
   );
 
   const toggle = useCallback(
@@ -63,5 +65,5 @@ export const useSpeech = () => {
     [speaking, speak, stop]
   );
 
-  return { speak, stop, toggle, speaking, supported };
+  return { speak, stop, toggle, speaking, supported, rate, setRate };
 };
