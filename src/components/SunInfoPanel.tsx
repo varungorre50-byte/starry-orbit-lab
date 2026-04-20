@@ -118,6 +118,13 @@ const SpinningSun = () => {
   return <canvas ref={canvasRef} className="w-[130px] h-[130px]" />;
 };
 
+const InfoRow = ({ label, value }: { label: string; value: string }) => (
+  <div className="flex justify-between items-start gap-3">
+    <span className="text-xs text-muted-foreground shrink-0">{label}</span>
+    <span className="text-sm text-foreground text-right">{value}</span>
+  </div>
+);
+
 export const SunInfoPanel = ({ onClose }: { onClose: () => void }) => {
   const { info } = SUN_DATA;
   return (
@@ -183,10 +190,3 @@ export const SunInfoPanel = ({ onClose }: { onClose: () => void }) => {
     </div>
   );
 };
-
-const InfoRow = ({ label, value }: { label: string; value: string }) => (
-  <div className="flex justify-between items-start gap-3">
-    <span className="text-xs text-muted-foreground shrink-0">{label}</span>
-    <span className="text-sm text-foreground text-right">{value}</span>
-  </div>
-);
