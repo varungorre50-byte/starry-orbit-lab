@@ -1,4 +1,5 @@
-import { Volume2, VolumeX, Gauge } from "lucide-react";
+import { Volume2, VolumeX, Gauge, Volume1 } from "lucide-react";
+import { useState } from "react";
 import { useSpeech } from "@/hooks/useSpeech";
 
 interface VoiceAssistantButtonProps {
@@ -17,9 +18,12 @@ const RATE_OPTIONS = [
 ];
 
 export const VoiceAssistantButton = ({ getText, label = "Listen" }: VoiceAssistantButtonProps) => {
-  const { speaking, toggle, supported, rate, setRate } = useSpeech();
+  const { speaking, toggle, supported, rate, setRate, volume, setVolume } = useSpeech();
+  const [showVolume, setShowVolume] = useState(false);
 
   if (!supported) return null;
+
+  const VolumeIcon = volume === 0 ? VolumeX : volume < 0.5 ? Volume1 : Volume2;
 
   return (
     <div className="inline-flex items-center gap-2">
@@ -59,6 +63,34 @@ export const VoiceAssistantButton = ({ getText, label = "Listen" }: VoiceAssista
             </button>
           ))}
         </div>
+      </div>
+
+      <div className="relative">
+        <button
+          onClick={() => setShowVolume((v) => !v)}
+          className="inline-flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs font-medium bg-muted text-foreground border border-border hover:bg-muted/70 transition-colors"
+          aria-label="Volume control"
+        >
+          <VolumeIcon size={14} />
+          <span>{Math.round(volume * 100)}%</span>
+        </button>
+        {showVolume && (
+          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-card border border-border rounded-lg shadow-lg p-3 min-w-[140px]">
+            <div className="flex items-center gap-2 mb-2">
+              <VolumeIcon size={14} className="text-muted-foreground" />
+              <span className="text-xs font-medium">{Math.round(volume * 100)}%</span>
+            </div>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.05"
+              value={volume}
+              onChange={(e) => setVolume(parseFloat(e.target.value))}
+              className="w-full h-1.5 bg-muted rounded-full appearance-none cursor-pointer accent-primary"
+            />
+          </div>
+        )}
       </div>
     </div>
   );
