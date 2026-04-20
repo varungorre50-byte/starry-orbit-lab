@@ -2,17 +2,24 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 /**
  * useSpeech — wrapper around the browser's Web Speech API (speechSynthesis).
- * Live-updates rate and volume by restarting speech when they change while speaking.
+ *
+ * - `volume` and `rate` are stored in state so the UI reflects them.
+ * - Changes during playback are NOT auto-applied (Web Speech API can't change
+ *   rate/volume mid-utterance — restarting would jump back to the beginning).
+ * - Call `applyLiveSettings()` (e.g. on slider release) to restart from the
+ *   current position with the new settings.
  */
 export const useSpeech = () => {
   const [speaking, setSpeaking] = useState(false);
   const [supported, setSupported] = useState(true);
   const [rate, setRate] = useState(1);
   const [volume, setVolume] = useState(1);
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+
   const lastTextRef = useRef<string>("");
+  const charIndexRef = useRef<number>(0);
   const rateRef = useRef(rate);
   const volumeRef = useRef(volume);
+  const manualStopRef = useRef(false);
 
   useEffect(() => { rateRef.current = rate; }, [rate]);
   useEffect(() => { volumeRef.current = volume; }, [volume]);
@@ -30,34 +37,49 @@ export const useSpeech = () => {
 
   const stop = useCallback(() => {
     if (!supported) return;
+    manualStopRef.current = true;
     window.speechSynthesis.cancel();
     setSpeaking(false);
+    charIndexRef.current = 0;
   }, [supported]);
 
-  const speakInternal = useCallback(
-    (text: string) => {
+  const speakFrom = useCallback(
+    (text: string, fromChar = 0) => {
       if (!supported || !text) return;
+      manualStopRef.current = true;
       window.speechSynthesis.cancel();
+      // Allow the cancel to flush before starting the new utterance.
+      setTimeout(() => {
+        manualStopRef.current = false;
+        const slice = text.slice(fromChar);
+        const utter = new SpeechSynthesisUtterance(slice);
+        utter.rate = rateRef.current;
+        utter.pitch = 1;
+        utter.volume = volumeRef.current;
+        utter.lang = "en-US";
 
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.rate = rateRef.current;
-      utter.pitch = 1;
-      utter.volume = volumeRef.current;
-      utter.lang = "en-US";
+        const voices = window.speechSynthesis.getVoices();
+        const preferred =
+          voices.find((v) => /en[-_]US/i.test(v.lang) && /Google|Samantha|Microsoft/i.test(v.name)) ||
+          voices.find((v) => /en[-_]US/i.test(v.lang)) ||
+          voices.find((v) => v.lang.startsWith("en"));
+        if (preferred) utter.voice = preferred;
 
-      const voices = window.speechSynthesis.getVoices();
-      const preferred =
-        voices.find((v) => /en[-_]US/i.test(v.lang) && /Google|Samantha|Microsoft/i.test(v.name)) ||
-        voices.find((v) => /en[-_]US/i.test(v.lang)) ||
-        voices.find((v) => v.lang.startsWith("en"));
-      if (preferred) utter.voice = preferred;
+        utter.onstart = () => setSpeaking(true);
+        utter.onboundary = (e) => {
+          // Track absolute char index in the full text so we can resume.
+          charIndexRef.current = fromChar + e.charIndex;
+        };
+        utter.onend = () => {
+          if (!manualStopRef.current) {
+            setSpeaking(false);
+            charIndexRef.current = 0;
+          }
+        };
+        utter.onerror = () => setSpeaking(false);
 
-      utter.onstart = () => setSpeaking(true);
-      utter.onend = () => setSpeaking(false);
-      utter.onerror = () => setSpeaking(false);
-
-      utteranceRef.current = utter;
-      window.speechSynthesis.speak(utter);
+        window.speechSynthesis.speak(utter);
+      }, 60);
     },
     [supported]
   );
@@ -65,9 +87,10 @@ export const useSpeech = () => {
   const speak = useCallback(
     (text: string) => {
       lastTextRef.current = text;
-      speakInternal(text);
+      charIndexRef.current = 0;
+      speakFrom(text, 0);
     },
-    [speakInternal]
+    [speakFrom]
   );
 
   const toggle = useCallback(
@@ -78,14 +101,22 @@ export const useSpeech = () => {
     [speaking, speak, stop]
   );
 
-  // When rate or volume changes mid-speech, restart with the new settings
-  // so the user immediately hears the difference.
-  useEffect(() => {
-    if (speaking && lastTextRef.current) {
-      speakInternal(lastTextRef.current);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rate, volume]);
+  /** Restart speech from current position with the latest rate/volume. */
+  const applyLiveSettings = useCallback(() => {
+    if (!speaking || !lastTextRef.current) return;
+    speakFrom(lastTextRef.current, charIndexRef.current);
+  }, [speaking, speakFrom]);
 
-  return { speak, stop, toggle, speaking, supported, rate, setRate, volume, setVolume };
+  return {
+    speak,
+    stop,
+    toggle,
+    speaking,
+    supported,
+    rate,
+    setRate,
+    volume,
+    setVolume,
+    applyLiveSettings,
+  };
 };

@@ -13,7 +13,7 @@ const RATE_MAX = 2;
 const RATE_STEP = 0.05;
 
 export const VoiceAssistantButton = ({ getText, label = "Listen" }: VoiceAssistantButtonProps) => {
-  const { speaking, toggle, supported, rate, setRate, volume, setVolume } = useSpeech();
+  const { speaking, toggle, supported, rate, setRate, volume, setVolume, applyLiveSettings } = useSpeech();
   const [showSpeed, setShowSpeed] = useState(false);
   const [showVolume, setShowVolume] = useState(false);
 
@@ -46,7 +46,7 @@ export const VoiceAssistantButton = ({ getText, label = "Listen" }: VoiceAssista
           <span>{rate.toFixed(2)}x</span>
         </button>
         {showSpeed && (
-          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-card border border-border rounded-lg shadow-lg p-3 min-w-[140px]">
+          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-card border border-border rounded-lg shadow-lg p-3 min-w-[160px]">
             <div className="flex items-center gap-2 mb-2">
               <Gauge size={14} className="text-muted-foreground" />
               <span className="text-xs font-medium">{rate.toFixed(2)}x speed</span>
@@ -58,12 +58,18 @@ export const VoiceAssistantButton = ({ getText, label = "Listen" }: VoiceAssista
               step="0.05"
               value={rate}
               onChange={(e) => setRate(parseFloat(e.target.value))}
+              onMouseUp={applyLiveSettings}
+              onTouchEnd={applyLiveSettings}
+              onKeyUp={applyLiveSettings}
               className="w-full h-1.5 bg-muted rounded-full appearance-none cursor-pointer accent-primary"
             />
             <div className="flex justify-between mt-1 text-[10px] text-muted-foreground">
               <span>0.25x</span>
               <span>2x</span>
             </div>
+            {speaking && (
+              <p className="text-[10px] text-muted-foreground mt-1 italic">Applies on release</p>
+            )}
           </div>
         )}
       </div>
@@ -78,7 +84,7 @@ export const VoiceAssistantButton = ({ getText, label = "Listen" }: VoiceAssista
           <span>{Math.round(volume * 100)}%</span>
         </button>
         {showVolume && (
-          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-card border border-border rounded-lg shadow-lg p-3 min-w-[140px]">
+          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-card border border-border rounded-lg shadow-lg p-3 min-w-[160px]">
             <div className="flex items-center gap-2 mb-2">
               <VolumeIcon size={14} className="text-muted-foreground" />
               <span className="text-xs font-medium">{Math.round(volume * 100)}%</span>
@@ -90,8 +96,14 @@ export const VoiceAssistantButton = ({ getText, label = "Listen" }: VoiceAssista
               step="0.05"
               value={volume}
               onChange={(e) => setVolume(parseFloat(e.target.value))}
+              onMouseUp={applyLiveSettings}
+              onTouchEnd={applyLiveSettings}
+              onKeyUp={applyLiveSettings}
               className="w-full h-1.5 bg-muted rounded-full appearance-none cursor-pointer accent-primary"
             />
+            {speaking && (
+              <p className="text-[10px] text-muted-foreground mt-1 italic">Applies on release</p>
+            )}
           </div>
         )}
       </div>
