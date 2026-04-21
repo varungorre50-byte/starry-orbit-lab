@@ -20,6 +20,9 @@ export const useSpeech = () => {
   const rateRef = useRef(rate);
   const volumeRef = useRef(volume);
   const manualStopRef = useRef(false);
+  const restartTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const activeFromCharRef = useRef(0);
+  const utteranceStartedAtRef = useRef(0);
 
   useEffect(() => { rateRef.current = rate; }, [rate]);
   useEffect(() => { volumeRef.current = volume; }, [volume]);
@@ -29,6 +32,9 @@ export const useSpeech = () => {
       setSupported(false);
     }
     return () => {
+      if (restartTimeoutRef.current) {
+        clearTimeout(restartTimeoutRef.current);
+      }
       if (typeof window !== "undefined" && "speechSynthesis" in window) {
         window.speechSynthesis.cancel();
       }
@@ -38,6 +44,10 @@ export const useSpeech = () => {
   const stop = useCallback(() => {
     if (!supported) return;
     manualStopRef.current = true;
+    if (restartTimeoutRef.current) {
+      clearTimeout(restartTimeoutRef.current);
+      restartTimeoutRef.current = null;
+    }
     window.speechSynthesis.cancel();
     setSpeaking(false);
     charIndexRef.current = 0;
@@ -47,9 +57,13 @@ export const useSpeech = () => {
     (text: string, fromChar = 0) => {
       if (!supported || !text) return;
       manualStopRef.current = true;
+      if (restartTimeoutRef.current) {
+        clearTimeout(restartTimeoutRef.current);
+      }
       window.speechSynthesis.cancel();
       // Allow the cancel to flush before starting the new utterance.
-      setTimeout(() => {
+      restartTimeoutRef.current = setTimeout(() => {
+        restartTimeoutRef.current = null;
         manualStopRef.current = false;
         const slice = text.slice(fromChar);
         const utter = new SpeechSynthesisUtterance(slice);
@@ -57,6 +71,8 @@ export const useSpeech = () => {
         utter.pitch = 1;
         utter.volume = volumeRef.current;
         utter.lang = "en-US";
+        activeFromCharRef.current = fromChar;
+        utteranceStartedAtRef.current = typeof performance !== "undefined" ? performance.now() : Date.now();
 
         const voices = window.speechSynthesis.getVoices();
         const preferred =
@@ -68,7 +84,7 @@ export const useSpeech = () => {
         utter.onstart = () => setSpeaking(true);
         utter.onboundary = (e) => {
           // Track absolute char index in the full text so we can resume.
-          charIndexRef.current = fromChar + e.charIndex;
+          charIndexRef.current = Math.max(charIndexRef.current, fromChar + e.charIndex);
         };
         utter.onend = () => {
           if (!manualStopRef.current) {
@@ -104,7 +120,21 @@ export const useSpeech = () => {
   /** Restart speech from current position with the latest rate/volume. */
   const applyLiveSettings = useCallback(() => {
     if (!speaking || !lastTextRef.current) return;
-    speakFrom(lastTextRef.current, charIndexRef.current);
+    const elapsedMs = Math.max(
+      0,
+      (typeof performance !== "undefined" ? performance.now() : Date.now()) - utteranceStartedAtRef.current
+    );
+    const activeSlice = lastTextRef.current.slice(activeFromCharRef.current);
+    const words = activeSlice.trim().split(/\s+/).filter(Boolean).length || 1;
+    const estimatedDurationMs = Math.max(350, (words / (170 * rateRef.current)) * 60_000);
+    const estimatedCharIndex = activeFromCharRef.current + Math.floor(activeSlice.length * Math.min(0.98, elapsedMs / estimatedDurationMs));
+    const resumeFrom = Math.min(
+      Math.max(charIndexRef.current, estimatedCharIndex),
+      Math.max(lastTextRef.current.length - 1, 0)
+    );
+
+    charIndexRef.current = resumeFrom;
+    speakFrom(lastTextRef.current, resumeFrom);
   }, [speaking, speakFrom]);
 
   return {
