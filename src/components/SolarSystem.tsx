@@ -6,7 +6,7 @@ import { Sun } from "./Sun";
 import { Planet } from "./Planet";
 import { OrbitRing } from "./OrbitRing";
 import { PlanetDetailView } from "./PlanetDetailView";
-import { SunInfoPanel } from "./SunInfoPanel";
+import { SunDetailView } from "./SunDetailView";
 import { SpeedController } from "./SpeedController";
 import { CameraRig, type CameraPreset } from "./CameraRig";
 import { CameraPresets } from "./CameraPresets";
@@ -41,7 +41,10 @@ const SolarSystem = () => {
         <Stars radius={200} depth={80} count={6000} factor={5} fade speed={1} />
 
         <Suspense fallback={null}>
-          <Sun onClick={() => { setShowSunInfo(true); setSelectedPlanet(null); }} />
+          <Sun
+            onClick={() => { setShowSunInfo(true); setSelectedPlanet(null); }}
+            showLabel={!selectedPlanet && !showSunInfo}
+          />
 
           {PLANETS.map((planet) => (
             <group key={planet.name}>
@@ -50,6 +53,7 @@ const SolarSystem = () => {
                 data={planet}
                 speedRef={speedRef}
                 onClick={() => { setSelectedPlanet(planet); setShowSunInfo(false); }}
+                showLabel={!selectedPlanet && !showSunInfo}
               />
             </group>
           ))}
@@ -88,7 +92,7 @@ const SolarSystem = () => {
         <PlanetDetailView planet={selectedPlanet} onClose={() => setSelectedPlanet(null)} />
       )}
       {showSunInfo && (
-        <SunInfoPanel onClose={() => setShowSunInfo(false)} />
+        <SunDetailView onClose={() => setShowSunInfo(false)} />
       )}
     </div>
   );

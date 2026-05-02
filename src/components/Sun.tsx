@@ -5,7 +5,7 @@ import { TextureLoader } from "three";
 import * as THREE from "three";
 import { SUN_DATA } from "@/data/planetData";
 
-export const Sun = ({ onClick }: { onClick: () => void }) => {
+export const Sun = ({ onClick, showLabel = true }: { onClick: () => void; showLabel?: boolean }) => {
   const meshRef = useRef<THREE.Mesh>(null);
   const glowRef = useRef<THREE.Mesh>(null);
 
@@ -52,14 +52,16 @@ export const Sun = ({ onClick }: { onClick: () => void }) => {
       {/* Point light from sun */}
       <pointLight intensity={5} color="#FDB813" distance={150} decay={0.4} />
 
-      <Html position={[0, SUN_DATA.radius + 1, 0]} center distanceFactor={25}>
-        <div
-          className="px-3 py-1.5 rounded-lg bg-card/85 text-foreground text-base font-bold whitespace-nowrap cursor-pointer backdrop-blur-sm border border-border/50"
-          onClick={onClick}
-        >
-          Sun
-        </div>
-      </Html>
+      {showLabel && (
+        <Html position={[0, SUN_DATA.radius + 1, 0]} center distanceFactor={25}>
+          <div
+            className="px-3 py-1.5 rounded-lg bg-card/85 text-foreground text-base font-bold whitespace-nowrap cursor-pointer backdrop-blur-sm border border-border/50"
+            onClick={onClick}
+          >
+            Sun
+          </div>
+        </Html>
+      )}
     </group>
   );
 };
