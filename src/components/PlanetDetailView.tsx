@@ -1,0 +1,286 @@
+import { Canvas, useFrame, useLoader } from "@react-three/fiber";
+import { OrbitControls, Stars, Html } from "@react-three/drei";
+import { Suspense, useRef } from "react";
+import * as THREE from "three";
+import { TextureLoader } from "three";
+import { X, ArrowLeft } from "lucide-react";
+import type { PlanetData } from "@/data/planetData";
+import { VoiceAssistantButton } from "./VoiceAssistantButton";
+
+const buildPlanetSpeech = (planet: PlanetData): string => {
+  const i = planet.info;
+  const moonsLine = i.moonDetails
+    ? ` ${planet.name} has ${i.moons} ${i.moons === 1 ? "moon" : "moons"}. ${i.moonDetails.description}`
+    : ` It has ${i.moons} ${i.moons === 1 ? "moon" : "moons"}.`;
+  return (
+    `${planet.name}. ${i.type}. ` +
+    `Diameter ${i.diameter}. Distance from the Sun ${i.distanceFromSun}. ` +
+    `One day on ${planet.name} lasts ${i.dayLength}, and one year takes ${i.yearLength}. ` +
+    `Surface gravity is ${i.gravity}. Temperature ranges ${i.temperature}. ` +
+    `Atmosphere consists of ${i.atmosphere.join(", ")}.` +
+    moonsLine
+  );
+};
+
+/** Big realistic rotating planet with atmosphere, clouds (Earth), specular rim, and rings */
+const BigPlanet = ({ planet }: { planet: PlanetData }) => {
+  const groupRef = useRef<THREE.Group>(null);
+  const meshRef = useRef<THREE.Mesh>(null);
+  const cloudsRef = useRef<THREE.Mesh>(null);
+  const atmoRef = useRef<THREE.Mesh>(null);
+  const ringsRef = useRef<THREE.Mesh>(null);
+
+  let texture: THREE.Texture | null = null;
+  try {
+    texture = useLoader(TextureLoader, planet.textureUrl);
+  } catch {
+    texture = null;
+  }
+
+  const tiltRad = (planet.tilt * Math.PI) / 180;
+  const displayRadius = 3.2;
+
+  useFrame((_, delta) => {
+    if (meshRef.current) meshRef.current.rotation.y += delta * 0.15;
+    if (cloudsRef.current) cloudsRef.current.rotation.y += delta * 0.22;
+    if (atmoRef.current) atmoRef.current.rotation.y -= delta * 0.05;
+    if (ringsRef.current) ringsRef.current.rotation.z += delta * 0.02;
+  });
+
+  return (
+    <group ref={groupRef} rotation={[tiltRad, 0, 0]}>
+      {/* Outer atmospheric glow */}
+      <mesh ref={atmoRef}>
+        <sphereGeometry args={[displayRadius * 1.18, 64, 64]} />
+        <meshBasicMaterial
+          color={planet.color}
+          transparent
+          opacity={0.08}
+          side={THREE.BackSide}
+        />
+      </mesh>
+      <mesh>
+        <sphereGeometry args={[displayRadius * 1.06, 64, 64]} />
+        <meshBasicMaterial
+          color={planet.color}
+          transparent
+          opacity={0.12}
+          side={THREE.BackSide}
+        />
+      </mesh>
+
+      {/* Earth-only cloud layer */}
+      {planet.name === "Earth" && (
+        <mesh ref={cloudsRef}>
+          <sphereGeometry args={[displayRadius * 1.015, 64, 64]} />
+          <meshStandardMaterial
+            color="#ffffff"
+            transparent
+            opacity={0.25}
+            roughness={1}
+          />
+        </mesh>
+      )}
+
+      {/* Main planet body */}
+      <mesh ref={meshRef} castShadow receiveShadow>
+        <sphereGeometry args={[displayRadius, 128, 128]} />
+        {texture ? (
+          <meshStandardMaterial
+            map={texture}
+            roughness={0.85}
+            metalness={0.05}
+            emissive={planet.color}
+            emissiveIntensity={0.08}
+            toneMapped={true}
+          />
+        ) : (
+          <meshStandardMaterial
+            color={planet.color}
+            roughness={0.7}
+            metalness={0.1}
+            emissive={planet.color}
+            emissiveIntensity={0.2}
+          />
+        )}
+      </mesh>
+
+      {/* Rings */}
+      {planet.hasRings && (
+        <mesh ref={ringsRef} rotation={[Math.PI / 2.3, 0, 0]}>
+          <ringGeometry args={[displayRadius * 1.45, displayRadius * 2.3, 128]} />
+          <meshBasicMaterial
+            color={planet.ringColor || "#D4C494"}
+            transparent
+            opacity={0.6}
+            side={THREE.DoubleSide}
+          />
+        </mesh>
+      )}
+    </group>
+  );
+};
+
+const InfoRow = ({ label, value }: { label: string; value: string }) => (
+  <div className="flex justify-between items-start gap-3 py-1.5 border-b border-border/40">
+    <span className="text-xs text-muted-foreground shrink-0 uppercase tracking-wider">{label}</span>
+    <span className="text-sm text-foreground text-right font-medium">{value}</span>
+  </div>
+);
+
+export const PlanetDetailView = ({ planet, onClose }: { planet: PlanetData; onClose: () => void }) => {
+  return (
+    <div className="fixed inset-0 z-50 bg-background animate-in fade-in duration-300">
+      {/* 3D Canvas - right side (full bg on mobile) */}
+      <div className="absolute inset-0 md:left-[420px]">
+        <Canvas
+          camera={{ position: [0, 1, 9], fov: 45 }}
+          gl={{ antialias: true, toneMapping: THREE.NoToneMapping }}
+          dpr={[1, 2]}
+          shadows
+        >
+          <color attach="background" args={["#03030a"]} />
+          <Stars radius={120} depth={60} count={4000} factor={4} fade speed={0.5} />
+
+          {/* Lighting — sun-like key + soft fill + rim */}
+          <ambientLight intensity={0.25} />
+          <directionalLight
+            position={[6, 3, 5]}
+            intensity={2.2}
+            color="#fff5e0"
+            castShadow
+          />
+          <pointLight position={[-8, -2, -4]} intensity={0.6} color="#4477ff" />
+          <pointLight position={[0, 5, -8]} intensity={0.4} color={planet.color} />
+
+          <Suspense fallback={
+            <Html center>
+              <div className="text-muted-foreground text-sm">Loading {planet.name}…</div>
+            </Html>
+          }>
+            <BigPlanet planet={planet} />
+          </Suspense>
+
+          <OrbitControls
+            enablePan={false}
+            enableZoom
+            minDistance={5}
+            maxDistance={18}
+            autoRotate={false}
+          />
+        </Canvas>
+      </div>
+
+      {/* Left info sidebar */}
+      <div className="absolute left-0 top-0 bottom-0 w-full md:w-[420px] bg-card/95 backdrop-blur-xl border-r border-border overflow-y-auto z-10 animate-in slide-in-from-left-4 duration-500">
+        <div className="sticky top-0 z-10 bg-card/95 backdrop-blur-xl border-b border-border px-5 py-4 flex items-center justify-between">
+          <button
+            onClick={onClose}
+            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ArrowLeft size={18} />
+            Back to system
+          </button>
+          <button
+            onClick={onClose}
+            className="md:hidden p-1 rounded-lg hover:bg-muted text-muted-foreground"
+            aria-label="Close"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        <div className="p-5 space-y-5">
+          <div>
+            <div className="text-xs uppercase tracking-[0.2em] text-primary mb-1">{planet.info.type}</div>
+            <h1 className="text-4xl font-bold text-foreground">{planet.name}</h1>
+          </div>
+
+          <VoiceAssistantButton getText={() => buildPlanetSpeech(planet)} label={`Hear about ${planet.name}`} />
+
+          <section>
+            <h2 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wider">Overview</h2>
+            <div className="space-y-0.5">
+              <InfoRow label="Diameter" value={planet.info.diameter} />
+              <InfoRow label="Distance from Sun" value={planet.info.distanceFromSun} />
+              <InfoRow label="Day Length" value={planet.info.dayLength} />
+              <InfoRow label="Year Length" value={planet.info.yearLength} />
+              <InfoRow label="Temperature" value={planet.info.temperature} />
+              <InfoRow label="Moons" value={String(planet.info.moons)} />
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wider">⚖ Gravity</h2>
+            <div className="space-y-0.5">
+              <InfoRow label="Surface Gravity" value={planet.info.gravity} />
+              <InfoRow
+                label="Your weight (70 kg on Earth)"
+                value={`${(70 * parseFloat(planet.info.gravity) / 9.81).toFixed(1)} kg`}
+              />
+              <InfoRow
+                label="Vs Earth"
+                value={`${(parseFloat(planet.info.gravity) / 9.81 * 100).toFixed(0)}%`}
+              />
+            </div>
+            <div className="mt-3">
+              <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-primary to-accent transition-all duration-1000"
+                  style={{ width: `${Math.min(parseFloat(planet.info.gravity) / 9.81 * 100, 100)}%` }}
+                />
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wider">Atmosphere</h2>
+            <div className="flex flex-wrap gap-1.5">
+              {planet.info.atmosphere.map((gas) => (
+                <span key={gas} className="text-xs px-2.5 py-1 bg-muted rounded-md text-foreground">
+                  {gas}
+                </span>
+              ))}
+            </div>
+          </section>
+
+          {planet.info.moonDetails && (
+            <section>
+              <h2 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wider">🌙 Moons</h2>
+              {planet.info.moonDetails.largest && (
+                <InfoRow label="Largest" value={planet.info.moonDetails.largest} />
+              )}
+              {planet.info.moonDetails.notable.length > 0 && (
+                <div className="mt-2 mb-2">
+                  <div className="text-[10px] text-muted-foreground mb-1 uppercase tracking-wider">Notable</div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {planet.info.moonDetails.notable.map((m) => (
+                      <span key={m} className="text-xs px-2 py-1 bg-muted rounded-md text-foreground">
+                        {m}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <p className="text-xs text-muted-foreground leading-relaxed mt-2">
+                {planet.info.moonDetails.description}
+              </p>
+            </section>
+          )}
+
+          <section>
+            <h2 className="text-sm font-semibold text-accent mb-2 uppercase tracking-wider">Neighbors</h2>
+            <div className="space-y-0.5">
+              <InfoRow label="Previous Planet" value={planet.info.distanceFromPrevious} />
+              <InfoRow label="Next Planet" value={planet.info.distanceFromNext} />
+            </div>
+          </section>
+
+          <p className="text-[11px] text-muted-foreground/70 text-center pt-4">
+            Drag the planet to rotate • Scroll to zoom
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
