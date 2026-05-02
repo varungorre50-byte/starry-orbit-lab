@@ -5,7 +5,7 @@ import * as THREE from "three";
 import { TextureLoader } from "three";
 import type { PlanetData } from "@/data/planetData";
 
-export const Planet = ({ data, speedRef, onClick }: { data: PlanetData; speedRef: React.MutableRefObject<number>; onClick: () => void }) => {
+export const Planet = ({ data, speedRef, onClick, showLabel = true }: { data: PlanetData; speedRef: React.MutableRefObject<number>; onClick: () => void; showLabel?: boolean }) => {
   const groupRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
   const accumulatedTime = useRef(0);
@@ -86,14 +86,16 @@ export const Planet = ({ data, speedRef, onClick }: { data: PlanetData; speedRef
         )}
       </group>
 
-      <Html position={[0, data.radius + 0.8, 0]} center distanceFactor={18}>
-        <div
-          className="px-3 py-1.5 rounded-lg bg-card/85 text-foreground text-base font-bold whitespace-nowrap cursor-pointer backdrop-blur-sm border border-border/50"
-          onClick={onClick}
-        >
-          {data.name}
-        </div>
-      </Html>
+      {showLabel && (
+        <Html position={[0, data.radius + 0.8, 0]} center distanceFactor={18}>
+          <div
+            className="px-3 py-1.5 rounded-lg bg-card/85 text-foreground text-base font-bold whitespace-nowrap cursor-pointer backdrop-blur-sm border border-border/50"
+            onClick={onClick}
+          >
+            {data.name}
+          </div>
+        </Html>
+      )}
     </group>
   );
 };
