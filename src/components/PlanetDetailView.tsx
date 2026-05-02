@@ -29,6 +29,7 @@ const BigPlanet = ({ planet }: { planet: PlanetData }) => {
   const cloudsRef = useRef<THREE.Mesh>(null);
   const atmoRef = useRef<THREE.Mesh>(null);
   const ringsRef = useRef<THREE.Mesh>(null);
+  const entryProgress = useRef(0);
 
   let texture: THREE.Texture | null = null;
   try {
@@ -41,6 +42,23 @@ const BigPlanet = ({ planet }: { planet: PlanetData }) => {
   const displayRadius = 3.2;
 
   useFrame((_, delta) => {
+    // Entry animation: planet zooms forward and scales up smoothly
+    if (entryProgress.current < 1) {
+      entryProgress.current = Math.min(1, entryProgress.current + delta * 0.9);
+    }
+    const t = entryProgress.current;
+    // easeOutCubic
+    const eased = 1 - Math.pow(1 - t, 3);
+
+    if (groupRef.current) {
+      const scale = 0.2 + eased * 0.8;
+      groupRef.current.scale.setScalar(scale);
+      // come forward from far away (-z) toward camera (z=0)
+      groupRef.current.position.z = -8 + eased * 8;
+      // gentle floating bob once settled
+      groupRef.current.position.y = Math.sin(performance.now() * 0.0006) * 0.15 * eased;
+    }
+
     if (meshRef.current) meshRef.current.rotation.y += delta * 0.15;
     if (cloudsRef.current) cloudsRef.current.rotation.y += delta * 0.22;
     if (atmoRef.current) atmoRef.current.rotation.y -= delta * 0.05;
