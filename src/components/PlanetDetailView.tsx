@@ -152,7 +152,7 @@ export const PlanetDetailView = ({ planet, onClose }: { planet: PlanetData; onCl
       {/* 3D Canvas - right side (full bg on mobile) */}
       <div className="absolute inset-0 md:left-[420px]">
         <Canvas
-          camera={{ position: [0, 1, 9], fov: 45 }}
+          camera={{ position: [0, 1, 8], fov: 42 }}
           gl={{ antialias: true, toneMapping: THREE.NoToneMapping }}
           dpr={[1, 2]}
           shadows
