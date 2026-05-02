@@ -29,6 +29,7 @@ const BigPlanet = ({ planet }: { planet: PlanetData }) => {
   const cloudsRef = useRef<THREE.Mesh>(null);
   const atmoRef = useRef<THREE.Mesh>(null);
   const ringsRef = useRef<THREE.Mesh>(null);
+  const entryProgress = useRef(0);
 
   let texture: THREE.Texture | null = null;
   try {
@@ -41,6 +42,23 @@ const BigPlanet = ({ planet }: { planet: PlanetData }) => {
   const displayRadius = 3.2;
 
   useFrame((_, delta) => {
+    // Entry animation: planet zooms forward and scales up smoothly
+    if (entryProgress.current < 1) {
+      entryProgress.current = Math.min(1, entryProgress.current + delta * 0.9);
+    }
+    const t = entryProgress.current;
+    // easeOutCubic
+    const eased = 1 - Math.pow(1 - t, 3);
+
+    if (groupRef.current) {
+      const scale = 0.2 + eased * 0.8;
+      groupRef.current.scale.setScalar(scale);
+      // come forward from far away (-z) toward camera (z=0)
+      groupRef.current.position.z = -8 + eased * 8;
+      // gentle floating bob once settled
+      groupRef.current.position.y = Math.sin(performance.now() * 0.0006) * 0.15 * eased;
+    }
+
     if (meshRef.current) meshRef.current.rotation.y += delta * 0.15;
     if (cloudsRef.current) cloudsRef.current.rotation.y += delta * 0.22;
     if (atmoRef.current) atmoRef.current.rotation.y -= delta * 0.05;
@@ -134,7 +152,7 @@ export const PlanetDetailView = ({ planet, onClose }: { planet: PlanetData; onCl
       {/* 3D Canvas - right side (full bg on mobile) */}
       <div className="absolute inset-0 md:left-[420px]">
         <Canvas
-          camera={{ position: [0, 1, 9], fov: 45 }}
+          camera={{ position: [0, 1, 8], fov: 42 }}
           gl={{ antialias: true, toneMapping: THREE.NoToneMapping }}
           dpr={[1, 2]}
           shadows
