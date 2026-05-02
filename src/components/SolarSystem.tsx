@@ -5,7 +5,7 @@ import { Suspense, useState, useRef } from "react";
 import { Sun } from "./Sun";
 import { Planet } from "./Planet";
 import { OrbitRing } from "./OrbitRing";
-import { PlanetInfoPanel } from "./PlanetInfoPanel";
+import { PlanetDetailView } from "./PlanetDetailView";
 import { SunInfoPanel } from "./SunInfoPanel";
 import { SpeedController } from "./SpeedController";
 import { CameraRig, type CameraPreset } from "./CameraRig";
@@ -85,7 +85,7 @@ const SolarSystem = () => {
 
       {/* Info Panel */}
       {selectedPlanet && (
-        <PlanetInfoPanel planet={selectedPlanet} onClose={() => setSelectedPlanet(null)} />
+        <PlanetDetailView planet={selectedPlanet} onClose={() => setSelectedPlanet(null)} />
       )}
       {showSunInfo && (
         <SunInfoPanel onClose={() => setShowSunInfo(false)} />
