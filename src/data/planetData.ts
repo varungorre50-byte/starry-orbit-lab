@@ -26,6 +26,19 @@ export interface PlanetData {
     type: string;
     distanceFromPrevious: string;
     distanceFromNext: string;
+    // Extended info
+    mass: string;
+    density: string;
+    orbitalVelocity: string;
+    escapeVelocity: string;
+    axialTilt: string;
+    magneticField: string;
+    surfaceFeatures: string[];
+    discoveredBy: string;
+    namedAfter: string;
+    rings?: string;
+    composition: string[];
+    funFacts: string[];
   };
 }
 
@@ -72,6 +85,21 @@ export const PLANETS: PlanetData[] = [
       type: "Terrestrial (Rocky)",
       distanceFromPrevious: "— (closest to Sun)",
       distanceFromNext: "50.3 million km to Venus",
+      mass: "3.30 × 10²³ kg (0.055× Earth)",
+      density: "5.43 g/cm³",
+      orbitalVelocity: "47.4 km/s (fastest planet)",
+      escapeVelocity: "4.25 km/s",
+      axialTilt: "0.03°",
+      magneticField: "Weak — about 1% of Earth's",
+      surfaceFeatures: ["Caloris Basin (1,550 km crater)", "Heavily cratered plains", "Lobate scarps (cliffs)", "Polar ice in shadowed craters"],
+      discoveredBy: "Known since antiquity",
+      namedAfter: "Roman messenger god Mercury",
+      composition: ["Iron core (~75% of radius)", "Silicate mantle", "Thin crust"],
+      funFacts: [
+        "A year on Mercury (88 days) is shorter than its day (176 days sun-to-sun).",
+        "Despite being closest to the Sun, it's not the hottest planet — Venus is.",
+        "Mercury's surface temperature swings ~600°C between day and night.",
+      ],
     },
   },
   {
@@ -99,6 +127,21 @@ export const PLANETS: PlanetData[] = [
       type: "Terrestrial (Rocky)",
       distanceFromPrevious: "50.3 million km from Mercury",
       distanceFromNext: "41.4 million km to Earth",
+      mass: "4.87 × 10²⁴ kg (0.815× Earth)",
+      density: "5.24 g/cm³",
+      orbitalVelocity: "35.0 km/s",
+      escapeVelocity: "10.36 km/s",
+      axialTilt: "177.4° (essentially upside down)",
+      magneticField: "Almost none (no internal dynamo)",
+      surfaceFeatures: ["Maxwell Montes (11 km tall)", "Volcanic plains", "Coronae (volcanic features)", "Over 1,600 major volcanoes"],
+      discoveredBy: "Known since antiquity",
+      namedAfter: "Roman goddess of love and beauty",
+      composition: ["Iron core", "Rocky silicate mantle", "Basaltic crust"],
+      funFacts: [
+        "A day on Venus is longer than its year.",
+        "Atmospheric pressure is 92× Earth's — like being 900 m underwater.",
+        "It rains sulfuric acid that evaporates before reaching the ground.",
+      ],
     },
   },
   {
@@ -127,6 +170,21 @@ export const PLANETS: PlanetData[] = [
       type: "Terrestrial (Rocky)",
       distanceFromPrevious: "41.4 million km from Venus",
       distanceFromNext: "78.3 million km to Mars",
+      mass: "5.97 × 10²⁴ kg",
+      density: "5.51 g/cm³ (densest planet)",
+      orbitalVelocity: "29.78 km/s",
+      escapeVelocity: "11.19 km/s",
+      axialTilt: "23.44° (drives the seasons)",
+      magneticField: "Strong — protects from solar radiation",
+      surfaceFeatures: ["71% covered by oceans", "7 continents", "Mount Everest (8.85 km)", "Mariana Trench (-11 km)"],
+      discoveredBy: "Our home world",
+      namedAfter: "Old English/Germanic 'eorþe' meaning ground",
+      composition: ["Solid iron-nickel inner core", "Liquid outer core", "Silicate mantle", "Continental & oceanic crust"],
+      funFacts: [
+        "The only known planet with confirmed life.",
+        "Earth's rotation is gradually slowing — days lengthen ~1.7 ms per century.",
+        "70% of the atmosphere's oxygen is produced by ocean phytoplankton.",
+      ],
     },
   },
   {
@@ -155,6 +213,21 @@ export const PLANETS: PlanetData[] = [
       type: "Terrestrial (Rocky)",
       distanceFromPrevious: "78.3 million km from Earth",
       distanceFromNext: "550.4 million km to Jupiter",
+      mass: "6.42 × 10²³ kg (0.107× Earth)",
+      density: "3.93 g/cm³",
+      orbitalVelocity: "24.07 km/s",
+      escapeVelocity: "5.03 km/s",
+      axialTilt: "25.19° (similar to Earth)",
+      magneticField: "Weak, localized crustal fields only",
+      surfaceFeatures: ["Olympus Mons (22 km — tallest volcano)", "Valles Marineris (4,000 km canyon)", "Polar ice caps (CO₂ + water)", "Rust-red iron oxide soil"],
+      discoveredBy: "Known since antiquity",
+      namedAfter: "Roman god of war (red color)",
+      composition: ["Iron-sulfur core", "Silicate mantle", "Iron-oxide-rich basaltic crust"],
+      funFacts: [
+        "Olympus Mons is 2.5× the height of Mount Everest.",
+        "Mars had liquid water rivers and lakes ~3.5 billion years ago.",
+        "A Martian sunset appears blue due to fine dust scattering light.",
+      ],
     },
   },
   {
@@ -183,6 +256,22 @@ export const PLANETS: PlanetData[] = [
       type: "Gas Giant",
       distanceFromPrevious: "550.4 million km from Mars",
       distanceFromNext: "649.1 million km to Saturn",
+      mass: "1.898 × 10²⁷ kg (318× Earth, 2.5× all other planets combined)",
+      density: "1.33 g/cm³",
+      orbitalVelocity: "13.07 km/s",
+      escapeVelocity: "59.5 km/s",
+      axialTilt: "3.13° (almost no seasons)",
+      magneticField: "Strongest of any planet — 20,000× Earth's",
+      surfaceFeatures: ["Great Red Spot (storm larger than Earth)", "Banded cloud zones", "Faint ring system", "No solid surface"],
+      discoveredBy: "Known since antiquity (moons by Galileo, 1610)",
+      namedAfter: "King of the Roman gods",
+      rings: "4 thin rings of dust (discovered by Voyager 1, 1979)",
+      composition: ["Hydrogen/helium gas envelope", "Liquid metallic hydrogen mantle", "Possible rocky/icy core"],
+      funFacts: [
+        "Jupiter spins so fast it bulges noticeably at the equator.",
+        "The Great Red Spot has been raging for at least 350 years.",
+        "Jupiter's gravity acts as a 'cosmic vacuum' shielding inner planets from comets.",
+      ],
     },
   },
   {
@@ -213,6 +302,22 @@ export const PLANETS: PlanetData[] = [
       type: "Gas Giant",
       distanceFromPrevious: "649.1 million km from Jupiter",
       distanceFromNext: "1.443 billion km to Uranus",
+      mass: "5.68 × 10²⁶ kg (95× Earth)",
+      density: "0.687 g/cm³ (would float in water!)",
+      orbitalVelocity: "9.69 km/s",
+      escapeVelocity: "35.5 km/s",
+      axialTilt: "26.73°",
+      magneticField: "578× Earth's, nearly aligned with rotation axis",
+      surfaceFeatures: ["Hexagonal storm at north pole", "Banded clouds", "No solid surface"],
+      discoveredBy: "Known since antiquity (rings by Galileo, 1610)",
+      namedAfter: "Roman god of agriculture, father of Jupiter",
+      rings: "7 main rings (A–G), 282,000 km wide but only ~10 m thick — made of ice and rock",
+      composition: ["Hydrogen/helium envelope", "Liquid metallic hydrogen", "Rocky/icy core (~9–22× Earth mass)"],
+      funFacts: [
+        "Saturn is the least dense planet — it would float in a giant bathtub.",
+        "Its rings will eventually disappear in ~100 million years (raining down as ice).",
+        "A persistent hexagon-shaped jet stream circles its north pole.",
+      ],
     },
   },
   {
@@ -243,6 +348,22 @@ export const PLANETS: PlanetData[] = [
       type: "Ice Giant",
       distanceFromPrevious: "1.443 billion km from Saturn",
       distanceFromNext: "1.627 billion km to Neptune",
+      mass: "8.68 × 10²⁵ kg (14.5× Earth)",
+      density: "1.27 g/cm³",
+      orbitalVelocity: "6.81 km/s",
+      escapeVelocity: "21.3 km/s",
+      axialTilt: "97.77° (rotates on its side)",
+      magneticField: "50× Earth's, tilted 59° from rotation axis",
+      surfaceFeatures: ["Featureless cyan haze", "Faint dark rings", "No solid surface"],
+      discoveredBy: "William Herschel, 1781 (first planet discovered with a telescope)",
+      namedAfter: "Greek god of the sky (father of Saturn)",
+      rings: "13 narrow, dark rings discovered in 1977",
+      composition: ["Hydrogen/helium atmosphere", "Water/ammonia/methane ice mantle", "Rocky core"],
+      funFacts: [
+        "Uranus rolls on its side — likely from an ancient massive collision.",
+        "Its blue-green color comes from methane absorbing red light.",
+        "Each pole has 42 years of continuous sunlight, then 42 years of darkness.",
+      ],
     },
   },
   {
@@ -271,6 +392,22 @@ export const PLANETS: PlanetData[] = [
       type: "Ice Giant",
       distanceFromPrevious: "1.627 billion km from Uranus",
       distanceFromNext: "— (outermost planet)",
+      mass: "1.024 × 10²⁶ kg (17× Earth)",
+      density: "1.64 g/cm³ (densest gas/ice giant)",
+      orbitalVelocity: "5.43 km/s",
+      escapeVelocity: "23.5 km/s",
+      axialTilt: "28.32°",
+      magneticField: "27× Earth's, tilted 47° from rotation axis",
+      surfaceFeatures: ["Great Dark Spot (storm)", "Fastest winds in the solar system (2,100 km/h)", "Faint ring system"],
+      discoveredBy: "Johann Galle, 1846 (predicted mathematically by Le Verrier)",
+      namedAfter: "Roman god of the sea",
+      rings: "5 main rings — Galle, Le Verrier, Lassell, Arago, Adams",
+      composition: ["Hydrogen/helium/methane atmosphere", "Water/ammonia/methane ice mantle", "Rocky/icy core"],
+      funFacts: [
+        "First planet discovered through mathematical prediction, not observation.",
+        "Has supersonic winds reaching 2,100 km/h — the fastest known.",
+        "Hasn't completed a single orbit since its discovery in 1846 (next: 2011 was first!).",
+      ],
     },
   },
 ];
