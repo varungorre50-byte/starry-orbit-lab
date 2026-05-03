@@ -135,76 +135,90 @@ const BigPlanet = ({ planet }: { planet: PlanetData }) => {
     if (ringsRef.current) ringsRef.current.rotation.z += delta * 0.02;
   });
 
+  const atmoUniforms = useMemo(
+    () => ({
+      glowColor: { value: new THREE.Color(planet.name === "Earth" ? "#6db3ff" : planet.color) },
+      power: { value: planet.name === "Earth" ? 2.4 : 3.0 },
+      intensity: { value: planet.name === "Earth" ? 1.6 : 1.1 },
+    }),
+    [planet]
+  );
+
+  const moonConfig = useMemo(() => {
+    if (["Mercury", "Venus"].includes(planet.name)) return [] as { r: number; d: number; s: number; c: string; p: number }[];
+    if (planet.name === "Earth") return [{ r: 0.18, d: 5.2, s: 0.5, c: "#d8d4cc", p: 0 }];
+    if (planet.name === "Mars") return [
+      { r: 0.08, d: 4.6, s: 0.9, c: "#a08572", p: 0 },
+      { r: 0.06, d: 5.3, s: 0.6, c: "#8a7568", p: 1.2 },
+    ];
+    return [
+      { r: 0.14, d: 5.6, s: 0.4, c: "#c9c0b3", p: 0 },
+      { r: 0.10, d: 6.4, s: 0.3, c: "#b8a890", p: 2.1 },
+      { r: 0.08, d: 7.1, s: 0.25, c: "#d4c8b0", p: 4.0 },
+    ];
+  }, [planet.name]);
+
   return (
     <group ref={groupRef} rotation={[tiltRad, 0, 0]}>
-      {/* Outer atmospheric glow */}
-      <mesh ref={atmoRef}>
-        <sphereGeometry args={[displayRadius * 1.18, 64, 64]} />
-        <meshBasicMaterial
-          color={planet.color}
+      {/* Fresnel atmospheric rim */}
+      <mesh ref={atmoRef} scale={1.12}>
+        <sphereGeometry args={[displayRadius, 64, 64]} />
+        <shaderMaterial
+          vertexShader={atmosphereVertex}
+          fragmentShader={atmosphereFragment}
+          uniforms={atmoUniforms}
           transparent
-          opacity={0.08}
+          blending={THREE.AdditiveBlending}
           side={THREE.BackSide}
-        />
-      </mesh>
-      <mesh>
-        <sphereGeometry args={[displayRadius * 1.06, 64, 64]} />
-        <meshBasicMaterial
-          color={planet.color}
-          transparent
-          opacity={0.12}
-          side={THREE.BackSide}
+          depthWrite={false}
         />
       </mesh>
 
-      {/* Earth-only cloud layer */}
       {planet.name === "Earth" && (
         <mesh ref={cloudsRef}>
-          <sphereGeometry args={[displayRadius * 1.015, 64, 64]} />
-          <meshStandardMaterial
-            color="#ffffff"
-            transparent
-            opacity={0.25}
-            roughness={1}
-          />
+          <sphereGeometry args={[displayRadius * 1.018, 96, 96]} />
+          <meshStandardMaterial color="#ffffff" transparent opacity={0.32} roughness={1} depthWrite={false} />
         </mesh>
       )}
 
-      {/* Main planet body */}
       <mesh ref={meshRef} castShadow receiveShadow>
-        <sphereGeometry args={[displayRadius, 128, 128]} />
+        <sphereGeometry args={[displayRadius, 256, 256]} />
         {texture ? (
           <meshStandardMaterial
             map={texture}
-            roughness={0.85}
-            metalness={0.05}
+            roughness={planet.name === "Earth" ? 0.65 : 0.92}
+            metalness={0.04}
             emissive={planet.color}
-            emissiveIntensity={0.08}
+            emissiveIntensity={0.05}
             toneMapped={true}
           />
         ) : (
-          <meshStandardMaterial
-            color={planet.color}
-            roughness={0.7}
-            metalness={0.1}
-            emissive={planet.color}
-            emissiveIntensity={0.2}
-          />
+          <meshStandardMaterial color={planet.color} roughness={0.7} metalness={0.1} emissive={planet.color} emissiveIntensity={0.2} />
         )}
       </mesh>
 
-      {/* Rings */}
       {planet.hasRings && (
-        <mesh ref={ringsRef} rotation={[Math.PI / 2.3, 0, 0]}>
-          <ringGeometry args={[displayRadius * 1.45, displayRadius * 2.3, 128]} />
-          <meshBasicMaterial
-            color={planet.ringColor || "#D4C494"}
-            transparent
-            opacity={0.6}
-            side={THREE.DoubleSide}
-          />
-        </mesh>
+        <group ref={ringsRef as any} rotation={[Math.PI / 2.3, 0, 0]}>
+          <mesh>
+            <ringGeometry args={[displayRadius * 1.45, displayRadius * 1.75, 256]} />
+            <meshBasicMaterial color={planet.ringColor || "#D4C494"} transparent opacity={0.7} side={THREE.DoubleSide} />
+          </mesh>
+          <mesh>
+            <ringGeometry args={[displayRadius * 1.78, displayRadius * 2.05, 256]} />
+            <meshBasicMaterial color={planet.ringColor || "#E8D9A8"} transparent opacity={0.45} side={THREE.DoubleSide} />
+          </mesh>
+          <mesh>
+            <ringGeometry args={[displayRadius * 2.08, displayRadius * 2.35, 256]} />
+            <meshBasicMaterial color={planet.ringColor || "#B8A878"} transparent opacity={0.55} side={THREE.DoubleSide} />
+          </mesh>
+        </group>
       )}
+
+      <Sparkles count={60} scale={displayRadius * 4} size={2} speed={0.3} color={planet.color} opacity={0.5} />
+
+      {moonConfig.map((m, i) => (
+        <Moon key={i} radius={m.r} distance={m.d} speed={m.s} color={m.c} phase={m.p} />
+      ))}
     </group>
   );
 };
