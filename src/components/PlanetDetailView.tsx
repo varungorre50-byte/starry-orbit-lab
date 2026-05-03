@@ -242,7 +242,12 @@ export const PlanetDetailView = ({ planet, onClose }: { planet: PlanetData; onCl
           shadows
         >
           <color attach="background" args={["#03030a"]} />
-          <Stars radius={120} depth={60} count={4000} factor={4} fade speed={0.5} />
+          <fog attach="fog" args={["#03030a", 25, 80]} />
+          <Stars radius={120} depth={60} count={6000} factor={4.5} fade speed={1} />
+          <Sparkles count={120} scale={40} size={1.2} speed={0.2} color="#ffffff" opacity={0.6} />
+          <ShootingStar delay={0} color="#ffffff" />
+          <ShootingStar delay={3.2} color="#9ec5ff" />
+          <ShootingStar delay={5.7} color="#ffd9a8" />
 
           {/* Lighting — sun-like key + soft fill + rim */}
           <ambientLight intensity={0.25} />
