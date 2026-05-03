@@ -1,11 +1,81 @@
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { OrbitControls, Stars, Html } from "@react-three/drei";
-import { Suspense, useRef } from "react";
+import { OrbitControls, Stars, Html, Sparkles, Trail } from "@react-three/drei";
+import { Suspense, useRef, useMemo } from "react";
 import * as THREE from "three";
 import { TextureLoader } from "three";
 import { X, ArrowLeft } from "lucide-react";
 import type { PlanetData } from "@/data/planetData";
 import { VoiceAssistantButton } from "./VoiceAssistantButton";
+
+/** Fresnel atmosphere shader — realistic limb glow */
+const atmosphereVertex = `
+  varying vec3 vNormal;
+  varying vec3 vPosition;
+  void main() {
+    vNormal = normalize(normalMatrix * normal);
+    vPosition = (modelViewMatrix * vec4(position, 1.0)).xyz;
+    gl_Position = projectionMatrix * vec4(vPosition, 1.0);
+  }
+`;
+const atmosphereFragment = `
+  uniform vec3 glowColor;
+  uniform float power;
+  uniform float intensity;
+  varying vec3 vNormal;
+  varying vec3 vPosition;
+  void main() {
+    vec3 viewDir = normalize(-vPosition);
+    float fres = pow(1.0 - dot(vNormal, viewDir), power);
+    gl_FragColor = vec4(glowColor * fres * intensity, fres);
+  }
+`;
+
+/** Shooting star streak across the scene */
+const ShootingStar = ({ delay = 0, color = "#ffffff" }: { delay?: number; color?: string }) => {
+  const ref = useRef<THREE.Mesh>(null);
+  const start = useRef(performance.now() * 0.001 + delay);
+  useFrame(() => {
+    if (!ref.current) return;
+    const now = performance.now() * 0.001;
+    const cycle = 8;
+    const t = ((now - start.current) % cycle) / cycle;
+    if (t < 0.18) {
+      const p = t / 0.18;
+      ref.current.visible = true;
+      ref.current.position.set(-25 + p * 50, 12 - p * 6, -15 + p * 8);
+    } else {
+      ref.current.visible = false;
+    }
+  });
+  return (
+    <Trail width={1.6} length={6} color={color} attenuation={(w) => w * w}>
+      <mesh ref={ref}>
+        <sphereGeometry args={[0.06, 8, 8]} />
+        <meshBasicMaterial color={color} />
+      </mesh>
+    </Trail>
+  );
+};
+
+/** Tiny moon that orbits the planet for ambience */
+const Moon = ({ radius, distance, speed, color = "#cccccc", phase = 0 }: { radius: number; distance: number; speed: number; color?: string; phase?: number }) => {
+  const ref = useRef<THREE.Group>(null);
+  useFrame((_, dt) => {
+    if (!ref.current) return;
+    const t = performance.now() * 0.001 * speed + phase;
+    ref.current.position.x = Math.cos(t) * distance;
+    ref.current.position.z = Math.sin(t) * distance;
+    ref.current.position.y = Math.sin(t * 0.7) * distance * 0.15;
+  });
+  return (
+    <group ref={ref}>
+      <mesh>
+        <sphereGeometry args={[radius, 24, 24]} />
+        <meshStandardMaterial color={color} roughness={0.9} metalness={0.05} />
+      </mesh>
+    </group>
+  );
+};
 
 const buildPlanetSpeech = (planet: PlanetData): string => {
   const i = planet.info;
