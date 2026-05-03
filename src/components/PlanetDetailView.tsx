@@ -1,11 +1,81 @@
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { OrbitControls, Stars, Html } from "@react-three/drei";
-import { Suspense, useRef } from "react";
+import { OrbitControls, Stars, Html, Sparkles, Trail } from "@react-three/drei";
+import { Suspense, useRef, useMemo } from "react";
 import * as THREE from "three";
 import { TextureLoader } from "three";
 import { X, ArrowLeft } from "lucide-react";
 import type { PlanetData } from "@/data/planetData";
 import { VoiceAssistantButton } from "./VoiceAssistantButton";
+
+/** Fresnel atmosphere shader — realistic limb glow */
+const atmosphereVertex = `
+  varying vec3 vNormal;
+  varying vec3 vPosition;
+  void main() {
+    vNormal = normalize(normalMatrix * normal);
+    vPosition = (modelViewMatrix * vec4(position, 1.0)).xyz;
+    gl_Position = projectionMatrix * vec4(vPosition, 1.0);
+  }
+`;
+const atmosphereFragment = `
+  uniform vec3 glowColor;
+  uniform float power;
+  uniform float intensity;
+  varying vec3 vNormal;
+  varying vec3 vPosition;
+  void main() {
+    vec3 viewDir = normalize(-vPosition);
+    float fres = pow(1.0 - dot(vNormal, viewDir), power);
+    gl_FragColor = vec4(glowColor * fres * intensity, fres);
+  }
+`;
+
+/** Shooting star streak across the scene */
+const ShootingStar = ({ delay = 0, color = "#ffffff" }: { delay?: number; color?: string }) => {
+  const ref = useRef<THREE.Mesh>(null);
+  const start = useRef(performance.now() * 0.001 + delay);
+  useFrame(() => {
+    if (!ref.current) return;
+    const now = performance.now() * 0.001;
+    const cycle = 8;
+    const t = ((now - start.current) % cycle) / cycle;
+    if (t < 0.18) {
+      const p = t / 0.18;
+      ref.current.visible = true;
+      ref.current.position.set(-25 + p * 50, 12 - p * 6, -15 + p * 8);
+    } else {
+      ref.current.visible = false;
+    }
+  });
+  return (
+    <Trail width={1.6} length={6} color={color} attenuation={(w) => w * w}>
+      <mesh ref={ref}>
+        <sphereGeometry args={[0.06, 8, 8]} />
+        <meshBasicMaterial color={color} />
+      </mesh>
+    </Trail>
+  );
+};
+
+/** Tiny moon that orbits the planet for ambience */
+const Moon = ({ radius, distance, speed, color = "#cccccc", phase = 0 }: { radius: number; distance: number; speed: number; color?: string; phase?: number }) => {
+  const ref = useRef<THREE.Group>(null);
+  useFrame((_, dt) => {
+    if (!ref.current) return;
+    const t = performance.now() * 0.001 * speed + phase;
+    ref.current.position.x = Math.cos(t) * distance;
+    ref.current.position.z = Math.sin(t) * distance;
+    ref.current.position.y = Math.sin(t * 0.7) * distance * 0.15;
+  });
+  return (
+    <group ref={ref}>
+      <mesh>
+        <sphereGeometry args={[radius, 24, 24]} />
+        <meshStandardMaterial color={color} roughness={0.9} metalness={0.05} />
+      </mesh>
+    </group>
+  );
+};
 
 const buildPlanetSpeech = (planet: PlanetData): string => {
   const i = planet.info;
@@ -28,7 +98,7 @@ const BigPlanet = ({ planet }: { planet: PlanetData }) => {
   const meshRef = useRef<THREE.Mesh>(null);
   const cloudsRef = useRef<THREE.Mesh>(null);
   const atmoRef = useRef<THREE.Mesh>(null);
-  const ringsRef = useRef<THREE.Mesh>(null);
+  const ringsRef = useRef<THREE.Group>(null);
   const entryProgress = useRef(0);
 
   let texture: THREE.Texture | null = null;
@@ -65,76 +135,90 @@ const BigPlanet = ({ planet }: { planet: PlanetData }) => {
     if (ringsRef.current) ringsRef.current.rotation.z += delta * 0.02;
   });
 
+  const atmoUniforms = useMemo(
+    () => ({
+      glowColor: { value: new THREE.Color(planet.name === "Earth" ? "#6db3ff" : planet.color) },
+      power: { value: planet.name === "Earth" ? 2.4 : 3.0 },
+      intensity: { value: planet.name === "Earth" ? 1.6 : 1.1 },
+    }),
+    [planet]
+  );
+
+  const moonConfig = useMemo(() => {
+    if (["Mercury", "Venus"].includes(planet.name)) return [] as { r: number; d: number; s: number; c: string; p: number }[];
+    if (planet.name === "Earth") return [{ r: 0.18, d: 5.2, s: 0.5, c: "#d8d4cc", p: 0 }];
+    if (planet.name === "Mars") return [
+      { r: 0.08, d: 4.6, s: 0.9, c: "#a08572", p: 0 },
+      { r: 0.06, d: 5.3, s: 0.6, c: "#8a7568", p: 1.2 },
+    ];
+    return [
+      { r: 0.14, d: 5.6, s: 0.4, c: "#c9c0b3", p: 0 },
+      { r: 0.10, d: 6.4, s: 0.3, c: "#b8a890", p: 2.1 },
+      { r: 0.08, d: 7.1, s: 0.25, c: "#d4c8b0", p: 4.0 },
+    ];
+  }, [planet.name]);
+
   return (
     <group ref={groupRef} rotation={[tiltRad, 0, 0]}>
-      {/* Outer atmospheric glow */}
-      <mesh ref={atmoRef}>
-        <sphereGeometry args={[displayRadius * 1.18, 64, 64]} />
-        <meshBasicMaterial
-          color={planet.color}
+      {/* Fresnel atmospheric rim */}
+      <mesh ref={atmoRef} scale={1.12}>
+        <sphereGeometry args={[displayRadius, 64, 64]} />
+        <shaderMaterial
+          vertexShader={atmosphereVertex}
+          fragmentShader={atmosphereFragment}
+          uniforms={atmoUniforms}
           transparent
-          opacity={0.08}
+          blending={THREE.AdditiveBlending}
           side={THREE.BackSide}
-        />
-      </mesh>
-      <mesh>
-        <sphereGeometry args={[displayRadius * 1.06, 64, 64]} />
-        <meshBasicMaterial
-          color={planet.color}
-          transparent
-          opacity={0.12}
-          side={THREE.BackSide}
+          depthWrite={false}
         />
       </mesh>
 
-      {/* Earth-only cloud layer */}
       {planet.name === "Earth" && (
         <mesh ref={cloudsRef}>
-          <sphereGeometry args={[displayRadius * 1.015, 64, 64]} />
-          <meshStandardMaterial
-            color="#ffffff"
-            transparent
-            opacity={0.25}
-            roughness={1}
-          />
+          <sphereGeometry args={[displayRadius * 1.018, 96, 96]} />
+          <meshStandardMaterial color="#ffffff" transparent opacity={0.32} roughness={1} depthWrite={false} />
         </mesh>
       )}
 
-      {/* Main planet body */}
       <mesh ref={meshRef} castShadow receiveShadow>
-        <sphereGeometry args={[displayRadius, 128, 128]} />
+        <sphereGeometry args={[displayRadius, 256, 256]} />
         {texture ? (
           <meshStandardMaterial
             map={texture}
-            roughness={0.85}
-            metalness={0.05}
+            roughness={planet.name === "Earth" ? 0.65 : 0.92}
+            metalness={0.04}
             emissive={planet.color}
-            emissiveIntensity={0.08}
+            emissiveIntensity={0.05}
             toneMapped={true}
           />
         ) : (
-          <meshStandardMaterial
-            color={planet.color}
-            roughness={0.7}
-            metalness={0.1}
-            emissive={planet.color}
-            emissiveIntensity={0.2}
-          />
+          <meshStandardMaterial color={planet.color} roughness={0.7} metalness={0.1} emissive={planet.color} emissiveIntensity={0.2} />
         )}
       </mesh>
 
-      {/* Rings */}
       {planet.hasRings && (
-        <mesh ref={ringsRef} rotation={[Math.PI / 2.3, 0, 0]}>
-          <ringGeometry args={[displayRadius * 1.45, displayRadius * 2.3, 128]} />
-          <meshBasicMaterial
-            color={planet.ringColor || "#D4C494"}
-            transparent
-            opacity={0.6}
-            side={THREE.DoubleSide}
-          />
-        </mesh>
+        <group ref={ringsRef as any} rotation={[Math.PI / 2.3, 0, 0]}>
+          <mesh>
+            <ringGeometry args={[displayRadius * 1.45, displayRadius * 1.75, 256]} />
+            <meshBasicMaterial color={planet.ringColor || "#D4C494"} transparent opacity={0.7} side={THREE.DoubleSide} />
+          </mesh>
+          <mesh>
+            <ringGeometry args={[displayRadius * 1.78, displayRadius * 2.05, 256]} />
+            <meshBasicMaterial color={planet.ringColor || "#E8D9A8"} transparent opacity={0.45} side={THREE.DoubleSide} />
+          </mesh>
+          <mesh>
+            <ringGeometry args={[displayRadius * 2.08, displayRadius * 2.35, 256]} />
+            <meshBasicMaterial color={planet.ringColor || "#B8A878"} transparent opacity={0.55} side={THREE.DoubleSide} />
+          </mesh>
+        </group>
       )}
+
+      <Sparkles count={60} scale={displayRadius * 4} size={2} speed={0.3} color={planet.color} opacity={0.5} />
+
+      {moonConfig.map((m, i) => (
+        <Moon key={i} radius={m.r} distance={m.d} speed={m.s} color={m.c} phase={m.p} />
+      ))}
     </group>
   );
 };
@@ -158,7 +242,12 @@ export const PlanetDetailView = ({ planet, onClose }: { planet: PlanetData; onCl
           shadows
         >
           <color attach="background" args={["#03030a"]} />
-          <Stars radius={120} depth={60} count={4000} factor={4} fade speed={0.5} />
+          <fog attach="fog" args={["#03030a", 25, 80]} />
+          <Stars radius={120} depth={60} count={6000} factor={4.5} fade speed={1} />
+          <Sparkles count={120} scale={40} size={1.2} speed={0.2} color="#ffffff" opacity={0.6} />
+          <ShootingStar delay={0} color="#ffffff" />
+          <ShootingStar delay={3.2} color="#9ec5ff" />
+          <ShootingStar delay={5.7} color="#ffd9a8" />
 
           {/* Lighting — sun-like key + soft fill + rim */}
           <ambientLight intensity={0.25} />
@@ -184,7 +273,8 @@ export const PlanetDetailView = ({ planet, onClose }: { planet: PlanetData; onCl
             enableZoom
             minDistance={5}
             maxDistance={18}
-            autoRotate={false}
+            autoRotate
+            autoRotateSpeed={0.4}
           />
         </Canvas>
       </div>
