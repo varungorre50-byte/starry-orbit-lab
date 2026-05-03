@@ -98,7 +98,7 @@ const BigPlanet = ({ planet }: { planet: PlanetData }) => {
   const meshRef = useRef<THREE.Mesh>(null);
   const cloudsRef = useRef<THREE.Mesh>(null);
   const atmoRef = useRef<THREE.Mesh>(null);
-  const ringsRef = useRef<THREE.Mesh>(null);
+  const ringsRef = useRef<THREE.Group>(null);
   const entryProgress = useRef(0);
 
   let texture: THREE.Texture | null = null;
