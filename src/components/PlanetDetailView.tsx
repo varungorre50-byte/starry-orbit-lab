@@ -273,7 +273,8 @@ export const PlanetDetailView = ({ planet, onClose }: { planet: PlanetData; onCl
             enableZoom
             minDistance={5}
             maxDistance={18}
-            autoRotate={false}
+            autoRotate
+            autoRotateSpeed={0.4}
           />
         </Canvas>
       </div>
