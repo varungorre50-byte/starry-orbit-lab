@@ -379,6 +379,62 @@ export const PlanetDetailView = ({ planet, onClose }: { planet: PlanetData; onCl
           )}
 
           <section>
+            <h2 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wider">📊 Physical Properties</h2>
+            <div className="space-y-0.5">
+              <InfoRow label="Mass" value={planet.info.mass} />
+              <InfoRow label="Density" value={planet.info.density} />
+              <InfoRow label="Orbital Velocity" value={planet.info.orbitalVelocity} />
+              <InfoRow label="Escape Velocity" value={planet.info.escapeVelocity} />
+              <InfoRow label="Axial Tilt" value={planet.info.axialTilt} />
+              <InfoRow label="Magnetic Field" value={planet.info.magneticField} />
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wider">🪨 Composition</h2>
+            <div className="flex flex-wrap gap-1.5">
+              {planet.info.composition.map((c) => (
+                <span key={c} className="text-xs px-2.5 py-1 bg-muted rounded-md text-foreground">{c}</span>
+              ))}
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wider">🗺 Surface & Features</h2>
+            <ul className="space-y-1">
+              {planet.info.surfaceFeatures.map((f) => (
+                <li key={f} className="text-xs text-foreground flex gap-2"><span className="text-primary">•</span>{f}</li>
+              ))}
+            </ul>
+          </section>
+
+          {planet.info.rings && (
+            <section>
+              <h2 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wider">💍 Rings</h2>
+              <p className="text-xs text-foreground leading-relaxed">{planet.info.rings}</p>
+            </section>
+          )}
+
+          <section>
+            <h2 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wider">📜 Discovery</h2>
+            <div className="space-y-0.5">
+              <InfoRow label="Discovered By" value={planet.info.discoveredBy} />
+              <InfoRow label="Named After" value={planet.info.namedAfter} />
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-sm font-semibold text-accent mb-2 uppercase tracking-wider">✨ Fun Facts</h2>
+            <ul className="space-y-2">
+              {planet.info.funFacts.map((f) => (
+                <li key={f} className="text-xs text-foreground leading-relaxed flex gap-2">
+                  <span className="text-accent shrink-0">★</span>{f}
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section>
             <h2 className="text-sm font-semibold text-accent mb-2 uppercase tracking-wider">Neighbors</h2>
             <div className="space-y-0.5">
               <InfoRow label="Previous Planet" value={planet.info.distanceFromPrevious} />
@@ -387,7 +443,7 @@ export const PlanetDetailView = ({ planet, onClose }: { planet: PlanetData; onCl
           </section>
 
           <p className="text-[11px] text-muted-foreground/70 text-center pt-4">
-            Drag the planet to rotate • Scroll to zoom
+            Drag the planet to rotate • Scroll to zoom • Rendering at 60 FPS
           </p>
         </div>
       </div>
