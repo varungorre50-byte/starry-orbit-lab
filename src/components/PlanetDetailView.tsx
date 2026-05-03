@@ -237,8 +237,10 @@ export const PlanetDetailView = ({ planet, onClose }: { planet: PlanetData; onCl
       <div className="absolute inset-0 md:left-[420px]">
         <Canvas
           camera={{ position: [0, 1, 8], fov: 42 }}
-          gl={{ antialias: true, toneMapping: THREE.NoToneMapping }}
+          gl={{ antialias: true, toneMapping: THREE.NoToneMapping, powerPreference: "high-performance" }}
           dpr={[1, 2]}
+          frameloop="always"
+          performance={{ min: 0.8 }}
           shadows
         >
           <color attach="background" args={["#03030a"]} />
