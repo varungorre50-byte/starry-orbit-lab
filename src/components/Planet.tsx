@@ -12,6 +12,11 @@ export const Planet = ({ data, speedRef, onClick, showLabel = true }: { data: Pl
   const atmosphereRef = useRef<THREE.Mesh>(null);
 
   const tiltRad = useMemo(() => (data.tilt * Math.PI) / 180, [data.tilt]);
+  const inclinationRad = useMemo(() => ((data.inclination ?? 0) * Math.PI) / 180, [data.inclination]);
+  const eccentricity = data.eccentricity ?? 0;
+  const semiMajor = data.orbitRadius;
+  const semiMinor = useMemo(() => semiMajor * Math.sqrt(1 - eccentricity * eccentricity), [semiMajor, eccentricity]);
+  const focusOffset = semiMajor * eccentricity;
 
   let texture: THREE.Texture | null = null;
   try {
@@ -21,22 +26,30 @@ export const Planet = ({ data, speedRef, onClick, showLabel = true }: { data: Pl
   }
 
   useFrame((_, delta) => {
-    accumulatedTime.current += delta * speedRef.current;
+    // clamp delta to avoid jumps when tab is backgrounded → smoother 60 FPS feel
+    const dt = Math.min(delta, 1 / 30);
+    accumulatedTime.current += dt * speedRef.current;
     const time = accumulatedTime.current;
 
     if (groupRef.current) {
       const angle = time * data.orbitSpeed;
-      groupRef.current.position.x = Math.cos(angle) * data.orbitRadius;
-      groupRef.current.position.z = Math.sin(angle) * data.orbitRadius;
-      groupRef.current.position.y = Math.sin(angle * 0.5) * 0.5;
+      // elliptical orbit (Sun at one focus)
+      const x = Math.cos(angle) * semiMajor - focusOffset;
+      const z = Math.sin(angle) * semiMinor;
+      // apply orbital inclination around X axis
+      const cosI = Math.cos(inclinationRad);
+      const sinI = Math.sin(inclinationRad);
+      groupRef.current.position.x = x;
+      groupRef.current.position.y = z * sinI;
+      groupRef.current.position.z = z * cosI;
     }
 
     if (meshRef.current) {
-      meshRef.current.rotation.y += data.rotationSpeed * 0.01;
+      meshRef.current.rotation.y += data.rotationSpeed * dt * 0.6;
     }
 
     if (atmosphereRef.current) {
-      atmosphereRef.current.rotation.y += data.rotationSpeed * 0.005;
+      atmosphereRef.current.rotation.y += data.rotationSpeed * dt * 0.3;
     }
   });
 
