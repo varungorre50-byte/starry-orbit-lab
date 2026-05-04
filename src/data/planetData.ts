@@ -71,6 +71,8 @@ export const PLANETS: PlanetData[] = [
     color: "#A09080",
     textureUrl: "/textures/mercury.jpg",
     tilt: 0.03,
+    eccentricity: 0.2056,
+    inclination: 7.0,
     info: {
       distanceFromSun: "57.9 million km (0.39 AU)",
       gravity: "3.7 m/s² (0.38× Earth)",
@@ -113,6 +115,8 @@ export const PLANETS: PlanetData[] = [
     color: "#F5C842",
     textureUrl: "/textures/venus.jpg",
     tilt: 177.4,
+    eccentricity: 0.0068,
+    inclination: 3.39,
     info: {
       distanceFromSun: "108.2 million km (0.72 AU)",
       gravity: "8.87 m/s² (0.9× Earth)",
@@ -155,6 +159,8 @@ export const PLANETS: PlanetData[] = [
     color: "#4A90D9",
     textureUrl: "/textures/earth.jpg",
     tilt: 23.44,
+    eccentricity: 0.0167,
+    inclination: 0.0,
     info: {
       distanceFromSun: "149.6 million km (1 AU)",
       gravity: "9.81 m/s² (1× Earth)",
@@ -198,6 +204,8 @@ export const PLANETS: PlanetData[] = [
     color: "#E05A3A",
     textureUrl: "/textures/mars.jpg",
     tilt: 25.19,
+    eccentricity: 0.0934,
+    inclination: 1.85,
     info: {
       distanceFromSun: "227.9 million km (1.52 AU)",
       gravity: "3.72 m/s² (0.38× Earth)",
@@ -241,6 +249,8 @@ export const PLANETS: PlanetData[] = [
     color: "#E8A060",
     textureUrl: "/textures/jupiter.jpg",
     tilt: 3.13,
+    eccentricity: 0.0489,
+    inclination: 1.31,
     info: {
       distanceFromSun: "778.3 million km (5.2 AU)",
       gravity: "24.79 m/s² (2.53× Earth)",
@@ -285,6 +295,8 @@ export const PLANETS: PlanetData[] = [
     color: "#F0D890",
     textureUrl: "/textures/saturn.jpg",
     tilt: 26.73,
+    eccentricity: 0.0565,
+    inclination: 2.49,
     hasRings: true,
     ringColor: "#D4C494",
     info: {
@@ -331,6 +343,8 @@ export const PLANETS: PlanetData[] = [
     color: "#7EEAED",
     textureUrl: "/textures/uranus.jpg",
     tilt: 97.77,
+    eccentricity: 0.0457,
+    inclination: 0.77,
     hasRings: true,
     ringColor: "#5A8A9A",
     info: {
@@ -377,6 +391,8 @@ export const PLANETS: PlanetData[] = [
     color: "#5B6BFF",
     textureUrl: "/textures/neptune.jpg",
     tilt: 28.32,
+    eccentricity: 0.0113,
+    inclination: 1.77,
     info: {
       distanceFromSun: "4.498 billion km (30.06 AU)",
       gravity: "11.15 m/s² (1.14× Earth)",
