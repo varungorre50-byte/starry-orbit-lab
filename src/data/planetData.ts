@@ -7,6 +7,8 @@ export interface PlanetData {
   color: string;
   textureUrl: string;
   tilt: number; // axial tilt in degrees
+  eccentricity?: number; // orbital eccentricity 0..<1
+  inclination?: number; // orbital inclination in degrees
   hasRings?: boolean;
   ringColor?: string;
   info: {
