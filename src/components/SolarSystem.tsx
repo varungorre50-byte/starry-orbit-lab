@@ -29,20 +29,20 @@ const SolarSystem = () => {
   return (
     <div className="relative w-full h-screen bg-background overflow-hidden">
       <Canvas
-        camera={{ position: [0, 30, 50], fov: 55, near: 0.1, far: 8000 }}
+        camera={{ position: [0, 30, 50], fov: 55, near: 0.1, far: 20000 }}
         gl={{ antialias: true, toneMapping: THREE.NoToneMapping, powerPreference: "high-performance" }}
         dpr={[1, 2]}
         frameloop="always"
         performance={{ min: 0.8 }}
         onPointerMissed={() => {}}
       >
-        <color attach="background" args={["#050510"]} />
+        <color attach="background" args={["#030308"]} />
         <ambientLight intensity={0.4} />
         <pointLight position={[0, 0, 0]} intensity={3} color="#FDB813" distance={150} decay={0.4} />
         <directionalLight position={[10, 20, 10]} intensity={0.4} />
 
-        <Stars radius={400} depth={120} count={9000} factor={6} fade speed={1} />
-        <Galaxy radius={1500} count={35000} arms={4} />
+        <Stars radius={600} depth={200} count={12000} factor={6} fade speed={1} />
+        <Galaxy radius={4000} count={60000} arms={4} sunGalacticRadius={2600} />
 
         <Suspense fallback={null}>
           <Sun
@@ -71,7 +71,7 @@ const SolarSystem = () => {
           enableZoom
           enableRotate
           minDistance={5}
-          maxDistance={2000}
+          maxDistance={6000}
           maxPolarAngle={Math.PI}
           minPolarAngle={0}
         />
