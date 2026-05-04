@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useFrame, useLoader } from "@react-three/fiber";
-import { Html } from "@react-three/drei";
+import { Html, Sparkles } from "@react-three/drei";
 import { TextureLoader } from "three";
 import * as THREE from "three";
 import { SUN_DATA } from "@/data/planetData";
@@ -8,46 +8,56 @@ import { SUN_DATA } from "@/data/planetData";
 export const Sun = ({ onClick, showLabel = true }: { onClick: () => void; showLabel?: boolean }) => {
   const meshRef = useRef<THREE.Mesh>(null);
   const glowRef = useRef<THREE.Mesh>(null);
+  const coronaRef = useRef<THREE.Mesh>(null);
 
   let texture: THREE.Texture | null = null;
   try {
     texture = useLoader(TextureLoader, SUN_DATA.textureUrl);
+    if (texture) {
+      texture.anisotropy = 8;
+      texture.colorSpace = THREE.SRGBColorSpace;
+    }
   } catch {
     texture = null;
   }
 
-  useFrame((_, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += delta * 0.1;
-    }
-    if (glowRef.current) {
-      glowRef.current.rotation.y -= delta * 0.05;
+  useFrame(({ clock }, delta) => {
+    const dt = Math.min(delta, 1 / 30);
+    if (meshRef.current) meshRef.current.rotation.y += dt * 0.08;
+    if (glowRef.current) glowRef.current.rotation.y -= dt * 0.04;
+    if (coronaRef.current) {
+      const t = clock.getElapsedTime();
+      const pulse = 1 + Math.sin(t * 1.5) * 0.03;
+      coronaRef.current.scale.setScalar(pulse);
     }
   });
 
   return (
     <group>
-      {/* Inner glow */}
-      <mesh ref={glowRef}>
-        <sphereGeometry args={[SUN_DATA.radius * 1.15, 32, 32]} />
-        <meshBasicMaterial color="#FDB813" transparent opacity={0.15} />
+      {/* Corona pulsing halo */}
+      <mesh ref={coronaRef}>
+        <sphereGeometry args={[SUN_DATA.radius * 1.6, 48, 48]} />
+        <meshBasicMaterial color="#FFB347" transparent opacity={0.08} blending={THREE.AdditiveBlending} depthWrite={false} />
       </mesh>
 
-      {/* Outer glow */}
-      <mesh>
-        <sphereGeometry args={[SUN_DATA.radius * 1.4, 32, 32]} />
-        <meshBasicMaterial color="#FFA500" transparent opacity={0.06} />
+      {/* Inner glow */}
+      <mesh ref={glowRef}>
+        <sphereGeometry args={[SUN_DATA.radius * 1.18, 48, 48]} />
+        <meshBasicMaterial color="#FDB813" transparent opacity={0.18} blending={THREE.AdditiveBlending} depthWrite={false} />
       </mesh>
 
       {/* Sun body */}
       <mesh ref={meshRef} onClick={onClick}>
-        <sphereGeometry args={[SUN_DATA.radius, 64, 64]} />
+        <sphereGeometry args={[SUN_DATA.radius, 128, 128]} />
         {texture ? (
-          <meshBasicMaterial map={texture} />
+          <meshBasicMaterial map={texture} toneMapped={false} />
         ) : (
-          <meshBasicMaterial color={SUN_DATA.color} />
+          <meshBasicMaterial color={SUN_DATA.color} toneMapped={false} />
         )}
       </mesh>
+
+      {/* Solar particle sparkles */}
+      <Sparkles count={40} scale={SUN_DATA.radius * 3} size={3} speed={0.4} color="#FFD27A" />
 
       {/* Point light from sun */}
       <pointLight intensity={5} color="#FDB813" distance={150} decay={0.4} />
@@ -65,3 +75,4 @@ export const Sun = ({ onClick, showLabel = true }: { onClick: () => void; showLa
     </group>
   );
 };
+
