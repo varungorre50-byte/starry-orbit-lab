@@ -29,8 +29,10 @@ const SolarSystem = () => {
     <div className="relative w-full h-screen bg-background overflow-hidden">
       <Canvas
         camera={{ position: [0, 30, 50], fov: 55 }}
-        gl={{ antialias: true, toneMapping: THREE.NoToneMapping }}
+        gl={{ antialias: true, toneMapping: THREE.NoToneMapping, powerPreference: "high-performance" }}
         dpr={[1, 2]}
+        frameloop="always"
+        performance={{ min: 0.8 }}
         onPointerMissed={() => {}}
       >
         <color attach="background" args={["#050510"]} />
