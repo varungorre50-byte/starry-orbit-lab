@@ -50,7 +50,7 @@ const SolarSystem = () => {
 
           {PLANETS.map((planet) => (
             <group key={planet.name}>
-              <OrbitRing radius={planet.orbitRadius} />
+              <OrbitRing radius={planet.orbitRadius} eccentricity={planet.eccentricity} inclination={planet.inclination} />
               <Planet
                 data={planet}
                 speedRef={speedRef}
