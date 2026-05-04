@@ -29,7 +29,7 @@ const SolarSystem = () => {
   return (
     <div className="relative w-full h-screen bg-background overflow-hidden">
       <Canvas
-        camera={{ position: [0, 30, 50], fov: 55 }}
+        camera={{ position: [0, 30, 50], fov: 55, near: 0.1, far: 8000 }}
         gl={{ antialias: true, toneMapping: THREE.NoToneMapping, powerPreference: "high-performance" }}
         dpr={[1, 2]}
         frameloop="always"
