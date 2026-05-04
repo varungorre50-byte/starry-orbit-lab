@@ -5,6 +5,7 @@ import { Suspense, useState, useRef } from "react";
 import { Sun } from "./Sun";
 import { Planet } from "./Planet";
 import { OrbitRing } from "./OrbitRing";
+import { Galaxy } from "./Galaxy";
 import { PlanetDetailView } from "./PlanetDetailView";
 import { SunDetailView } from "./SunDetailView";
 import { SpeedController } from "./SpeedController";
@@ -40,7 +41,8 @@ const SolarSystem = () => {
         <pointLight position={[0, 0, 0]} intensity={3} color="#FDB813" distance={150} decay={0.4} />
         <directionalLight position={[10, 20, 10]} intensity={0.4} />
 
-        <Stars radius={200} depth={80} count={6000} factor={5} fade speed={1} />
+        <Stars radius={400} depth={120} count={9000} factor={6} fade speed={1} />
+        <Galaxy radius={1500} count={35000} arms={4} />
 
         <Suspense fallback={null}>
           <Sun
@@ -69,7 +71,7 @@ const SolarSystem = () => {
           enableZoom
           enableRotate
           minDistance={5}
-          maxDistance={150}
+          maxDistance={2000}
           maxPolarAngle={Math.PI}
           minPolarAngle={0}
         />
