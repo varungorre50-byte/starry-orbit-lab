@@ -41,6 +41,15 @@ export interface PlanetData {
     rings?: string;
     composition: string[];
     funFacts: string[];
+    // Newly added extended fields
+    orbitalPeriodNote?: string;
+    rotationDirection?: string;
+    numberFromSun?: string;
+    surfacePressure?: string;
+    seasons?: string;
+    explorationMissions?: string[];
+    habitability?: string;
+    interestingPhenomena?: string[];
   };
 }
 
@@ -51,13 +60,39 @@ export const SUN_DATA = {
   textureUrl: "/textures/sun.jpg",
   info: {
     type: "G-type main-sequence star (Yellow Dwarf)",
-    diameter: "1,391,000 km",
+    diameter: "1,391,000 km (109× Earth)",
     temperature: "5,500°C (surface) / 15 million°C (core)",
     gravity: "274 m/s² (28× Earth)",
     composition: ["Hydrogen (73%)", "Helium (25%)", "Oxygen, Carbon, Neon, Iron (2%)"],
     age: "4.6 billion years",
     mass: "1.989 × 10³⁰ kg (333,000× Earth)",
     luminosity: "3.828 × 10²⁶ watts",
+    // New extended fields
+    rotationPeriod: "25 days at equator, 35 days at poles (differential rotation)",
+    coreDensity: "150 g/cm³ (10× denser than lead)",
+    surfaceDensity: "1.41 g/cm³ (average)",
+    energyOutput: "Converts 4 million tons of matter into energy every second",
+    distanceFromEarth: "149.6 million km (1 AU) — light takes 8 min 20 s",
+    distanceFromGalacticCenter: "26,000 light-years from Sagittarius A*",
+    orbitalSpeedInGalaxy: "230 km/s — completes one galactic orbit every 225 million years",
+    sunspotCycle: "11-year cycle of magnetic activity (solar maximum/minimum)",
+    solarWind: "400–800 km/s stream of charged particles reaching beyond Pluto",
+    layers: [
+      "Core (nuclear fusion zone, 0–25% radius)",
+      "Radiative zone (25–70% radius)",
+      "Convective zone (70–100% radius)",
+      "Photosphere (visible surface)",
+      "Chromosphere (red layer above surface)",
+      "Corona (outer atmosphere, millions of °C)",
+    ],
+    fate: "Will become a red giant in ~5 billion years, then collapse into a white dwarf",
+    massShareOfSolarSystem: "99.86% of all mass in the solar system",
+    funFacts: [
+      "Over 1.3 million Earths could fit inside the Sun.",
+      "Light from the Sun's core takes ~100,000 years to escape to its surface.",
+      "The Sun is white — it only looks yellow due to Earth's atmosphere scattering blue light.",
+      "Solar flares can release energy equivalent to billions of hydrogen bombs.",
+    ],
   },
 };
 
