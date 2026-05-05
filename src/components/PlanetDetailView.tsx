@@ -311,11 +311,15 @@ export const PlanetDetailView = ({ planet, onClose }: { planet: PlanetData; onCl
           <section>
             <h2 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wider">Overview</h2>
             <div className="space-y-0.5">
+              {planet.info.numberFromSun && <InfoRow label="Position" value={planet.info.numberFromSun} />}
               <InfoRow label="Diameter" value={planet.info.diameter} />
               <InfoRow label="Distance from Sun" value={planet.info.distanceFromSun} />
               <InfoRow label="Day Length" value={planet.info.dayLength} />
               <InfoRow label="Year Length" value={planet.info.yearLength} />
+              {planet.info.rotationDirection && <InfoRow label="Rotation" value={planet.info.rotationDirection} />}
               <InfoRow label="Temperature" value={planet.info.temperature} />
+              {planet.info.surfacePressure && <InfoRow label="Surface Pressure" value={planet.info.surfacePressure} />}
+              {planet.info.seasons && <InfoRow label="Seasons" value={planet.info.seasons} />}
               <InfoRow label="Moons" value={String(planet.info.moons)} />
             </div>
           </section>
