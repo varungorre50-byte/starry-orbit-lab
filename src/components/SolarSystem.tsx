@@ -6,6 +6,7 @@ import { Sun } from "./Sun";
 import { Planet } from "./Planet";
 import { OrbitRing } from "./OrbitRing";
 import { Galaxy } from "./Galaxy";
+import { SolarSystemLOD } from "./SolarSystemLOD";
 import { PlanetDetailView } from "./PlanetDetailView";
 import { SunDetailView } from "./SunDetailView";
 import { SpeedController } from "./SpeedController";
