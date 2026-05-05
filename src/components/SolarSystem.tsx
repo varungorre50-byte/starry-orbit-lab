@@ -6,6 +6,7 @@ import { Sun } from "./Sun";
 import { Planet } from "./Planet";
 import { OrbitRing } from "./OrbitRing";
 import { Galaxy } from "./Galaxy";
+import { SolarSystemLOD } from "./SolarSystemLOD";
 import { PlanetDetailView } from "./PlanetDetailView";
 import { SunDetailView } from "./SunDetailView";
 import { SpeedController } from "./SpeedController";
@@ -45,22 +46,24 @@ const SolarSystem = () => {
         <Galaxy radius={4000} count={60000} arms={4} sunGalacticRadius={2600} />
 
         <Suspense fallback={null}>
-          <Sun
-            onClick={() => { setShowSunInfo(true); setSelectedPlanet(null); }}
-            showLabel={!selectedPlanet && !showSunInfo}
-          />
+          <SolarSystemLOD fadeStart={250} fadeEnd={650}>
+            <Sun
+              onClick={() => { setShowSunInfo(true); setSelectedPlanet(null); }}
+              showLabel={!selectedPlanet && !showSunInfo}
+            />
 
-          {PLANETS.map((planet) => (
-            <group key={planet.name}>
-              <OrbitRing radius={planet.orbitRadius} eccentricity={planet.eccentricity} inclination={planet.inclination} />
-              <Planet
-                data={planet}
-                speedRef={speedRef}
-                onClick={() => { setSelectedPlanet(planet); setShowSunInfo(false); }}
-                showLabel={!selectedPlanet && !showSunInfo}
-              />
-            </group>
-          ))}
+            {PLANETS.map((planet) => (
+              <group key={planet.name}>
+                <OrbitRing radius={planet.orbitRadius} eccentricity={planet.eccentricity} inclination={planet.inclination} />
+                <Planet
+                  data={planet}
+                  speedRef={speedRef}
+                  onClick={() => { setSelectedPlanet(planet); setShowSunInfo(false); }}
+                  showLabel={!selectedPlanet && !showSunInfo}
+                />
+              </group>
+            ))}
+          </SolarSystemLOD>
         </Suspense>
 
         <CameraRig preset={cameraPreset} controlsRef={controlsRef} />
