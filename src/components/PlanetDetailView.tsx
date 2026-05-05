@@ -311,11 +311,15 @@ export const PlanetDetailView = ({ planet, onClose }: { planet: PlanetData; onCl
           <section>
             <h2 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wider">Overview</h2>
             <div className="space-y-0.5">
+              {planet.info.numberFromSun && <InfoRow label="Position" value={planet.info.numberFromSun} />}
               <InfoRow label="Diameter" value={planet.info.diameter} />
               <InfoRow label="Distance from Sun" value={planet.info.distanceFromSun} />
               <InfoRow label="Day Length" value={planet.info.dayLength} />
               <InfoRow label="Year Length" value={planet.info.yearLength} />
+              {planet.info.rotationDirection && <InfoRow label="Rotation" value={planet.info.rotationDirection} />}
               <InfoRow label="Temperature" value={planet.info.temperature} />
+              {planet.info.surfacePressure && <InfoRow label="Surface Pressure" value={planet.info.surfacePressure} />}
+              {planet.info.seasons && <InfoRow label="Seasons" value={planet.info.seasons} />}
               <InfoRow label="Moons" value={String(planet.info.moons)} />
             </div>
           </section>
@@ -433,6 +437,35 @@ export const PlanetDetailView = ({ planet, onClose }: { planet: PlanetData; onCl
               ))}
             </ul>
           </section>
+
+          {planet.info.interestingPhenomena && planet.info.interestingPhenomena.length > 0 && (
+            <section>
+              <h2 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wider">🌟 Interesting Phenomena</h2>
+              <ul className="space-y-1">
+                {planet.info.interestingPhenomena.map((p) => (
+                  <li key={p} className="text-xs text-foreground flex gap-2"><span className="text-primary">•</span>{p}</li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {planet.info.explorationMissions && planet.info.explorationMissions.length > 0 && (
+            <section>
+              <h2 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wider">🚀 Exploration Missions</h2>
+              <div className="flex flex-wrap gap-1.5">
+                {planet.info.explorationMissions.map((m) => (
+                  <span key={m} className="text-xs px-2 py-1 bg-muted rounded-md text-foreground">{m}</span>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {planet.info.habitability && (
+            <section>
+              <h2 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wider">🧬 Habitability</h2>
+              <p className="text-xs text-foreground leading-relaxed">{planet.info.habitability}</p>
+            </section>
+          )}
 
           <section>
             <h2 className="text-sm font-semibold text-accent mb-2 uppercase tracking-wider">Neighbors</h2>

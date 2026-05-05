@@ -41,6 +41,15 @@ export interface PlanetData {
     rings?: string;
     composition: string[];
     funFacts: string[];
+    // Newly added extended fields
+    orbitalPeriodNote?: string;
+    rotationDirection?: string;
+    numberFromSun?: string;
+    surfacePressure?: string;
+    seasons?: string;
+    explorationMissions?: string[];
+    habitability?: string;
+    interestingPhenomena?: string[];
   };
 }
 
@@ -51,13 +60,39 @@ export const SUN_DATA = {
   textureUrl: "/textures/sun.jpg",
   info: {
     type: "G-type main-sequence star (Yellow Dwarf)",
-    diameter: "1,391,000 km",
+    diameter: "1,391,000 km (109× Earth)",
     temperature: "5,500°C (surface) / 15 million°C (core)",
     gravity: "274 m/s² (28× Earth)",
     composition: ["Hydrogen (73%)", "Helium (25%)", "Oxygen, Carbon, Neon, Iron (2%)"],
     age: "4.6 billion years",
     mass: "1.989 × 10³⁰ kg (333,000× Earth)",
     luminosity: "3.828 × 10²⁶ watts",
+    // New extended fields
+    rotationPeriod: "25 days at equator, 35 days at poles (differential rotation)",
+    coreDensity: "150 g/cm³ (10× denser than lead)",
+    surfaceDensity: "1.41 g/cm³ (average)",
+    energyOutput: "Converts 4 million tons of matter into energy every second",
+    distanceFromEarth: "149.6 million km (1 AU) — light takes 8 min 20 s",
+    distanceFromGalacticCenter: "26,000 light-years from Sagittarius A*",
+    orbitalSpeedInGalaxy: "230 km/s — completes one galactic orbit every 225 million years",
+    sunspotCycle: "11-year cycle of magnetic activity (solar maximum/minimum)",
+    solarWind: "400–800 km/s stream of charged particles reaching beyond Pluto",
+    layers: [
+      "Core (nuclear fusion zone, 0–25% radius)",
+      "Radiative zone (25–70% radius)",
+      "Convective zone (70–100% radius)",
+      "Photosphere (visible surface)",
+      "Chromosphere (red layer above surface)",
+      "Corona (outer atmosphere, millions of °C)",
+    ],
+    fate: "Will become a red giant in ~5 billion years, then collapse into a white dwarf",
+    massShareOfSolarSystem: "99.86% of all mass in the solar system",
+    funFacts: [
+      "Over 1.3 million Earths could fit inside the Sun.",
+      "Light from the Sun's core takes ~100,000 years to escape to its surface.",
+      "The Sun is white — it only looks yellow due to Earth's atmosphere scattering blue light.",
+      "Solar flares can release energy equivalent to billions of hydrogen bombs.",
+    ],
   },
 };
 
@@ -104,6 +139,13 @@ export const PLANETS: PlanetData[] = [
         "Despite being closest to the Sun, it's not the hottest planet — Venus is.",
         "Mercury's surface temperature swings ~600°C between day and night.",
       ],
+      numberFromSun: "1st planet from the Sun",
+      rotationDirection: "Prograde (same as Earth), but very slow",
+      surfacePressure: "≈10⁻¹⁵ bar (essentially vacuum)",
+      seasons: "Negligible — axial tilt is just 0.03°",
+      explorationMissions: ["Mariner 10 (1974–75)", "MESSENGER (2011–15)", "BepiColombo (arriving 2026)"],
+      habitability: "Uninhabitable — extreme temperatures and no atmosphere",
+      interestingPhenomena: ["Sun appears 3× larger than from Earth", "Sun can rise, stop, and reverse in the sky due to its eccentric orbit"],
     },
   },
   {
@@ -148,6 +190,13 @@ export const PLANETS: PlanetData[] = [
         "Atmospheric pressure is 92× Earth's — like being 900 m underwater.",
         "It rains sulfuric acid that evaporates before reaching the ground.",
       ],
+      numberFromSun: "2nd planet from the Sun",
+      rotationDirection: "Retrograde — Sun rises in the west",
+      surfacePressure: "92 bar (like 900 m underwater on Earth)",
+      seasons: "None — tilt of 177° and slow rotation prevent seasons",
+      explorationMissions: ["Venera 7 (first soft landing, 1970)", "Magellan (1990–94)", "Parker Solar Probe flybys", "DAVINCI & VERITAS (planned)"],
+      habitability: "Uninhabitable surface, but cloud layer at 50 km has Earth-like temperatures",
+      interestingPhenomena: ["Brightest planet in Earth's sky", "Lightning storms 50× more frequent than Earth's", "Phosphine detection sparked life debate (2020)"],
     },
   },
   {
@@ -193,6 +242,13 @@ export const PLANETS: PlanetData[] = [
         "Earth's rotation is gradually slowing — days lengthen ~1.7 ms per century.",
         "70% of the atmosphere's oxygen is produced by ocean phytoplankton.",
       ],
+      numberFromSun: "3rd planet from the Sun",
+      rotationDirection: "Prograde (west to east)",
+      surfacePressure: "1.013 bar (defines 1 atm)",
+      seasons: "Four distinct seasons driven by 23.44° axial tilt",
+      explorationMissions: ["Continuously studied by ISS, Landsat, GOES, Sentinel satellites"],
+      habitability: "Only known planet with life — liquid water, oxygen, magnetic shield",
+      interestingPhenomena: ["Aurora borealis/australis", "Plate tectonics (unique among rocky planets)", "Stable climate thanks to the Moon"],
     },
   },
   {
@@ -238,6 +294,13 @@ export const PLANETS: PlanetData[] = [
         "Mars had liquid water rivers and lakes ~3.5 billion years ago.",
         "A Martian sunset appears blue due to fine dust scattering light.",
       ],
+      numberFromSun: "4th planet from the Sun",
+      rotationDirection: "Prograde",
+      surfacePressure: "0.006 bar (less than 1% of Earth)",
+      seasons: "Yes — but each season lasts ~6 Earth months",
+      explorationMissions: ["Viking 1 & 2 (1976)", "Sojourner, Spirit, Opportunity, Curiosity, Perseverance rovers", "Ingenuity helicopter (first powered flight on another planet)"],
+      habitability: "Best candidate for past/future human settlement — water ice exists at poles",
+      interestingPhenomena: ["Global dust storms can cover entire planet", "Frozen CO₂ 'snow' falls at poles", "Methane plumes detected (origin unknown)"],
     },
   },
   {
@@ -284,6 +347,13 @@ export const PLANETS: PlanetData[] = [
         "The Great Red Spot has been raging for at least 350 years.",
         "Jupiter's gravity acts as a 'cosmic vacuum' shielding inner planets from comets.",
       ],
+      numberFromSun: "5th planet from the Sun",
+      rotationDirection: "Prograde (fastest of any planet)",
+      surfacePressure: "No solid surface — pressure rises to millions of bars in core",
+      seasons: "Almost none — tilt is just 3°",
+      explorationMissions: ["Pioneer 10/11", "Voyager 1/2", "Galileo (1995–2003)", "Juno (2016–present)", "Europa Clipper (en route)"],
+      habitability: "Itself uninhabitable, but moon Europa may host life beneath its ice",
+      interestingPhenomena: ["Auroras 1,000× more powerful than Earth's", "Acts as 'gravitational vacuum' protecting inner planets", "Could have become a star with ~80× more mass"],
     },
   },
   {
@@ -332,6 +402,13 @@ export const PLANETS: PlanetData[] = [
         "Its rings will eventually disappear in ~100 million years (raining down as ice).",
         "A persistent hexagon-shaped jet stream circles its north pole.",
       ],
+      numberFromSun: "6th planet from the Sun",
+      rotationDirection: "Prograde",
+      surfacePressure: "No solid surface",
+      seasons: "Yes — each ~7 Earth years long",
+      explorationMissions: ["Pioneer 11 (1979)", "Voyager 1/2", "Cassini–Huygens (2004–17, landed on Titan)"],
+      habitability: "Moons Titan and Enceladus are top astrobiology targets",
+      interestingPhenomena: ["Rings only ~10–100 m thick despite being 282,000 km wide", "Hexagonal jet stream at north pole", "Enceladus shoots water ice 500 km into space"],
     },
   },
   {
@@ -380,6 +457,13 @@ export const PLANETS: PlanetData[] = [
         "Its blue-green color comes from methane absorbing red light.",
         "Each pole has 42 years of continuous sunlight, then 42 years of darkness.",
       ],
+      numberFromSun: "7th planet from the Sun",
+      rotationDirection: "Retrograde, rotates on its side (97.8° tilt)",
+      surfacePressure: "No solid surface",
+      seasons: "Extreme — 42 years of sunlight then 42 years of darkness at each pole",
+      explorationMissions: ["Voyager 2 flyby (1986) — only spacecraft ever to visit"],
+      habitability: "Uninhabitable — frozen, no surface, lethal atmosphere",
+      interestingPhenomena: ["Coldest planetary atmosphere in solar system (-224°C)", "Possibly rains diamonds in its mantle", "Magnetic field tilted 59° from rotation axis"],
     },
   },
   {
@@ -426,6 +510,13 @@ export const PLANETS: PlanetData[] = [
         "Has supersonic winds reaching 2,100 km/h — the fastest known.",
         "Hasn't completed a single orbit since its discovery in 1846 (next: 2011 was first!).",
       ],
+      numberFromSun: "8th planet from the Sun",
+      rotationDirection: "Prograde",
+      surfacePressure: "No solid surface",
+      seasons: "Yes — each lasting ~40 Earth years",
+      explorationMissions: ["Voyager 2 flyby (1989) — only spacecraft ever to visit"],
+      habitability: "Uninhabitable, but moon Triton may have a subsurface ocean",
+      interestingPhenomena: ["Fastest winds in the solar system (2,100 km/h)", "Diamond rain in its interior", "Triton orbits backwards — likely a captured Kuiper Belt object"],
     },
   },
 ];
