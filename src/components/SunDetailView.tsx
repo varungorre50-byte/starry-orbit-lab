@@ -164,6 +164,28 @@ export const SunDetailView = ({ onClose }: { onClose: () => void }) => {
               <InfoRow label="Age" value={info.age} />
               <InfoRow label="Mass" value={info.mass} />
               <InfoRow label="Luminosity" value={info.luminosity} />
+              <InfoRow label="Rotation Period" value={(info as any).rotationPeriod} />
+              <InfoRow label="Mass Share of Solar System" value={(info as any).massShareOfSolarSystem} />
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wider">📊 Physical Properties</h2>
+            <div className="space-y-0.5">
+              <InfoRow label="Core Density" value={(info as any).coreDensity} />
+              <InfoRow label="Surface Density" value={(info as any).surfaceDensity} />
+              <InfoRow label="Energy Output" value={(info as any).energyOutput} />
+              <InfoRow label="Solar Wind" value={(info as any).solarWind} />
+              <InfoRow label="Sunspot Cycle" value={(info as any).sunspotCycle} />
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wider">🌌 In the Galaxy</h2>
+            <div className="space-y-0.5">
+              <InfoRow label="Distance from Earth" value={(info as any).distanceFromEarth} />
+              <InfoRow label="Distance from Galactic Center" value={(info as any).distanceFromGalacticCenter} />
+              <InfoRow label="Orbital Speed in Galaxy" value={(info as any).orbitalSpeedInGalaxy} />
             </div>
           </section>
 
@@ -176,6 +198,20 @@ export const SunDetailView = ({ onClose }: { onClose: () => void }) => {
                 </span>
               ))}
             </div>
+          </section>
+
+          <section>
+            <h2 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wider">🧅 Layers of the Sun</h2>
+            <ul className="space-y-1">
+              {((info as any).layers as string[]).map((l) => (
+                <li key={l} className="text-xs text-foreground flex gap-2"><span className="text-primary">•</span>{l}</li>
+              ))}
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wider">🔮 Future Fate</h2>
+            <p className="text-xs text-foreground leading-relaxed">{(info as any).fate}</p>
           </section>
 
           <section>
@@ -197,6 +233,17 @@ export const SunDetailView = ({ onClose }: { onClose: () => void }) => {
             <p className="text-xs text-muted-foreground leading-relaxed mt-3">
               The Sun contains 99.86% of all mass in the solar system and produces energy through nuclear fusion, converting 4 million tons of matter into energy every second.
             </p>
+          </section>
+
+          <section>
+            <h2 className="text-sm font-semibold text-accent mb-2 uppercase tracking-wider">✨ Fun Facts</h2>
+            <ul className="space-y-2">
+              {((info as any).funFacts as string[]).map((f) => (
+                <li key={f} className="text-xs text-foreground leading-relaxed flex gap-2">
+                  <span className="text-accent shrink-0">★</span>{f}
+                </li>
+              ))}
+            </ul>
           </section>
 
           <p className="text-[11px] text-muted-foreground/70 text-center pt-4">
