@@ -257,16 +257,11 @@ export const PlanetDetailView = ({ planet, onClose }: { planet: PlanetData; onCl
           <ShootingStar delay={5.7} color="#ffd9a8" />
 
           {/* Lighting — sun-like key + soft fill + rim */}
-          <ambientLight intensity={0.25} />
-          <directionalLight
-            position={[6, 3, 5]}
-            intensity={2.2}
-            color="#fff5e0"
-            castShadow
-          />
-          <pointLight position={[-8, -2, -4]} intensity={0.6} color="#4477ff" />
-          <pointLight position={[0, 5, -8]} intensity={0.4} color={planet.color} />
-
+          <ambientLight intensity={0.9} />
+          <directionalLight position={[6, 3, 5]} intensity={1.6} color="#fff5e0" />
+          <directionalLight position={[-6, -2, -5]} intensity={1.0} color="#a8c4ff" />
+          <pointLight position={[0, 5, -8]} intensity={0.5} color={planet.color} />
+          <pointLight position={[0, -5, 8]} intensity={0.5} color="#ffffff" />
           <Suspense fallback={
             <Html center>
               <div className="text-muted-foreground text-sm">Loading {planet.name}…</div>
