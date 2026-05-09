@@ -87,7 +87,8 @@ const buildPlanetSpeech = (planet: PlanetData): string => {
     `Diameter ${i.diameter}. Distance from the Sun ${i.distanceFromSun}. ` +
     `One day on ${planet.name} lasts ${i.dayLength}, and one year takes ${i.yearLength}. ` +
     `Surface gravity is ${i.gravity}. Temperature ranges ${i.temperature}. ` +
-    `Atmosphere consists of ${i.atmosphere.join(", ")}.` +
+    `Atmosphere consists of ${i.atmosphere.join(", ")}. ` +
+    `${i.surfaceDescription || ""}` +
     moonsLine
   );
 };
