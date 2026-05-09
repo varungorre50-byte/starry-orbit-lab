@@ -87,7 +87,8 @@ const buildPlanetSpeech = (planet: PlanetData): string => {
     `Diameter ${i.diameter}. Distance from the Sun ${i.distanceFromSun}. ` +
     `One day on ${planet.name} lasts ${i.dayLength}, and one year takes ${i.yearLength}. ` +
     `Surface gravity is ${i.gravity}. Temperature ranges ${i.temperature}. ` +
-    `Atmosphere consists of ${i.atmosphere.join(", ")}.` +
+    `Atmosphere consists of ${i.atmosphere.join(", ")}. ` +
+    `${i.surfaceDescription || ""}` +
     moonsLine
   );
 };
@@ -323,6 +324,13 @@ export const PlanetDetailView = ({ planet, onClose }: { planet: PlanetData; onCl
               <InfoRow label="Moons" value={String(planet.info.moons)} />
             </div>
           </section>
+
+          {planet.info.surfaceDescription && (
+            <section>
+              <h2 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wider">🌍 Surface & Interior</h2>
+              <p className="text-xs text-foreground leading-relaxed">{planet.info.surfaceDescription}</p>
+            </section>
+          )}
 
           <section>
             <h2 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wider">⚖ Gravity</h2>
