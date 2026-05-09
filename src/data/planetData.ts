@@ -50,6 +50,7 @@ export interface PlanetData {
     explorationMissions?: string[];
     habitability?: string;
     interestingPhenomena?: string[];
+    surfaceDescription?: string;
   };
 }
 
