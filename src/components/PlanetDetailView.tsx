@@ -185,7 +185,18 @@ const BigPlanet = ({ planet }: { planet: PlanetData }) => {
       <mesh ref={meshRef}>
         <sphereGeometry args={[displayRadius, 256, 256]} />
         {texture ? (
-          <meshBasicMaterial map={texture} toneMapped={false} />
+          <meshStandardMaterial
+            map={texture}
+            bumpMap={texture}
+            bumpScale={planet.name === "Earth" ? 0.04 : 0.08}
+            roughnessMap={texture}
+            roughness={planet.name === "Earth" ? 0.7 : 0.95}
+            metalness={0.02}
+            emissiveMap={texture}
+            emissive={"#ffffff"}
+            emissiveIntensity={0.55}
+            toneMapped={false}
+          />
         ) : (
           <meshBasicMaterial color={planet.color} toneMapped={false} />
         )}
