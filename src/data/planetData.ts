@@ -346,7 +346,7 @@ export const PLANETS: PlanetData[] = [
       discoveredBy: "Known since antiquity (moons by Galileo, 1610)",
       namedAfter: "King of the Roman gods",
       rings: "4 thin rings of dust (discovered by Voyager 1, 1979)",
-      composition: ["Hydrogen/helium gas envelope", "Liquid metallic hydrogen mantle", "Possible rocky/icy core"],
+      composition: ["Hydrogen & helium gas/liquid envelope", "Liquid metallic hydrogen mantle", "Possible rocky/icy core (no firm surface — atmosphere becomes denser until core)"],
       funFacts: [
         "Jupiter spins so fast it bulges noticeably at the equator.",
         "The Great Red Spot has been raging for at least 350 years.",
@@ -359,6 +359,7 @@ export const PLANETS: PlanetData[] = [
       explorationMissions: ["Pioneer 10/11", "Voyager 1/2", "Galileo (1995–2003)", "Juno (2016–present)", "Europa Clipper (en route)"],
       habitability: "Itself uninhabitable, but moon Europa may host life beneath its ice",
       interestingPhenomena: ["Auroras 1,000× more powerful than Earth's", "Acts as 'gravitational vacuum' protecting inner planets", "Could have become a star with ~80× more mass"],
+      surfaceDescription: "Does not have a firm surface. Its atmosphere of hydrogen and helium simply becomes denser until it reaches a solid core.",
     },
   },
   {
@@ -401,7 +402,7 @@ export const PLANETS: PlanetData[] = [
       discoveredBy: "Known since antiquity (rings by Galileo, 1610)",
       namedAfter: "Roman god of agriculture, father of Jupiter",
       rings: "7 main rings (A–G), 282,000 km wide but only ~10 m thick — made of ice and rock",
-      composition: ["Hydrogen/helium envelope", "Liquid metallic hydrogen", "Rocky/icy core (~9–22× Earth mass)"],
+      composition: ["Hydrogen & helium gas/liquid envelope", "Liquid metallic hydrogen mantle", "Rocky/icy core (~9–22× Earth mass, no firm surface — atmosphere becomes denser until core)"],
       funFacts: [
         "Saturn is the least dense planet — it would float in a giant bathtub.",
         "Its rings will eventually disappear in ~100 million years (raining down as ice).",
@@ -414,6 +415,7 @@ export const PLANETS: PlanetData[] = [
       explorationMissions: ["Pioneer 11 (1979)", "Voyager 1/2", "Cassini–Huygens (2004–17, landed on Titan)"],
       habitability: "Moons Titan and Enceladus are top astrobiology targets",
       interestingPhenomena: ["Rings only ~10–100 m thick despite being 282,000 km wide", "Hexagonal jet stream at north pole", "Enceladus shoots water ice 500 km into space"],
+      surfaceDescription: "Does not have a firm surface. Composed primarily of hydrogen and helium gas/liquid, its atmosphere simply becomes denser until it reaches a solid core.",
     },
   },
   {
@@ -456,7 +458,7 @@ export const PLANETS: PlanetData[] = [
       discoveredBy: "William Herschel, 1781 (first planet discovered with a telescope)",
       namedAfter: "Greek god of the sky (father of Saturn)",
       rings: "13 narrow, dark rings discovered in 1977",
-      composition: ["Hydrogen/helium atmosphere", "Water/ammonia/methane ice mantle", "Rocky core"],
+      composition: ["Hydrogen/helium atmosphere layers", "Water, ammonia, and methane ices mantle", "Rocky core (no firm surface — atmosphere becomes denser until core)"],
       funFacts: [
         "Uranus rolls on its side — likely from an ancient massive collision.",
         "Its blue-green color comes from methane absorbing red light.",
@@ -469,6 +471,7 @@ export const PLANETS: PlanetData[] = [
       explorationMissions: ["Voyager 2 flyby (1986) — only spacecraft ever to visit"],
       habitability: "Uninhabitable — frozen, no surface, lethal atmosphere",
       interestingPhenomena: ["Coldest planetary atmosphere in solar system (-224°C)", "Possibly rains diamonds in its mantle", "Magnetic field tilted 59° from rotation axis"],
+      surfaceDescription: "Does not have a firm surface. Composed of water, ammonia, and methane ices, with hydrogen/helium atmosphere layers that become denser until reaching a solid core.",
     },
   },
   {
@@ -509,7 +512,7 @@ export const PLANETS: PlanetData[] = [
       discoveredBy: "Johann Galle, 1846 (predicted mathematically by Le Verrier)",
       namedAfter: "Roman god of the sea",
       rings: "5 main rings — Galle, Le Verrier, Lassell, Arago, Adams",
-      composition: ["Hydrogen/helium/methane atmosphere", "Water/ammonia/methane ice mantle", "Rocky/icy core"],
+      composition: ["Hydrogen/helium/methane atmosphere layers", "Water, ammonia, and methane ices mantle", "Rocky/icy core (no firm surface — atmosphere becomes denser until core)"],
       funFacts: [
         "First planet discovered through mathematical prediction, not observation.",
         "Has supersonic winds reaching 2,100 km/h — the fastest known.",
@@ -522,6 +525,7 @@ export const PLANETS: PlanetData[] = [
       explorationMissions: ["Voyager 2 flyby (1989) — only spacecraft ever to visit"],
       habitability: "Uninhabitable, but moon Triton may have a subsurface ocean",
       interestingPhenomena: ["Fastest winds in the solar system (2,100 km/h)", "Diamond rain in its interior", "Triton orbits backwards — likely a captured Kuiper Belt object"],
+      surfaceDescription: "Does not have a firm surface. Composed of water, ammonia, and methane ices, with hydrogen/helium/methane atmosphere layers that become denser until reaching a solid core.",
     },
   },
 ];
