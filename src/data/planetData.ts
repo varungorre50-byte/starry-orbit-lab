@@ -147,6 +147,7 @@ export const PLANETS: PlanetData[] = [
       explorationMissions: ["Mariner 10 (1974–75)", "MESSENGER (2011–15)", "BepiColombo (arriving 2026)"],
       habitability: "Uninhabitable — extreme temperatures and no atmosphere",
       interestingPhenomena: ["Sun appears 3× larger than from Earth", "Sun can rise, stop, and reverse in the sky due to its eccentric orbit"],
+      surfaceDescription: "Heavily cratered, rocky surface with vast plains and deep impact basins.",
     },
   },
   {
@@ -198,6 +199,7 @@ export const PLANETS: PlanetData[] = [
       explorationMissions: ["Venera 7 (first soft landing, 1970)", "Magellan (1990–94)", "Parker Solar Probe flybys", "DAVINCI & VERITAS (planned)"],
       habitability: "Uninhabitable surface, but cloud layer at 50 km has Earth-like temperatures",
       interestingPhenomena: ["Brightest planet in Earth's sky", "Lightning storms 50× more frequent than Earth's", "Phosphine detection sparked life debate (2020)"],
+      surfaceDescription: "Rocky surface obscured by thick toxic clouds, featuring volcanoes, vast plains, and highland plateaus.",
     },
   },
   {
@@ -250,6 +252,7 @@ export const PLANETS: PlanetData[] = [
       explorationMissions: ["Continuously studied by ISS, Landsat, GOES, Sentinel satellites"],
       habitability: "Only known planet with life — liquid water, oxygen, magnetic shield",
       interestingPhenomena: ["Aurora borealis/australis", "Plate tectonics (unique among rocky planets)", "Stable climate thanks to the Moon"],
+      surfaceDescription: "Known for its liquid water oceans, which cover about 70.8% of its surface, with continents, mountains, and deep trenches.",
     },
   },
   {
@@ -302,6 +305,7 @@ export const PLANETS: PlanetData[] = [
       explorationMissions: ["Viking 1 & 2 (1976)", "Sojourner, Spirit, Opportunity, Curiosity, Perseverance rovers", "Ingenuity helicopter (first powered flight on another planet)"],
       habitability: "Best candidate for past/future human settlement — water ice exists at poles",
       interestingPhenomena: ["Global dust storms can cover entire planet", "Frozen CO₂ 'snow' falls at poles", "Methane plumes detected (origin unknown)"],
+      surfaceDescription: "Known for its red iron oxide dust, volcanoes, vast plains, and deep canyons.",
     },
   },
   {
