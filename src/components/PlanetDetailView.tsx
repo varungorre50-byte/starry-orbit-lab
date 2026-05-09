@@ -324,6 +324,13 @@ export const PlanetDetailView = ({ planet, onClose }: { planet: PlanetData; onCl
             </div>
           </section>
 
+          {planet.info.surfaceDescription && (
+            <section>
+              <h2 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wider">🌍 Surface & Interior</h2>
+              <p className="text-xs text-foreground leading-relaxed">{planet.info.surfaceDescription}</p>
+            </section>
+          )}
+
           <section>
             <h2 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wider">⚖ Gravity</h2>
             <div className="space-y-0.5">
