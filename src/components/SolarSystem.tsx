@@ -66,7 +66,7 @@ const SolarSystem = () => {
                 <OrbitRing radius={planet.orbitRadius} eccentricity={planet.eccentricity} inclination={planet.inclination} />
                 <Planet
                   data={planet}
-                  speedRef={speedRef}
+                  timeRef={timeRef}
                   onClick={() => { setSelectedPlanet(planet); setShowSunInfo(false); }}
                   showLabel={!selectedPlanet && !showSunInfo}
                 />
@@ -75,7 +75,7 @@ const SolarSystem = () => {
           </SolarSystemLOD>
         </Suspense>
 
-        <CameraRig preset={cameraPreset} controlsRef={controlsRef} />
+        <CameraRig mode={cameraMode} controlsRef={controlsRef} timeRef={timeRef} />
 
         <OrbitControls
           ref={controlsRef}
@@ -101,7 +101,7 @@ const SolarSystem = () => {
       <SpeedController speed={speed} onSpeedChange={handleSpeedChange} />
 
       {/* Camera Presets */}
-      <CameraPresets active={cameraPreset} onChange={setCameraPreset} />
+      <CameraPresets mode={cameraMode} onChange={setCameraMode} />
 
       {/* Info Panel */}
       {selectedPlanet && (
