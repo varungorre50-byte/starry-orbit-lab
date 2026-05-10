@@ -54,6 +54,8 @@ const SolarSystem = () => {
         <Stars radius={600} depth={200} count={12000} factor={6} fade speed={1} />
         <Galaxy radius={4000} count={60000} arms={4} sunGalacticRadius={2600} />
 
+        <Ticker timeRef={timeRef} speedRef={speedRef} />
+
         <Suspense fallback={null}>
           <SolarSystemLOD fadeStart={250} fadeEnd={650}>
             <Sun
