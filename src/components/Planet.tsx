@@ -118,8 +118,10 @@ export const Planet = ({
   try {
     texture = useLoader(TextureLoader, data.textureUrl);
     if (texture) {
-      texture.anisotropy = 8;
       texture.colorSpace = THREE.SRGBColorSpace;
+      texture.anisotropy = 16;
+      texture.minFilter = THREE.LinearMipmapLinearFilter;
+      texture.magFilter = THREE.LinearFilter;
     }
   } catch {
     texture = null;
