@@ -90,19 +90,19 @@ const RingSystem = ({ inner, outer, color }: { inner: number; outer: number; col
 
 export const Planet = ({
   data,
-  speedRef,
+  timeRef,
   onClick,
   showLabel = true,
 }: {
   data: PlanetData;
-  speedRef: React.MutableRefObject<number>;
+  timeRef: React.MutableRefObject<number>;
   onClick: () => void;
   showLabel?: boolean;
 }) => {
   const groupRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
   const cloudsRef = useRef<THREE.Mesh>(null);
-  const accumulatedTime = useRef(0);
+  const lastTime = useRef(0);
 
   const tiltRad = useMemo(() => (data.tilt * Math.PI) / 180, [data.tilt]);
   const inclinationRad = useMemo(() => ((data.inclination ?? 0) * Math.PI) / 180, [data.inclination]);
@@ -146,10 +146,10 @@ export const Planet = ({
       ? "#F0D890"
       : null;
 
-  useFrame((_, delta) => {
-    const dt = Math.min(delta, 1 / 30);
-    accumulatedTime.current += dt * speedRef.current;
-    const time = accumulatedTime.current;
+  useFrame(() => {
+    const time = timeRef.current;
+    const dt = Math.max(0, time - lastTime.current);
+    lastTime.current = time;
 
     if (groupRef.current) {
       const angle = time * data.orbitSpeed;

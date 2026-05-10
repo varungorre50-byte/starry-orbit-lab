@@ -1,4 +1,4 @@
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { OrbitControls, Stars } from "@react-three/drei";
 import { Suspense, useState, useRef } from "react";
@@ -10,16 +10,25 @@ import { SolarSystemLOD } from "./SolarSystemLOD";
 import { PlanetDetailView } from "./PlanetDetailView";
 import { SunDetailView } from "./SunDetailView";
 import { SpeedController } from "./SpeedController";
-import { CameraRig, type CameraPreset } from "./CameraRig";
+import { CameraRig, type CameraMode } from "./CameraRig";
 import { CameraPresets } from "./CameraPresets";
 import { PLANETS, type PlanetData } from "@/data/planetData";
+
+/** Advances the shared simulation clock used by planets and the camera rig. */
+const Ticker = ({ timeRef, speedRef }: { timeRef: React.MutableRefObject<number>; speedRef: React.MutableRefObject<number> }) => {
+  useFrame((_, delta) => {
+    timeRef.current += Math.min(delta, 1 / 30) * speedRef.current;
+  });
+  return null;
+};
 
 const SolarSystem = () => {
   const [selectedPlanet, setSelectedPlanet] = useState<PlanetData | null>(null);
   const [showSunInfo, setShowSunInfo] = useState(false);
   const speedRef = useRef(1);
+  const timeRef = useRef(0);
   const [speed, setSpeed] = useState(1);
-  const [cameraPreset, setCameraPreset] = useState<CameraPreset>("default");
+  const [cameraMode, setCameraMode] = useState<CameraMode>({ type: "overview" });
   const controlsRef = useRef<any>(null);
 
   const handleSpeedChange = (val: number) => {
@@ -45,6 +54,8 @@ const SolarSystem = () => {
         <Stars radius={600} depth={200} count={12000} factor={6} fade speed={1} />
         <Galaxy radius={4000} count={60000} arms={4} sunGalacticRadius={2600} />
 
+        <Ticker timeRef={timeRef} speedRef={speedRef} />
+
         <Suspense fallback={null}>
           <SolarSystemLOD fadeStart={250} fadeEnd={650}>
             <Sun
@@ -57,7 +68,7 @@ const SolarSystem = () => {
                 <OrbitRing radius={planet.orbitRadius} eccentricity={planet.eccentricity} inclination={planet.inclination} />
                 <Planet
                   data={planet}
-                  speedRef={speedRef}
+                  timeRef={timeRef}
                   onClick={() => { setSelectedPlanet(planet); setShowSunInfo(false); }}
                   showLabel={!selectedPlanet && !showSunInfo}
                 />
@@ -66,7 +77,7 @@ const SolarSystem = () => {
           </SolarSystemLOD>
         </Suspense>
 
-        <CameraRig preset={cameraPreset} controlsRef={controlsRef} />
+        <CameraRig mode={cameraMode} controlsRef={controlsRef} timeRef={timeRef} />
 
         <OrbitControls
           ref={controlsRef}
@@ -92,7 +103,7 @@ const SolarSystem = () => {
       <SpeedController speed={speed} onSpeedChange={handleSpeedChange} />
 
       {/* Camera Presets */}
-      <CameraPresets active={cameraPreset} onChange={setCameraPreset} />
+      <CameraPresets mode={cameraMode} onChange={setCameraMode} />
 
       {/* Info Panel */}
       {selectedPlanet && (
