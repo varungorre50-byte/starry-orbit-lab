@@ -14,8 +14,10 @@ export const Sun = ({ onClick, showLabel = true }: { onClick: () => void; showLa
   try {
     texture = useLoader(TextureLoader, SUN_DATA.textureUrl);
     if (texture) {
-      texture.anisotropy = 8;
       texture.colorSpace = THREE.SRGBColorSpace;
+      texture.anisotropy = 16;
+      texture.minFilter = THREE.LinearMipmapLinearFilter;
+      texture.magFilter = THREE.LinearFilter;
     }
   } catch {
     texture = null;

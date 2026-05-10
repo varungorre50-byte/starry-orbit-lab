@@ -105,6 +105,12 @@ const BigPlanet = ({ planet }: { planet: PlanetData }) => {
   let texture: THREE.Texture | null = null;
   try {
     texture = useLoader(TextureLoader, planet.textureUrl);
+    if (texture) {
+      texture.colorSpace = THREE.SRGBColorSpace;
+      texture.anisotropy = 16;
+      texture.minFilter = THREE.LinearMipmapLinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+    }
   } catch {
     texture = null;
   }
