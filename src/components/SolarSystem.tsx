@@ -1,4 +1,4 @@
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { OrbitControls, Stars } from "@react-three/drei";
 import { Suspense, useState, useRef } from "react";
@@ -10,16 +10,25 @@ import { SolarSystemLOD } from "./SolarSystemLOD";
 import { PlanetDetailView } from "./PlanetDetailView";
 import { SunDetailView } from "./SunDetailView";
 import { SpeedController } from "./SpeedController";
-import { CameraRig, type CameraPreset } from "./CameraRig";
+import { CameraRig, type CameraMode } from "./CameraRig";
 import { CameraPresets } from "./CameraPresets";
 import { PLANETS, type PlanetData } from "@/data/planetData";
+
+/** Advances the shared simulation clock used by planets and the camera rig. */
+const Ticker = ({ timeRef, speedRef }: { timeRef: React.MutableRefObject<number>; speedRef: React.MutableRefObject<number> }) => {
+  useFrame((_, delta) => {
+    timeRef.current += Math.min(delta, 1 / 30) * speedRef.current;
+  });
+  return null;
+};
 
 const SolarSystem = () => {
   const [selectedPlanet, setSelectedPlanet] = useState<PlanetData | null>(null);
   const [showSunInfo, setShowSunInfo] = useState(false);
   const speedRef = useRef(1);
+  const timeRef = useRef(0);
   const [speed, setSpeed] = useState(1);
-  const [cameraPreset, setCameraPreset] = useState<CameraPreset>("default");
+  const [cameraMode, setCameraMode] = useState<CameraMode>({ type: "overview" });
   const controlsRef = useRef<any>(null);
 
   const handleSpeedChange = (val: number) => {
