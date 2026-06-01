@@ -86,7 +86,7 @@ const SolarSystem = () => {
           </SolarSystemLOD>
         </Suspense>
 
-        <CameraRig mode={cameraMode} controlsRef={controlsRef} timeRef={timeRef} />
+        <CameraRig mode={cameraMode} controlsRef={controlsRef} timeRef={timeRef} overviewPosition={overviewPosition} />
 
         <OrbitControls
           ref={controlsRef}
