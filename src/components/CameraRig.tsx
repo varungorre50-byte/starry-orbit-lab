@@ -63,7 +63,7 @@ export const CameraRig = ({ mode, controlsRef, timeRef, overviewPosition = [0, 4
   }, [modeKey, camera, controlsRef]);
 
   useFrame(() => {
-    const desired = desiredFor(mode, timeRef.current);
+    const desired = desiredFor(mode, timeRef.current, overviewVec.current);
     if (!desired || !controlsRef.current?.target) return;
 
     const tween = tweenRef.current;
