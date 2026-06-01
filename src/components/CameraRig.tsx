@@ -13,9 +13,9 @@ interface CameraRigProps {
   mode: CameraMode;
   controlsRef: React.MutableRefObject<any>;
   timeRef: React.MutableRefObject<number>;
+  overviewPosition?: [number, number, number];
 }
 
-const OVERVIEW_POS = new THREE.Vector3(0, 40, 70);
 const OVERVIEW_TARGET = new THREE.Vector3(0, 0, 0);
 
 /** Compute desired camera pos+target for a given mode at the current time. */
