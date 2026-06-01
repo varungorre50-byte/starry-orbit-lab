@@ -12,6 +12,7 @@ import { SunDetailView } from "./SunDetailView";
 import { SpeedController } from "./SpeedController";
 import { CameraRig, type CameraMode } from "./CameraRig";
 import { CameraPresets } from "./CameraPresets";
+import { ViewAngleSelector, VIEW_ANGLES, type ViewAngle } from "./ViewAngleSelector";
 import { PLANETS, type PlanetData } from "@/data/planetData";
 
 /** Advances the shared simulation clock used by planets and the camera rig. */
