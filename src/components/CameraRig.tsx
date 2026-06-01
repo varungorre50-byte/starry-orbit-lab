@@ -19,9 +19,13 @@ interface CameraRigProps {
 const OVERVIEW_TARGET = new THREE.Vector3(0, 0, 0);
 
 /** Compute desired camera pos+target for a given mode at the current time. */
-function desiredFor(mode: CameraMode, time: number): { pos: THREE.Vector3; target: THREE.Vector3 } | null {
+function desiredFor(
+  mode: CameraMode,
+  time: number,
+  overviewPos: THREE.Vector3,
+): { pos: THREE.Vector3; target: THREE.Vector3 } | null {
   if (mode.type === "overview") {
-    return { pos: OVERVIEW_POS.clone(), target: OVERVIEW_TARGET.clone() };
+    return { pos: overviewPos.clone(), target: OVERVIEW_TARGET.clone() };
   }
   const p = PLANETS.find((pl) => pl.name === mode.planet);
   if (!p) return null;
@@ -39,10 +43,13 @@ function desiredFor(mode: CameraMode, time: number): { pos: THREE.Vector3; targe
   return { pos, target };
 }
 
-export const CameraRig = ({ mode, controlsRef, timeRef }: CameraRigProps) => {
+export const CameraRig = ({ mode, controlsRef, timeRef, overviewPosition = [0, 40, 70] }: CameraRigProps) => {
   const { camera } = useThree();
   const tweenRef = useRef<{ start: number; duration: number; fromPos: THREE.Vector3; fromTarget: THREE.Vector3 } | null>(null);
-  const modeKey = mode.type === "overview" ? "overview" : `${mode.type}:${mode.planet}`;
+  const overviewKey = overviewPosition.join(",");
+  const modeKey = mode.type === "overview" ? `overview:${overviewKey}` : `${mode.type}:${mode.planet}`;
+  const overviewVec = useRef(new THREE.Vector3());
+  overviewVec.current.set(overviewPosition[0], overviewPosition[1], overviewPosition[2]);
 
   // On every mode change, capture the current camera+target as the tween start.
   useEffect(() => {
