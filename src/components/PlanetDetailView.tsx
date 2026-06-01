@@ -194,13 +194,12 @@ const BigPlanet = ({ planet }: { planet: PlanetData }) => {
           <meshStandardMaterial
             map={texture}
             bumpMap={texture}
-            bumpScale={planet.name === "Earth" ? 0.04 : 0.08}
-            roughnessMap={texture}
-            roughness={planet.name === "Earth" ? 0.7 : 0.95}
-            metalness={0.02}
+            bumpScale={planet.name === "Earth" ? 0.008 : 0.015}
+            roughness={planet.name === "Earth" ? 0.85 : 0.98}
+            metalness={0.0}
             emissiveMap={texture}
             emissive={"#ffffff"}
-            emissiveIntensity={0.55}
+            emissiveIntensity={0.65}
             toneMapped={false}
           />
         ) : (
