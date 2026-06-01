@@ -113,6 +113,7 @@ const SolarSystem = () => {
 
       {/* Camera Presets */}
       <CameraPresets mode={cameraMode} onChange={setCameraMode} />
+      <ViewAngleSelector value={viewAngle} onChange={handleViewAngleChange} />
 
       {/* Info Panel */}
       {selectedPlanet && (
