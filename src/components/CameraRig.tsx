@@ -62,6 +62,8 @@ export const CameraRig = ({ mode, controlsRef, timeRef, overviewPosition = [0, 4
     };
   }, [modeKey, camera, controlsRef]);
 
+  const prevTargetRef = useRef<THREE.Vector3 | null>(null);
+
   useFrame(() => {
     const desired = desiredFor(mode, timeRef.current, overviewVec.current);
     if (!desired || !controlsRef.current?.target) return;
@@ -71,19 +73,28 @@ export const CameraRig = ({ mode, controlsRef, timeRef, overviewPosition = [0, 4
     if (tween) {
       const t = Math.min(1, (performance.now() - tween.start) / tween.duration);
       k = 1 - Math.pow(1 - t, 3); // easeOutCubic
-      if (t >= 1) tweenRef.current = null;
+      if (t >= 1) {
+        tweenRef.current = null;
+        prevTargetRef.current = desired.target.clone();
+      }
     }
 
     if (tween) {
       camera.position.lerpVectors(tween.fromPos, desired.pos, k);
       controlsRef.current.target.lerpVectors(tween.fromTarget, desired.target, k);
+      prevTargetRef.current = desired.target.clone();
     } else if (mode.type === "follow") {
-      // Smooth tracking after the tween settles.
-      camera.position.lerp(desired.pos, 0.08);
-      controlsRef.current.target.lerp(desired.target, 0.15);
+      // Translate the camera by the planet's movement delta so user zoom/orbit are preserved.
+      const prev = prevTargetRef.current ?? desired.target.clone();
+      const delta = desired.target.clone().sub(prev);
+      camera.position.add(delta);
+      controlsRef.current.target.add(delta);
+      prevTargetRef.current = desired.target.clone();
     } else if (mode.type === "closeup") {
-      // Keep target locked to the (slowly moving) planet, but don't drag the camera.
-      controlsRef.current.target.lerp(desired.target, 0.05);
+      const prev = prevTargetRef.current ?? desired.target.clone();
+      const delta = desired.target.clone().sub(prev);
+      controlsRef.current.target.add(delta);
+      prevTargetRef.current = desired.target.clone();
     }
 
     controlsRef.current.update();
