@@ -30,7 +30,15 @@ const SolarSystem = () => {
   const timeRef = useRef(0);
   const [speed, setSpeed] = useState(1);
   const [cameraMode, setCameraMode] = useState<CameraMode>({ type: "overview" });
+  const [viewAngle, setViewAngle] = useState<ViewAngle>("default");
   const controlsRef = useRef<any>(null);
+
+  const overviewPosition = (VIEW_ANGLES.find((v) => v.id === viewAngle) ?? VIEW_ANGLES[0]).position;
+
+  const handleViewAngleChange = (v: ViewAngle) => {
+    setViewAngle(v);
+    setCameraMode({ type: "overview" });
+  };
 
   const handleSpeedChange = (val: number) => {
     speedRef.current = val;
