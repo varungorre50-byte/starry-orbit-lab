@@ -12,6 +12,7 @@ import { SunDetailView } from "./SunDetailView";
 import { SpeedController } from "./SpeedController";
 import { CameraRig, type CameraMode } from "./CameraRig";
 import { CameraPresets } from "./CameraPresets";
+import { ViewAngleSelector, VIEW_ANGLES, type ViewAngle } from "./ViewAngleSelector";
 import { PLANETS, type PlanetData } from "@/data/planetData";
 
 /** Advances the shared simulation clock used by planets and the camera rig. */
@@ -29,7 +30,15 @@ const SolarSystem = () => {
   const timeRef = useRef(0);
   const [speed, setSpeed] = useState(1);
   const [cameraMode, setCameraMode] = useState<CameraMode>({ type: "overview" });
+  const [viewAngle, setViewAngle] = useState<ViewAngle>("default");
   const controlsRef = useRef<any>(null);
+
+  const overviewPosition = (VIEW_ANGLES.find((v) => v.id === viewAngle) ?? VIEW_ANGLES[0]).position;
+
+  const handleViewAngleChange = (v: ViewAngle) => {
+    setViewAngle(v);
+    setCameraMode({ type: "overview" });
+  };
 
   const handleSpeedChange = (val: number) => {
     speedRef.current = val;
@@ -77,7 +86,7 @@ const SolarSystem = () => {
           </SolarSystemLOD>
         </Suspense>
 
-        <CameraRig mode={cameraMode} controlsRef={controlsRef} timeRef={timeRef} />
+        <CameraRig mode={cameraMode} controlsRef={controlsRef} timeRef={timeRef} overviewPosition={overviewPosition} />
 
         <OrbitControls
           ref={controlsRef}
@@ -104,6 +113,7 @@ const SolarSystem = () => {
 
       {/* Camera Presets */}
       <CameraPresets mode={cameraMode} onChange={setCameraMode} />
+      <ViewAngleSelector value={viewAngle} onChange={handleViewAngleChange} />
 
       {/* Info Panel */}
       {selectedPlanet && (
