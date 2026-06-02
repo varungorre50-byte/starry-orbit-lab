@@ -129,6 +129,21 @@ export const Planet = ({
     texture = null;
   }
 
+  // Jupiter PBR maps (normal + roughness) for realistic surface detail
+  const isJupiter = data.name === "Jupiter";
+  const [jupiterNormalMap, jupiterRoughnessMap] = useLoader(
+    TextureLoader,
+    isJupiter ? [jupiterNormalAsset.url, jupiterRoughnessAsset.url] : []
+  ) as THREE.Texture[];
+  if (isJupiter && jupiterNormalMap) {
+    jupiterNormalMap.colorSpace = THREE.NoColorSpace;
+    jupiterNormalMap.anisotropy = 16;
+  }
+  if (isJupiter && jupiterRoughnessMap) {
+    jupiterRoughnessMap.colorSpace = THREE.NoColorSpace;
+    jupiterRoughnessMap.anisotropy = 16;
+  }
+
   // Per-planet visual tweaks
   const isGasGiant = ["Jupiter", "Saturn", "Uranus", "Neptune"].includes(data.name);
   const atmosphereColor =
