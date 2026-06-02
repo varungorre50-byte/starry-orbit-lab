@@ -4,6 +4,8 @@ import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import { TextureLoader } from "three";
 import type { PlanetData } from "@/data/planetData";
+import jupiterNormalAsset from "@/assets/jupiter_normal.jpg.asset.json";
+import jupiterRoughnessAsset from "@/assets/jupiter_roughness.jpg.asset.json";
 
 // Reusable Fresnel atmosphere shader (limb glow)
 const atmosphereVertex = /* glsl */ `
