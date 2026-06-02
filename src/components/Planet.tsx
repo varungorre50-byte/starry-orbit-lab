@@ -196,16 +196,17 @@ export const Planet = ({
         <mesh ref={meshRef} castShadow receiveShadow onClick={(e) => { e.stopPropagation(); onClick(); }}>
           <sphereGeometry args={[data.radius, 128, 128]} />
           {texture ? (
-            data.name === "Jupiter" ? (
+            isJupiter ? (
               <meshStandardMaterial
                 map={texture}
-                bumpMap={texture}
-                bumpScale={0.06}
-                roughness={0.95}
+                normalMap={jupiterNormalMap}
+                normalScale={new THREE.Vector2(1.2, 1.2)}
+                roughnessMap={jupiterRoughnessMap}
+                roughness={1.0}
                 metalness={0.0}
                 emissiveMap={texture}
                 emissive={"#ffffff"}
-                emissiveIntensity={0.18}
+                emissiveIntensity={0.15}
                 toneMapped={false}
               />
             ) : (
