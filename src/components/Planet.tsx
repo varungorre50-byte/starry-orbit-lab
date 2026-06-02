@@ -4,6 +4,8 @@ import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import { TextureLoader } from "three";
 import type { PlanetData } from "@/data/planetData";
+import jupiterNormalAsset from "@/assets/jupiter_normal.jpg.asset.json";
+import jupiterRoughnessAsset from "@/assets/jupiter_roughness.jpg.asset.json";
 
 // Reusable Fresnel atmosphere shader (limb glow)
 const atmosphereVertex = /* glsl */ `
@@ -127,6 +129,23 @@ export const Planet = ({
     texture = null;
   }
 
+  // Jupiter PBR maps (normal + roughness) for realistic surface detail
+  const isJupiter = data.name === "Jupiter";
+  const [jupiterNormalMap, jupiterRoughnessMap] = useLoader(TextureLoader, [
+    jupiterNormalAsset.url,
+    jupiterRoughnessAsset.url,
+  ]);
+  useMemo(() => {
+    if (jupiterNormalMap) {
+      jupiterNormalMap.colorSpace = THREE.NoColorSpace;
+      jupiterNormalMap.anisotropy = 16;
+    }
+    if (jupiterRoughnessMap) {
+      jupiterRoughnessMap.colorSpace = THREE.NoColorSpace;
+      jupiterRoughnessMap.anisotropy = 16;
+    }
+  }, [jupiterNormalMap, jupiterRoughnessMap]);
+
   // Per-planet visual tweaks
   const isGasGiant = ["Jupiter", "Saturn", "Uranus", "Neptune"].includes(data.name);
   const atmosphereColor =
@@ -177,16 +196,17 @@ export const Planet = ({
         <mesh ref={meshRef} castShadow receiveShadow onClick={(e) => { e.stopPropagation(); onClick(); }}>
           <sphereGeometry args={[data.radius, 128, 128]} />
           {texture ? (
-            data.name === "Jupiter" ? (
+            isJupiter ? (
               <meshStandardMaterial
                 map={texture}
-                bumpMap={texture}
-                bumpScale={0.06}
-                roughness={0.95}
+                normalMap={jupiterNormalMap}
+                normalScale={new THREE.Vector2(1.2, 1.2)}
+                roughnessMap={jupiterRoughnessMap}
+                roughness={1.0}
                 metalness={0.0}
                 emissiveMap={texture}
                 emissive={"#ffffff"}
-                emissiveIntensity={0.18}
+                emissiveIntensity={0.15}
                 toneMapped={false}
               />
             ) : (
