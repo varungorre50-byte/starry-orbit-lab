@@ -177,14 +177,28 @@ export const Planet = ({
         <mesh ref={meshRef} castShadow receiveShadow onClick={(e) => { e.stopPropagation(); onClick(); }}>
           <sphereGeometry args={[data.radius, 128, 128]} />
           {texture ? (
-            <meshStandardMaterial
-              map={texture}
-              roughness={isGasGiant ? 0.85 : 0.65}
-              metalness={0.05}
-              emissive={data.color}
-              emissiveIntensity={isGasGiant ? 0.08 : 0.12}
-              toneMapped
-            />
+            data.name === "Jupiter" ? (
+              <meshStandardMaterial
+                map={texture}
+                bumpMap={texture}
+                bumpScale={0.06}
+                roughness={0.95}
+                metalness={0.0}
+                emissiveMap={texture}
+                emissive={"#ffffff"}
+                emissiveIntensity={0.18}
+                toneMapped={false}
+              />
+            ) : (
+              <meshStandardMaterial
+                map={texture}
+                roughness={isGasGiant ? 0.85 : 0.65}
+                metalness={0.05}
+                emissive={data.color}
+                emissiveIntensity={isGasGiant ? 0.08 : 0.12}
+                toneMapped
+              />
+            )
           ) : (
             <meshStandardMaterial
               color={data.color}
@@ -195,6 +209,21 @@ export const Planet = ({
             />
           )}
         </mesh>
+
+        {/* Jupiter swirling cloud band overlay for realistic storm motion */}
+        {data.name === "Jupiter" && texture && (
+          <mesh ref={cloudsRef}>
+            <sphereGeometry args={[data.radius * 1.008, 128, 128]} />
+            <meshStandardMaterial
+              map={texture}
+              transparent
+              opacity={0.35}
+              roughness={1}
+              depthWrite={false}
+              toneMapped={false}
+            />
+          </mesh>
+        )}
 
         {/* Earth cloud layer */}
         {data.name === "Earth" && (
