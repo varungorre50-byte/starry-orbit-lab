@@ -1,14 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { getBcp47, useLanguage, type LangCode } from "./useLanguage";
 
-/**
- * useSpeech — wrapper around the browser's Web Speech API (speechSynthesis).
- *
- * - `volume` and `rate` are stored in state so the UI reflects them.
- * - Changes during playback are NOT auto-applied (Web Speech API can't change
- *   rate/volume mid-utterance — restarting would jump back to the beginning).
- * - Call `applyLiveSettings()` (e.g. on slider release) to restart from the
- *   current position with the new settings.
- */
 export type VoiceGender = "female" | "male";
 
 const FEMALE_NAME_HINTS = /female|woman|samantha|victoria|karen|moira|tessa|fiona|allison|ava|susan|zira|hazel|catherine|serena|veena|google us english$|google uk english female/i;
@@ -20,12 +12,14 @@ export const useSpeech = () => {
   const [rate, setRate] = useState(1);
   const [volume, setVolume] = useState(1);
   const [gender, setGender] = useState<VoiceGender>("female");
+  const { lang } = useLanguage();
 
   const lastTextRef = useRef<string>("");
   const charIndexRef = useRef<number>(0);
   const rateRef = useRef(rate);
   const volumeRef = useRef(volume);
   const genderRef = useRef(gender);
+  const langRef = useRef<LangCode>(lang);
   const manualStopRef = useRef(false);
   const restartTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const activeFromCharRef = useRef(0);
@@ -34,6 +28,7 @@ export const useSpeech = () => {
   useEffect(() => { rateRef.current = rate; }, [rate]);
   useEffect(() => { volumeRef.current = volume; }, [volume]);
   useEffect(() => { genderRef.current = gender; }, [gender]);
+  useEffect(() => { langRef.current = lang; }, [lang]);
 
   useEffect(() => {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) {
@@ -78,19 +73,22 @@ export const useSpeech = () => {
         utter.rate = rateRef.current;
         utter.pitch = genderRef.current === "male" ? 0.85 : 1.15;
         utter.volume = volumeRef.current;
-        utter.lang = "en-US";
+        const bcp47 = getBcp47(langRef.current);
+        utter.lang = bcp47;
         activeFromCharRef.current = fromChar;
         utteranceStartedAtRef.current = typeof performance !== "undefined" ? performance.now() : Date.now();
 
         const voices = window.speechSynthesis.getVoices();
-        const enVoices = voices.filter((v) => /^en/i.test(v.lang));
+        const langPrefix = bcp47.split("-")[0];
+        const localeVoices = voices.filter((v) => v.lang.toLowerCase().startsWith(langPrefix));
         const hints = genderRef.current === "male" ? MALE_NAME_HINTS : FEMALE_NAME_HINTS;
         const antiHints = genderRef.current === "male" ? FEMALE_NAME_HINTS : MALE_NAME_HINTS;
         const preferred =
-          enVoices.find((v) => hints.test(v.name) && /en[-_]US/i.test(v.lang)) ||
-          enVoices.find((v) => hints.test(v.name)) ||
-          enVoices.find((v) => !antiHints.test(v.name) && /en[-_]US/i.test(v.lang)) ||
-          enVoices[0];
+          localeVoices.find((v) => hints.test(v.name) && v.lang.replace("_", "-").toLowerCase() === bcp47.toLowerCase()) ||
+          localeVoices.find((v) => hints.test(v.name)) ||
+          localeVoices.find((v) => !antiHints.test(v.name)) ||
+          localeVoices[0] ||
+          voices.find((v) => v.lang.toLowerCase().startsWith("en"));
         if (preferred) utter.voice = preferred;
 
         utter.onstart = () => setSpeaking(true);
