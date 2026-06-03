@@ -76,17 +76,21 @@ export const useSpeech = () => {
         const slice = text.slice(fromChar);
         const utter = new SpeechSynthesisUtterance(slice);
         utter.rate = rateRef.current;
-        utter.pitch = 1;
+        utter.pitch = genderRef.current === "male" ? 0.85 : 1.15;
         utter.volume = volumeRef.current;
         utter.lang = "en-US";
         activeFromCharRef.current = fromChar;
         utteranceStartedAtRef.current = typeof performance !== "undefined" ? performance.now() : Date.now();
 
         const voices = window.speechSynthesis.getVoices();
+        const enVoices = voices.filter((v) => /^en/i.test(v.lang));
+        const hints = genderRef.current === "male" ? MALE_NAME_HINTS : FEMALE_NAME_HINTS;
+        const antiHints = genderRef.current === "male" ? FEMALE_NAME_HINTS : MALE_NAME_HINTS;
         const preferred =
-          voices.find((v) => /en[-_]US/i.test(v.lang) && /Google|Samantha|Microsoft/i.test(v.name)) ||
-          voices.find((v) => /en[-_]US/i.test(v.lang)) ||
-          voices.find((v) => v.lang.startsWith("en"));
+          enVoices.find((v) => hints.test(v.name) && /en[-_]US/i.test(v.lang)) ||
+          enVoices.find((v) => hints.test(v.name)) ||
+          enVoices.find((v) => !antiHints.test(v.name) && /en[-_]US/i.test(v.lang)) ||
+          enVoices[0];
         if (preferred) utter.voice = preferred;
 
         utter.onstart = () => setSpeaking(true);
