@@ -9,16 +9,23 @@ import { useCallback, useEffect, useRef, useState } from "react";
  * - Call `applyLiveSettings()` (e.g. on slider release) to restart from the
  *   current position with the new settings.
  */
+export type VoiceGender = "female" | "male";
+
+const FEMALE_NAME_HINTS = /female|woman|samantha|victoria|karen|moira|tessa|fiona|allison|ava|susan|zira|hazel|catherine|serena|veena|google us english$|google uk english female/i;
+const MALE_NAME_HINTS = /\bmale\b|man|daniel|alex|fred|tom|oliver|rishi|david|mark|george|james|google uk english male/i;
+
 export const useSpeech = () => {
   const [speaking, setSpeaking] = useState(false);
   const [supported, setSupported] = useState(true);
   const [rate, setRate] = useState(1);
   const [volume, setVolume] = useState(1);
+  const [gender, setGender] = useState<VoiceGender>("female");
 
   const lastTextRef = useRef<string>("");
   const charIndexRef = useRef<number>(0);
   const rateRef = useRef(rate);
   const volumeRef = useRef(volume);
+  const genderRef = useRef(gender);
   const manualStopRef = useRef(false);
   const restartTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const activeFromCharRef = useRef(0);
@@ -26,6 +33,7 @@ export const useSpeech = () => {
 
   useEffect(() => { rateRef.current = rate; }, [rate]);
   useEffect(() => { volumeRef.current = volume; }, [volume]);
+  useEffect(() => { genderRef.current = gender; }, [gender]);
 
   useEffect(() => {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) {
@@ -68,17 +76,21 @@ export const useSpeech = () => {
         const slice = text.slice(fromChar);
         const utter = new SpeechSynthesisUtterance(slice);
         utter.rate = rateRef.current;
-        utter.pitch = 1;
+        utter.pitch = genderRef.current === "male" ? 0.85 : 1.15;
         utter.volume = volumeRef.current;
         utter.lang = "en-US";
         activeFromCharRef.current = fromChar;
         utteranceStartedAtRef.current = typeof performance !== "undefined" ? performance.now() : Date.now();
 
         const voices = window.speechSynthesis.getVoices();
+        const enVoices = voices.filter((v) => /^en/i.test(v.lang));
+        const hints = genderRef.current === "male" ? MALE_NAME_HINTS : FEMALE_NAME_HINTS;
+        const antiHints = genderRef.current === "male" ? FEMALE_NAME_HINTS : MALE_NAME_HINTS;
         const preferred =
-          voices.find((v) => /en[-_]US/i.test(v.lang) && /Google|Samantha|Microsoft/i.test(v.name)) ||
-          voices.find((v) => /en[-_]US/i.test(v.lang)) ||
-          voices.find((v) => v.lang.startsWith("en"));
+          enVoices.find((v) => hints.test(v.name) && /en[-_]US/i.test(v.lang)) ||
+          enVoices.find((v) => hints.test(v.name)) ||
+          enVoices.find((v) => !antiHints.test(v.name) && /en[-_]US/i.test(v.lang)) ||
+          enVoices[0];
         if (preferred) utter.voice = preferred;
 
         utter.onstart = () => setSpeaking(true);
@@ -147,6 +159,8 @@ export const useSpeech = () => {
     setRate,
     volume,
     setVolume,
+    gender,
+    setGender,
     applyLiveSettings,
   };
 };

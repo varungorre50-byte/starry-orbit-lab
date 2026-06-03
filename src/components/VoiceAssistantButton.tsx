@@ -1,4 +1,4 @@
-import { Volume2, VolumeX, Gauge, Volume1 } from "lucide-react";
+import { Volume2, VolumeX, Gauge, Volume1, User } from "lucide-react";
 import { useState } from "react";
 import { useSpeech } from "@/hooks/useSpeech";
 
@@ -13,9 +13,10 @@ const RATE_MAX = 2;
 const RATE_STEP = 0.05;
 
 export const VoiceAssistantButton = ({ getText, label = "Listen" }: VoiceAssistantButtonProps) => {
-  const { speaking, toggle, supported, rate, setRate, volume, setVolume, applyLiveSettings } = useSpeech();
+  const { speaking, toggle, supported, rate, setRate, volume, setVolume, gender, setGender, applyLiveSettings } = useSpeech();
   const [showSpeed, setShowSpeed] = useState(false);
   const [showVolume, setShowVolume] = useState(false);
+  const [showVoice, setShowVoice] = useState(false);
 
   if (!supported) return null;
 
@@ -104,6 +105,43 @@ export const VoiceAssistantButton = ({ getText, label = "Listen" }: VoiceAssista
             {speaking && (
               <p className="text-[10px] text-muted-foreground mt-1 italic">Applies on release</p>
             )}
+          </div>
+        )}
+      </div>
+
+      <div className="relative">
+        <button
+          onClick={() => setShowVoice((v) => !v)}
+          className="inline-flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs font-medium bg-muted text-foreground border border-border hover:bg-muted/70 transition-colors"
+          aria-label="Voice gender"
+        >
+          <User size={14} />
+          <span className="capitalize">{gender}</span>
+        </button>
+        {showVoice && (
+          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-card border border-border rounded-lg shadow-lg p-2 min-w-[140px]">
+            <div className="flex gap-1">
+              <button
+                onClick={() => { setGender("female"); applyLiveSettings(); }}
+                className={`flex-1 px-2 py-1.5 rounded-md text-xs font-medium border transition-colors ${
+                  gender === "female"
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-muted text-foreground border-border hover:bg-muted/70"
+                }`}
+              >
+                Female
+              </button>
+              <button
+                onClick={() => { setGender("male"); applyLiveSettings(); }}
+                className={`flex-1 px-2 py-1.5 rounded-md text-xs font-medium border transition-colors ${
+                  gender === "male"
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-muted text-foreground border-border hover:bg-muted/70"
+                }`}
+              >
+                Male
+              </button>
+            </div>
           </div>
         )}
       </div>
