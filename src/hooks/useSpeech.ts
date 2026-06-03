@@ -12,12 +12,14 @@ export const useSpeech = () => {
   const [rate, setRate] = useState(1);
   const [volume, setVolume] = useState(1);
   const [gender, setGender] = useState<VoiceGender>("female");
+  const { lang } = useLanguage();
 
   const lastTextRef = useRef<string>("");
   const charIndexRef = useRef<number>(0);
   const rateRef = useRef(rate);
   const volumeRef = useRef(volume);
   const genderRef = useRef(gender);
+  const langRef = useRef<LangCode>(lang);
   const manualStopRef = useRef(false);
   const restartTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const activeFromCharRef = useRef(0);
@@ -26,6 +28,7 @@ export const useSpeech = () => {
   useEffect(() => { rateRef.current = rate; }, [rate]);
   useEffect(() => { volumeRef.current = volume; }, [volume]);
   useEffect(() => { genderRef.current = gender; }, [gender]);
+  useEffect(() => { langRef.current = lang; }, [lang]);
 
   useEffect(() => {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) {
