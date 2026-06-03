@@ -108,6 +108,43 @@ export const VoiceAssistantButton = ({ getText, label = "Listen" }: VoiceAssista
           </div>
         )}
       </div>
+
+      <div className="relative">
+        <button
+          onClick={() => setShowVoice((v) => !v)}
+          className="inline-flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs font-medium bg-muted text-foreground border border-border hover:bg-muted/70 transition-colors"
+          aria-label="Voice gender"
+        >
+          <User size={14} />
+          <span className="capitalize">{gender}</span>
+        </button>
+        {showVoice && (
+          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-card border border-border rounded-lg shadow-lg p-2 min-w-[140px]">
+            <div className="flex gap-1">
+              <button
+                onClick={() => { setGender("female"); applyLiveSettings(); }}
+                className={`flex-1 px-2 py-1.5 rounded-md text-xs font-medium border transition-colors ${
+                  gender === "female"
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-muted text-foreground border-border hover:bg-muted/70"
+                }`}
+              >
+                Female
+              </button>
+              <button
+                onClick={() => { setGender("male"); applyLiveSettings(); }}
+                className={`flex-1 px-2 py-1.5 rounded-md text-xs font-medium border transition-colors ${
+                  gender === "male"
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-muted text-foreground border-border hover:bg-muted/70"
+                }`}
+              >
+                Male
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
