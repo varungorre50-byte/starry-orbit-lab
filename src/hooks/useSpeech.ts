@@ -159,6 +159,8 @@ export const useSpeech = () => {
     setRate,
     volume,
     setVolume,
+    gender,
+    setGender,
     applyLiveSettings,
   };
 };
