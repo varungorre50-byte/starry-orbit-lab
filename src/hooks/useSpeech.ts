@@ -9,16 +9,23 @@ import { useCallback, useEffect, useRef, useState } from "react";
  * - Call `applyLiveSettings()` (e.g. on slider release) to restart from the
  *   current position with the new settings.
  */
+export type VoiceGender = "female" | "male";
+
+const FEMALE_NAME_HINTS = /female|woman|samantha|victoria|karen|moira|tessa|fiona|allison|ava|susan|zira|hazel|catherine|serena|veena|google us english$|google uk english female/i;
+const MALE_NAME_HINTS = /\bmale\b|man|daniel|alex|fred|tom|oliver|rishi|david|mark|george|james|google uk english male/i;
+
 export const useSpeech = () => {
   const [speaking, setSpeaking] = useState(false);
   const [supported, setSupported] = useState(true);
   const [rate, setRate] = useState(1);
   const [volume, setVolume] = useState(1);
+  const [gender, setGender] = useState<VoiceGender>("female");
 
   const lastTextRef = useRef<string>("");
   const charIndexRef = useRef<number>(0);
   const rateRef = useRef(rate);
   const volumeRef = useRef(volume);
+  const genderRef = useRef(gender);
   const manualStopRef = useRef(false);
   const restartTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const activeFromCharRef = useRef(0);
@@ -26,6 +33,7 @@ export const useSpeech = () => {
 
   useEffect(() => { rateRef.current = rate; }, [rate]);
   useEffect(() => { volumeRef.current = volume; }, [volume]);
+  useEffect(() => { genderRef.current = gender; }, [gender]);
 
   useEffect(() => {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) {
