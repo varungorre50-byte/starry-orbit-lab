@@ -1,40 +1,60 @@
-import { Volume2, VolumeX, Gauge, Volume1, User } from "lucide-react";
+import { Volume2, VolumeX, Gauge, Volume1, User, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useSpeech } from "@/hooks/useSpeech";
+import { useLanguage } from "@/hooks/useLanguage";
+import { translateText } from "@/lib/translate";
 
 interface VoiceAssistantButtonProps {
-  /** Function that returns the text to be spoken. Called lazily on click. */
+  /** Function that returns the English text to be spoken. Called lazily on click. */
   getText: () => string;
   label?: string;
 }
 
-const RATE_MIN = 0.25;
-const RATE_MAX = 2;
-const RATE_STEP = 0.05;
-
 export const VoiceAssistantButton = ({ getText, label = "Listen" }: VoiceAssistantButtonProps) => {
   const { speaking, toggle, supported, rate, setRate, volume, setVolume, gender, setGender, applyLiveSettings } = useSpeech();
+  const { lang } = useLanguage();
   const [showSpeed, setShowSpeed] = useState(false);
   const [showVolume, setShowVolume] = useState(false);
   const [showVoice, setShowVoice] = useState(false);
+  const [translating, setTranslating] = useState(false);
 
   if (!supported) return null;
 
   const VolumeIcon = volume === 0 ? VolumeX : volume < 0.5 ? Volume1 : Volume2;
 
+  const handleToggle = async () => {
+    if (speaking) {
+      toggle("");
+      return;
+    }
+    const english = getText();
+    if (lang === "en") {
+      toggle(english);
+      return;
+    }
+    setTranslating(true);
+    try {
+      const translated = await translateText(english, lang);
+      toggle(translated);
+    } finally {
+      setTranslating(false);
+    }
+  };
+
   return (
     <div className="inline-flex items-center gap-2">
       <button
-        onClick={() => toggle(getText())}
+        onClick={handleToggle}
+        disabled={translating}
         className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border ${
           speaking
             ? "bg-primary text-primary-foreground border-primary animate-pulse"
             : "bg-muted text-foreground border-border hover:bg-muted/70"
-        }`}
+        } disabled:opacity-60`}
         aria-label={speaking ? "Mute voice assistant" : "Play voice assistant"}
       >
-        {speaking ? <VolumeX size={14} /> : <Volume2 size={14} />}
-        {speaking ? "Mute" : label}
+        {translating ? <Loader2 size={14} className="animate-spin" /> : speaking ? <VolumeX size={14} /> : <Volume2 size={14} />}
+        {translating ? "Translating…" : speaking ? "Mute" : label}
       </button>
 
       <div className="relative">
