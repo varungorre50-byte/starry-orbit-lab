@@ -1,4 +1,4 @@
-import { Volume2, VolumeX, Gauge, Volume1 } from "lucide-react";
+import { Volume2, VolumeX, Gauge, Volume1, User } from "lucide-react";
 import { useState } from "react";
 import { useSpeech } from "@/hooks/useSpeech";
 
@@ -13,9 +13,10 @@ const RATE_MAX = 2;
 const RATE_STEP = 0.05;
 
 export const VoiceAssistantButton = ({ getText, label = "Listen" }: VoiceAssistantButtonProps) => {
-  const { speaking, toggle, supported, rate, setRate, volume, setVolume, applyLiveSettings } = useSpeech();
+  const { speaking, toggle, supported, rate, setRate, volume, setVolume, gender, setGender, applyLiveSettings } = useSpeech();
   const [showSpeed, setShowSpeed] = useState(false);
   const [showVolume, setShowVolume] = useState(false);
+  const [showVoice, setShowVoice] = useState(false);
 
   if (!supported) return null;
 
