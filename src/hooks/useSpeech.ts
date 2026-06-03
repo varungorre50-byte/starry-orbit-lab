@@ -1,14 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { getBcp47, useLanguage, type LangCode } from "./useLanguage";
 
-/**
- * useSpeech — wrapper around the browser's Web Speech API (speechSynthesis).
- *
- * - `volume` and `rate` are stored in state so the UI reflects them.
- * - Changes during playback are NOT auto-applied (Web Speech API can't change
- *   rate/volume mid-utterance — restarting would jump back to the beginning).
- * - Call `applyLiveSettings()` (e.g. on slider release) to restart from the
- *   current position with the new settings.
- */
 export type VoiceGender = "female" | "male";
 
 const FEMALE_NAME_HINTS = /female|woman|samantha|victoria|karen|moira|tessa|fiona|allison|ava|susan|zira|hazel|catherine|serena|veena|google us english$|google uk english female/i;
