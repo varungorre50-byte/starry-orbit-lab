@@ -73,19 +73,22 @@ export const useSpeech = () => {
         utter.rate = rateRef.current;
         utter.pitch = genderRef.current === "male" ? 0.85 : 1.15;
         utter.volume = volumeRef.current;
-        utter.lang = "en-US";
+        const bcp47 = getBcp47(langRef.current);
+        utter.lang = bcp47;
         activeFromCharRef.current = fromChar;
         utteranceStartedAtRef.current = typeof performance !== "undefined" ? performance.now() : Date.now();
 
         const voices = window.speechSynthesis.getVoices();
-        const enVoices = voices.filter((v) => /^en/i.test(v.lang));
+        const langPrefix = bcp47.split("-")[0];
+        const localeVoices = voices.filter((v) => v.lang.toLowerCase().startsWith(langPrefix));
         const hints = genderRef.current === "male" ? MALE_NAME_HINTS : FEMALE_NAME_HINTS;
         const antiHints = genderRef.current === "male" ? FEMALE_NAME_HINTS : MALE_NAME_HINTS;
         const preferred =
-          enVoices.find((v) => hints.test(v.name) && /en[-_]US/i.test(v.lang)) ||
-          enVoices.find((v) => hints.test(v.name)) ||
-          enVoices.find((v) => !antiHints.test(v.name) && /en[-_]US/i.test(v.lang)) ||
-          enVoices[0];
+          localeVoices.find((v) => hints.test(v.name) && v.lang.replace("_", "-").toLowerCase() === bcp47.toLowerCase()) ||
+          localeVoices.find((v) => hints.test(v.name)) ||
+          localeVoices.find((v) => !antiHints.test(v.name)) ||
+          localeVoices[0] ||
+          voices.find((v) => v.lang.toLowerCase().startsWith("en"));
         if (preferred) utter.voice = preferred;
 
         utter.onstart = () => setSpeaking(true);
