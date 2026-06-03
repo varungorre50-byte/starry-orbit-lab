@@ -2,6 +2,8 @@ import { useEffect, useRef } from "react";
 import type { PlanetData } from "@/data/planetData";
 import { X } from "lucide-react";
 import { VoiceAssistantButton } from "./VoiceAssistantButton";
+import { LanguageSelector } from "./LanguageSelector";
+import { useTranslated } from "@/hooks/useTranslated";
 
 const buildPlanetSpeech = (planet: PlanetData): string => {
   const i = planet.info;
@@ -121,6 +123,8 @@ function darkenColor(hex: string, amount: number): string {
 }
 
 export const PlanetInfoPanel = ({ planet, onClose }: { planet: PlanetData; onClose: () => void }) => {
+  const speechText = buildPlanetSpeech(planet);
+  const { text: translatedSpeech, loading } = useTranslated(speechText);
   return (
     <div className="absolute right-4 top-20 bottom-4 w-[360px] max-w-[90vw] bg-card/90 backdrop-blur-md border border-border rounded-xl p-5 overflow-y-auto z-20 animate-in slide-in-from-right-4 duration-300">
       <div className="flex items-center justify-between mb-2">
@@ -137,10 +141,19 @@ export const PlanetInfoPanel = ({ planet, onClose }: { planet: PlanetData; onClo
         </div>
       </div>
 
-      {/* Voice assistant */}
-      <div className="flex justify-center mb-4">
-        <VoiceAssistantButton getText={() => buildPlanetSpeech(planet)} label={`Hear about ${planet.name}`} />
+      {/* Language + voice controls */}
+      <div className="flex flex-wrap justify-center gap-2 mb-3">
+        <LanguageSelector />
+        <VoiceAssistantButton getText={() => speechText} label={`Hear about ${planet.name}`} />
       </div>
+
+      {/* Translated description */}
+      <div className="mb-4 p-3 rounded-lg bg-muted/50 border border-border">
+        <p className="text-xs text-foreground leading-relaxed whitespace-pre-line">
+          {loading ? "…" : translatedSpeech}
+        </p>
+      </div>
+
 
 
       <div className="space-y-3">

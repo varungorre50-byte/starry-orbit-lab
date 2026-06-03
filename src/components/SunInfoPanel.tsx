@@ -2,6 +2,8 @@ import { useEffect, useRef } from "react";
 import { SUN_DATA, PLANETS } from "@/data/planetData";
 import { X } from "lucide-react";
 import { VoiceAssistantButton } from "./VoiceAssistantButton";
+import { LanguageSelector } from "./LanguageSelector";
+import { useTranslated } from "@/hooks/useTranslated";
 
 const buildSunSpeech = (): string => {
   const i = SUN_DATA.info;
@@ -127,6 +129,8 @@ const InfoRow = ({ label, value }: { label: string; value: string }) => (
 
 export const SunInfoPanel = ({ onClose }: { onClose: () => void }) => {
   const { info } = SUN_DATA;
+  const speechText = buildSunSpeech();
+  const { text: translatedSpeech, loading } = useTranslated(speechText);
   return (
     <div className="absolute right-4 top-20 bottom-4 w-[360px] max-w-[90vw] bg-card/90 backdrop-blur-md border border-border rounded-xl p-5 overflow-y-auto z-20 animate-in slide-in-from-right-4">
       <div className="flex items-center justify-between mb-2">
@@ -141,10 +145,19 @@ export const SunInfoPanel = ({ onClose }: { onClose: () => void }) => {
         <SpinningSun />
       </div>
 
-      {/* Voice assistant */}
-      <div className="flex justify-center mb-4">
-        <VoiceAssistantButton getText={buildSunSpeech} label="Hear about the Sun" />
+      {/* Language + voice controls */}
+      <div className="flex flex-wrap justify-center gap-2 mb-3">
+        <LanguageSelector />
+        <VoiceAssistantButton getText={() => speechText} label="Hear about the Sun" />
       </div>
+
+      {/* Translated description */}
+      <div className="mb-4 p-3 rounded-lg bg-muted/50 border border-border">
+        <p className="text-xs text-foreground leading-relaxed whitespace-pre-line">
+          {loading ? "…" : translatedSpeech}
+        </p>
+      </div>
+
 
       <div className="space-y-3">
         <InfoRow label="Type" value={info.type} />
