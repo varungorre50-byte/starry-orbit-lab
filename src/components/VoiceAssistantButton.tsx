@@ -166,6 +166,31 @@ export const VoiceAssistantButton = ({ getText, label = "Listen" }: VoiceAssista
           </div>
         )}
       </div>
+
+      {speaking && currentText && (
+        <SubtitleStrip text={currentText} spokenIndex={spokenIndex} />
+      )}
+    </div>
+  );
+};
+
+const SubtitleStrip = ({ text, spokenIndex }: { text: string; spokenIndex: number }) => {
+  // Find the current word boundaries around spokenIndex.
+  const safeIdx = Math.min(Math.max(spokenIndex, 0), text.length);
+  let start = safeIdx;
+  while (start > 0 && !/\s/.test(text[start - 1])) start--;
+  let end = safeIdx;
+  while (end < text.length && !/\s/.test(text[end])) end++;
+  const before = text.slice(0, start);
+  const current = text.slice(start, end);
+  const after = text.slice(end);
+  return (
+    <div className="mt-1 p-2 rounded-lg bg-background/80 border border-border max-h-24 overflow-y-auto text-center">
+      <p className="text-[11px] leading-relaxed text-muted-foreground">
+        <span className="opacity-60">{before}</span>
+        <span className="bg-primary/30 text-foreground rounded px-0.5 font-medium">{current}</span>
+        <span className="opacity-90 text-foreground">{after}</span>
+      </p>
     </div>
   );
 };
