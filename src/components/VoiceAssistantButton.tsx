@@ -166,6 +166,8 @@ export const VoiceAssistantButton = ({ getText, label = "Listen" }: VoiceAssista
           </div>
         )}
       </div>
+      </div>
+
 
       {speaking && currentText && (
         <SubtitleStrip text={currentText} spokenIndex={spokenIndex} />
