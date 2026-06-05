@@ -12,6 +12,8 @@ export const useSpeech = () => {
   const [rate, setRate] = useState(1);
   const [volume, setVolume] = useState(1);
   const [gender, setGender] = useState<VoiceGender>("female");
+  const [currentText, setCurrentText] = useState("");
+  const [spokenIndex, setSpokenIndex] = useState(0);
   const { lang } = useLanguage();
 
   const lastTextRef = useRef<string>("");
