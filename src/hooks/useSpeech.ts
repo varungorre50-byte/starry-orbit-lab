@@ -93,15 +93,24 @@ export const useSpeech = () => {
           voices.find((v) => v.lang.toLowerCase().startsWith("en"));
         if (preferred) utter.voice = preferred;
 
-        utter.onstart = () => setSpeaking(true);
+        setCurrentText(text);
+        setSpokenIndex(fromChar);
+
+        utter.onstart = () => {
+          setSpeaking(true);
+          setSpokenIndex(fromChar);
+        };
         utter.onboundary = (e) => {
           // Track absolute char index in the full text so we can resume.
-          charIndexRef.current = Math.max(charIndexRef.current, fromChar + e.charIndex);
+          const abs = fromChar + e.charIndex;
+          charIndexRef.current = Math.max(charIndexRef.current, abs);
+          setSpokenIndex(abs);
         };
         utter.onend = () => {
           if (!manualStopRef.current) {
             setSpeaking(false);
             charIndexRef.current = 0;
+            setSpokenIndex(text.length);
           }
         };
         utter.onerror = () => setSpeaking(false);
