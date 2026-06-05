@@ -56,6 +56,8 @@ export const useSpeech = () => {
     window.speechSynthesis.cancel();
     setSpeaking(false);
     charIndexRef.current = 0;
+    setCurrentText("");
+    setSpokenIndex(0);
   }, [supported]);
 
   const speakFrom = useCallback(
