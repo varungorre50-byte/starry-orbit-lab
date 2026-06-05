@@ -42,7 +42,8 @@ export const VoiceAssistantButton = ({ getText, label = "Listen" }: VoiceAssista
   };
 
   return (
-    <div className="inline-flex items-center gap-2">
+    <div className="inline-flex flex-col items-stretch gap-2 w-full">
+      <div className="inline-flex items-center gap-2 justify-center flex-wrap">
       <button
         onClick={handleToggle}
         disabled={translating}
