@@ -11,7 +11,7 @@ interface VoiceAssistantButtonProps {
 }
 
 export const VoiceAssistantButton = ({ getText, label = "Listen" }: VoiceAssistantButtonProps) => {
-  const { speaking, toggle, supported, rate, setRate, volume, setVolume, gender, setGender, applyLiveSettings } = useSpeech();
+  const { speaking, toggle, supported, rate, setRate, volume, setVolume, gender, setGender, applyLiveSettings, currentText, spokenIndex } = useSpeech();
   const { lang } = useLanguage();
   const [showSpeed, setShowSpeed] = useState(false);
   const [showVolume, setShowVolume] = useState(false);
