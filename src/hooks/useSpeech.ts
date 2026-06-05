@@ -173,5 +173,7 @@ export const useSpeech = () => {
     gender,
     setGender,
     applyLiveSettings,
+    currentText,
+    spokenIndex,
   };
 };
