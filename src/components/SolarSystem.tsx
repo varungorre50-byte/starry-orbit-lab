@@ -132,7 +132,7 @@ const SolarSystem = () => {
       )}
 
       {/* Procedural planet ambient sound — appears on the right while a planet/Sun is animating */}
-      <PlanetSoundButton planetName={selectedPlanet?.name ?? (showSunInfo ? "Sun" : null)} />
+      <PlanetSoundButton planetName={selectedPlanet?.name ?? (showSunInfo ? "Sun" : null)} triggerRef={soundTriggerRef} />
     </div>
   );
 };
