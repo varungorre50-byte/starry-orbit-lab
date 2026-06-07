@@ -86,6 +86,7 @@ const SolarSystem = () => {
                   data={planet}
                   timeRef={timeRef}
                   onClick={() => { setSelectedPlanet(planet); setShowSunInfo(false); }}
+                  onRightClick={handleRightClick}
                   showLabel={!selectedPlanet && !showSunInfo}
                 />
               </group>
