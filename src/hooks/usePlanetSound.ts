@@ -129,5 +129,5 @@ export const usePlanetSound = (planetName: string | null) => {
 
   useEffect(() => () => stop(), [stop]);
 
-  return { playing, toggle, stop, volume, setVolume };
+  return { playing, toggle, start, stop, volume, setVolume };
 };
