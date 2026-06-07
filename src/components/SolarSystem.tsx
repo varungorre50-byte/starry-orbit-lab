@@ -75,6 +75,7 @@ const SolarSystem = () => {
           <SolarSystemLOD fadeStart={250} fadeEnd={650}>
             <Sun
               onClick={() => { setShowSunInfo(true); setSelectedPlanet(null); }}
+              onRightClick={handleRightClick}
               showLabel={!selectedPlanet && !showSunInfo}
             />
 
