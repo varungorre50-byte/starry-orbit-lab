@@ -14,6 +14,7 @@ import { CameraRig, type CameraMode } from "./CameraRig";
 import { CameraPresets } from "./CameraPresets";
 import { ViewAngleSelector, VIEW_ANGLES, type ViewAngle } from "./ViewAngleSelector";
 import { PLANETS, type PlanetData } from "@/data/planetData";
+import { PlanetSoundButton } from "./PlanetSoundButton";
 
 /** Advances the shared simulation clock used by planets and the camera rig. */
 const Ticker = ({ timeRef, speedRef }: { timeRef: React.MutableRefObject<number>; speedRef: React.MutableRefObject<number> }) => {
@@ -122,6 +123,9 @@ const SolarSystem = () => {
       {showSunInfo && (
         <SunDetailView onClose={() => setShowSunInfo(false)} />
       )}
+
+      {/* Procedural planet ambient sound — appears on the right while a planet/Sun is animating */}
+      <PlanetSoundButton planetName={selectedPlanet?.name ?? (showSunInfo ? "Sun" : null)} />
     </div>
   );
 };
