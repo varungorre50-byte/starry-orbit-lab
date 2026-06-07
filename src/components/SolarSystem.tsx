@@ -1,7 +1,7 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { OrbitControls, Stars } from "@react-three/drei";
-import { Suspense, useState, useRef } from "react";
+import { Suspense, useState, useRef, useCallback } from "react";
 import { Sun } from "./Sun";
 import { Planet } from "./Planet";
 import { OrbitRing } from "./OrbitRing";
@@ -35,6 +35,7 @@ const SolarSystem = () => {
   const controlsRef = useRef<any>(null);
 
   const overviewPosition = (VIEW_ANGLES.find((v) => v.id === viewAngle) ?? VIEW_ANGLES[0]).position;
+  const soundTriggerRef = useRef<((name: string) => void) | undefined>(undefined);
 
   const handleViewAngleChange = (v: ViewAngle) => {
     setViewAngle(v);
@@ -46,8 +47,12 @@ const SolarSystem = () => {
     setSpeed(val);
   };
 
+  const handleRightClick = useCallback((name: string) => {
+    soundTriggerRef.current?.(name);
+  }, []);
+
   return (
-    <div className="relative w-full h-screen bg-background overflow-hidden">
+    <div className="relative w-full h-screen bg-background overflow-hidden" onContextMenu={(e) => e.preventDefault()}>
       <Canvas
         camera={{ position: [0, 30, 50], fov: 55, near: 0.1, far: 20000 }}
         gl={{ antialias: true, toneMapping: THREE.NoToneMapping, powerPreference: "high-performance" }}
@@ -70,6 +75,7 @@ const SolarSystem = () => {
           <SolarSystemLOD fadeStart={250} fadeEnd={650}>
             <Sun
               onClick={() => { setShowSunInfo(true); setSelectedPlanet(null); }}
+              onRightClick={handleRightClick}
               showLabel={!selectedPlanet && !showSunInfo}
             />
 
@@ -80,6 +86,7 @@ const SolarSystem = () => {
                   data={planet}
                   timeRef={timeRef}
                   onClick={() => { setSelectedPlanet(planet); setShowSunInfo(false); }}
+                  onRightClick={handleRightClick}
                   showLabel={!selectedPlanet && !showSunInfo}
                 />
               </group>
@@ -125,7 +132,7 @@ const SolarSystem = () => {
       )}
 
       {/* Procedural planet ambient sound — appears on the right while a planet/Sun is animating */}
-      <PlanetSoundButton planetName={selectedPlanet?.name ?? (showSunInfo ? "Sun" : null)} />
+      <PlanetSoundButton planetName={selectedPlanet?.name ?? (showSunInfo ? "Sun" : null)} triggerRef={soundTriggerRef} />
     </div>
   );
 };

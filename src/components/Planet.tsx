@@ -94,11 +94,13 @@ export const Planet = ({
   data,
   timeRef,
   onClick,
+  onRightClick,
   showLabel = true,
 }: {
   data: PlanetData;
   timeRef: React.MutableRefObject<number>;
   onClick: () => void;
+  onRightClick?: (name: string) => void;
   showLabel?: boolean;
 }) => {
   const groupRef = useRef<THREE.Group>(null);
@@ -189,11 +191,18 @@ export const Planet = ({
     }
   });
 
+  const handlePointerDown = (e: any) => {
+    if (e.button === 2) {
+      e.stopPropagation();
+      onRightClick?.(data.name);
+    }
+  };
+
   return (
     <group ref={groupRef}>
       <group rotation={[tiltRad, 0, 0]}>
         {/* Planet body */}
-        <mesh ref={meshRef} castShadow receiveShadow onClick={(e) => { e.stopPropagation(); onClick(); }}>
+        <mesh ref={meshRef} castShadow receiveShadow onPointerDown={handlePointerDown} onClick={(e) => { e.stopPropagation(); onClick(); }}>
           <sphereGeometry args={[data.radius, 128, 128]} />
           {texture ? (
             isJupiter ? (
@@ -290,8 +299,12 @@ export const Planet = ({
       {showLabel && (
         <Html position={[0, data.radius + 0.8, 0]} center distanceFactor={18}>
           <div
-            className="px-3 py-1.5 rounded-lg bg-card/85 text-foreground text-base font-bold whitespace-nowrap cursor-pointer backdrop-blur-sm border border-border/50"
+            className="px-3 py-1.5 rounded-lg bg-card/85 text-foreground text-base font-bold whitespace-nowrap cursor-pointer backdrop-blur-sm border border-border/50 select-none"
             onClick={onClick}
+            onContextMenu={(e) => {
+              e.preventDefault();
+              onRightClick?.(data.name);
+            }}
           >
             {data.name}
           </div>

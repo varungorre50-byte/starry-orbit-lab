@@ -5,7 +5,7 @@ import { TextureLoader } from "three";
 import * as THREE from "three";
 import { SUN_DATA } from "@/data/planetData";
 
-export const Sun = ({ onClick, showLabel = true }: { onClick: () => void; showLabel?: boolean }) => {
+export const Sun = ({ onClick, onRightClick, showLabel = true }: { onClick: () => void; onRightClick?: (name: string) => void; showLabel?: boolean }) => {
   const meshRef = useRef<THREE.Mesh>(null);
   const glowRef = useRef<THREE.Mesh>(null);
   const coronaRef = useRef<THREE.Mesh>(null);
@@ -34,6 +34,13 @@ export const Sun = ({ onClick, showLabel = true }: { onClick: () => void; showLa
     }
   });
 
+  const handlePointerDown = (e: any) => {
+    if (e.button === 2) {
+      e.stopPropagation();
+      onRightClick?.("Sun");
+    }
+  };
+
   return (
     <group>
       {/* Corona pulsing halo */}
@@ -49,7 +56,7 @@ export const Sun = ({ onClick, showLabel = true }: { onClick: () => void; showLa
       </mesh>
 
       {/* Sun body */}
-      <mesh ref={meshRef} onClick={onClick}>
+      <mesh ref={meshRef} onPointerDown={handlePointerDown} onClick={onClick}>
         <sphereGeometry args={[SUN_DATA.radius, 128, 128]} />
         {texture ? (
           <meshBasicMaterial map={texture} toneMapped={false} />
@@ -67,8 +74,12 @@ export const Sun = ({ onClick, showLabel = true }: { onClick: () => void; showLa
       {showLabel && (
         <Html position={[0, SUN_DATA.radius + 1, 0]} center distanceFactor={25}>
           <div
-            className="px-3 py-1.5 rounded-lg bg-card/85 text-foreground text-base font-bold whitespace-nowrap cursor-pointer backdrop-blur-sm border border-border/50"
+            className="px-3 py-1.5 rounded-lg bg-card/85 text-foreground text-base font-bold whitespace-nowrap cursor-pointer backdrop-blur-sm border border-border/50 select-none"
             onClick={onClick}
+            onContextMenu={(e) => {
+              e.preventDefault();
+              onRightClick?.("Sun");
+            }}
           >
             Sun
           </div>
@@ -77,4 +88,3 @@ export const Sun = ({ onClick, showLabel = true }: { onClick: () => void; showLa
     </group>
   );
 };
-

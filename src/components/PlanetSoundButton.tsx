@@ -1,12 +1,20 @@
 import { Volume2, VolumeX } from "lucide-react";
 import { usePlanetSound } from "@/hooks/usePlanetSound";
+import { useEffect } from "react";
 
 interface Props {
   planetName: string | null;
+  triggerRef?: React.MutableRefObject<((name: string) => void) | undefined>;
 }
 
-export const PlanetSoundButton = ({ planetName }: Props) => {
-  const { playing, toggle, volume, setVolume } = usePlanetSound(planetName);
+export const PlanetSoundButton = ({ planetName, triggerRef }: Props) => {
+  const { playing, toggle, start, volume, setVolume } = usePlanetSound(planetName);
+
+  useEffect(() => {
+    if (triggerRef) {
+      triggerRef.current = start;
+    }
+  }, [triggerRef, start]);
 
   if (!planetName) return null;
 

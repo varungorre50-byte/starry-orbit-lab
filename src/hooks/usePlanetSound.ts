@@ -36,6 +36,7 @@ export const usePlanetSound = (planetName: string | null) => {
 
   const start = useCallback(
     (name: string) => {
+      stop();
       const profile = PLANET_PROFILES[name] ?? PLANET_PROFILES.Earth;
       if (!ctxRef.current) {
         const Ctx = (window as any).AudioContext || (window as any).webkitAudioContext;
@@ -111,7 +112,7 @@ export const usePlanetSound = (planetName: string | null) => {
       };
       setPlaying(true);
     },
-    [volume]
+    [volume, stop]
   );
 
   const toggle = useCallback(() => {
@@ -128,5 +129,5 @@ export const usePlanetSound = (planetName: string | null) => {
 
   useEffect(() => () => stop(), [stop]);
 
-  return { playing, toggle, stop, volume, setVolume };
+  return { playing, toggle, start, stop, volume, setVolume };
 };
