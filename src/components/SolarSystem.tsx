@@ -35,6 +35,7 @@ const SolarSystem = () => {
   const controlsRef = useRef<any>(null);
 
   const overviewPosition = (VIEW_ANGLES.find((v) => v.id === viewAngle) ?? VIEW_ANGLES[0]).position;
+  const soundTriggerRef = useRef<((name: string) => void) | undefined>(undefined);
 
   const handleViewAngleChange = (v: ViewAngle) => {
     setViewAngle(v);
@@ -46,8 +47,12 @@ const SolarSystem = () => {
     setSpeed(val);
   };
 
+  const handleRightClick = useCallback((name: string) => {
+    soundTriggerRef.current?.(name);
+  }, []);
+
   return (
-    <div className="relative w-full h-screen bg-background overflow-hidden">
+    <div className="relative w-full h-screen bg-background overflow-hidden" onContextMenu={(e) => e.preventDefault()}>
       <Canvas
         camera={{ position: [0, 30, 50], fov: 55, near: 0.1, far: 20000 }}
         gl={{ antialias: true, toneMapping: THREE.NoToneMapping, powerPreference: "high-performance" }}
