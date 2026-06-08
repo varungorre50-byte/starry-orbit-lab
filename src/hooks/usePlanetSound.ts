@@ -25,6 +25,7 @@ export const usePlanetSound = (planetName: string | null) => {
   const [volume, setVolume] = useState(0.5);
   const ctxRef = useRef<AudioContext | null>(null);
   const nodesRef = useRef<{ stop: () => void } | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
 
   const stop = useCallback(() => {
     if (nodesRef.current) {
@@ -49,7 +50,11 @@ export const usePlanetSound = (planetName: string | null) => {
       const master = ctx.createGain();
       master.gain.value = 0;
       master.gain.linearRampToValueAtTime(volume, ctx.currentTime + 0.8);
-      master.connect(ctx.destination);
+      const analyser = ctx.createAnalyser();
+      analyser.fftSize = 1024;
+      master.connect(analyser);
+      analyser.connect(ctx.destination);
+      analyserRef.current = analyser;
 
       // Two detuned oscillators for thick drone
       const osc1 = ctx.createOscillator();
@@ -129,5 +134,5 @@ export const usePlanetSound = (planetName: string | null) => {
 
   useEffect(() => () => stop(), [stop]);
 
-  return { playing, toggle, start, stop, volume, setVolume };
+  return { playing, toggle, start, stop, volume, setVolume, analyserRef };
 };
