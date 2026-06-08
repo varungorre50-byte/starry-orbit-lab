@@ -49,6 +49,13 @@ export const PlanetSoundButton = ({ planetName, triggerRef }: Props) => {
         style={{ writingMode: "vertical-rl" as any, direction: "rtl" }}
         title="Volume"
       />
+      <Link
+        to={`/planet-sound/${encodeURIComponent(planetName)}`}
+        className="w-12 h-12 rounded-full flex items-center justify-center bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-all shadow-[0_0_15px_hsl(var(--destructive)/0.5)]"
+        title={`Stop sound & open ${planetName} sound analyzer`}
+      >
+        <Square size={18} fill="currentColor" />
+      </Link>
     </div>
   );
 };
