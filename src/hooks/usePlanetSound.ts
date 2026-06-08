@@ -25,6 +25,7 @@ export const usePlanetSound = (planetName: string | null) => {
   const [volume, setVolume] = useState(0.5);
   const ctxRef = useRef<AudioContext | null>(null);
   const nodesRef = useRef<{ stop: () => void } | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
 
   const stop = useCallback(() => {
     if (nodesRef.current) {
